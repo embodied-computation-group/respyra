@@ -34,9 +34,16 @@ Measuring respiroception has relied primarily on detection paradigms, such as th
 
 The study of sensorimotor control offers well-established paradigms for investigating how the motor system adapts to perturbations in visual feedback. In visuomotor reaching studies, participants learn to compensate for rotated or scaled cursor feedback, revealing the dynamics of sensorimotor adaptation, error correction, and internal model updating \parencite[e.g.,][]{krakauer2019motor}. Applying analogous perturbation paradigms to respiratory control could illuminate how individuals monitor and correct their breathing output, with implications for understanding both healthy respiratory regulation and clinical conditions involving dysfunctional breathing patterns.
 
-Here we present \textit{respyra}, an open-source Python toolbox for conducting respiratory motor control tracking experiments with real-time biofeedback and visuomotor perturbation capabilities. The toolbox integrates a commercially available respiration belt with PsychoPy for stimulus-precise experiment control. We describe the system architecture, experimental protocol, and report proof-of-concept data demonstrating that (a) participants can accurately track sinusoidal breathing targets and (b) visual gain perturbations reliably increase tracking error while remaining learnable within a session.
+Here we present \textit{respyra}, an open-source Python toolbox for conducting respiratory motor control tracking experiments with real-time biofeedback and visuomotor perturbation capabilities (Figure~\ref{fig:schematic}). The toolbox integrates a commercially available respiration belt with PsychoPy for stimulus-precise experiment control. We describe the system architecture, experimental protocol, and report proof-of-concept data demonstrating that (a) participants can accurately track sinusoidal breathing targets and (b) visual gain perturbations reliably increase tracking error while remaining learnable within a session.
 
 \section{Method}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{fig_task_schematic.png}
+\caption{Schematic of the respiromotor tracking task. \textbf{(A)}~Task overview: the participant wears a respiration belt and views a monitor displaying their breathing trace in real time. A sinusoidal target guides the desired breathing pattern. Visual biofeedback can be veridically displayed or scaled by a gain factor $g$, creating a closed-loop sensorimotor control paradigm with afferent feedback and motor correction. \textbf{(B)}~Belt detail: the Vernier Go Direct Respiration Belt (GDX-RB) consists of an elastic strap with an embedded force sensor module that transmits data wirelessly via Bluetooth Low Energy (BLE).}
+\label{fig:schematic}
+\end{figure}
 
 \subsection{Toolbox Architecture}
 

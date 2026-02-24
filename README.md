@@ -4,6 +4,10 @@ Python framework for respiratory motor control experiments integrating the [Vern
 
 Participants follow a sinusoidal target dot with their breathing while their live respiratory waveform is displayed. The framework supports multiple experimental conditions including frequency changes and visuomotor perturbations (visual gain manipulation).
 
+## Task Schematic
+
+![Task schematic](media/task_schematic_2.png)
+
 ## Task Screenshots
 
 | Range Calibration | Baseline |
