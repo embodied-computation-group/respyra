@@ -11,6 +11,7 @@ Run from the project root:
     python -m src.scripts.breath_tracking_task
 """
 
+import colorsys
 from collections import deque
 
 import numpy as np
@@ -25,8 +26,12 @@ from src.configs.breath_tracking import (
     DATA_COLUMNS,
     DOT_COLOR_BAD,
     DOT_COLOR_GOOD,
+    DOT_COLOR_MID,
+    DOT_FEEDBACK_MODE,
+    DOT_GRADED_MAX_ERROR_N,
     DOT_RADIUS,
     DOT_X_OFFSET,
+    ERROR_THRESHOLD_MID_N,
     ERROR_THRESHOLD_N,
     ESCAPE_KEY,
     FULLSCR,
@@ -51,6 +56,26 @@ from src.configs.breath_tracking import (
 from src.core.breath_belt import BreathBelt, BreathBeltError
 from src.core.data_logger import DataLogger, create_session_file
 from src.core.target_generator import TargetGenerator, calibrate_from_baseline
+
+
+# ======================================================================
+# Helpers
+# ======================================================================
+
+def _graded_dot_color(error: float, max_error: float) -> tuple[float, float, float]:
+    """Map tracking error to a color on the green→yellow→red spectrum.
+
+    Returns an RGB tuple in PsychoPy's [-1, 1] color space.
+    Error 0 → green (hue 120°), error >= max_error → red (hue 0°),
+    with yellow in the middle.  A square-root curve sharpens the
+    falloff so small errors already shift noticeably toward yellow.
+    """
+    t = min(abs(error) / max_error, 1.0)  # 0 = perfect, 1 = worst
+    t = t ** 0.5                           # sharpen: small errors shift faster
+    hue = (1.0 - t) / 3.0                 # 0.33 (green) → 0.0 (red)
+    r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
+    # Convert [0,1] RGB to PsychoPy [-1,1]
+    return (r * 2 - 1, g * 2 - 1, b * 2 - 1)
 
 
 # ======================================================================
@@ -573,15 +598,22 @@ def run_experiment():
 
                 target_dot.pos = (trace_right + DOT_X_OFFSET, dot_y)
 
-                # Dot color: yellow if tracking well, red if off
+                # Dot color feedback
                 if latest_force is not None:
                     current_error = abs(target_force - latest_force)
-                    if current_error <= ERROR_THRESHOLD_N:
-                        target_dot.fillColor = DOT_COLOR_GOOD
-                        target_dot.lineColor = DOT_COLOR_GOOD
-                    else:
-                        target_dot.fillColor = DOT_COLOR_BAD
-                        target_dot.lineColor = DOT_COLOR_BAD
+                    if DOT_FEEDBACK_MODE == 'graded':
+                        color = _graded_dot_color(current_error, DOT_GRADED_MAX_ERROR_N)
+                    elif DOT_FEEDBACK_MODE == 'trinary':
+                        if current_error <= ERROR_THRESHOLD_N:
+                            color = DOT_COLOR_GOOD
+                        elif current_error <= ERROR_THRESHOLD_MID_N:
+                            color = DOT_COLOR_MID
+                        else:
+                            color = DOT_COLOR_BAD
+                    else:  # binary (default)
+                        color = DOT_COLOR_GOOD if current_error <= ERROR_THRESHOLD_N else DOT_COLOR_BAD
+                    target_dot.fillColor = color
+                    target_dot.lineColor = color
 
                 remaining = max(0, TRACKING_DURATION_SEC - tracking_t)
                 status_text.text = (

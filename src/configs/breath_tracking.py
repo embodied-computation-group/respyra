@@ -39,9 +39,17 @@ TRACE_BUFFER_SIZE = int(TRACE_DURATION_SEC * (1000 / BELT_PERIOD_MS))  # samples
 # ------------------------------------------------------------------ #
 DOT_RADIUS = 0.03                     # in window units (height)
 DOT_X_OFFSET = 0.05                   # how far right of trace right edge
-DOT_COLOR_GOOD = 'yellow'             # when tracking error <= threshold
-DOT_COLOR_BAD = 'red'                 # when tracking error > threshold
-ERROR_THRESHOLD_N = 1.0               # acceptable error band in Newtons
+DOT_COLOR_GOOD = 'yellow'             # binary/trinary: good tracking color
+DOT_COLOR_BAD = 'red'                 # binary/trinary: poor tracking color
+DOT_COLOR_MID = 'orange'              # trinary only: moderate tracking color
+ERROR_THRESHOLD_N = 1.0               # binary: good/bad cutoff (Newtons)
+ERROR_THRESHOLD_MID_N = 2.0           # trinary: mid/bad cutoff (Newtons)
+
+# Feedback mode: 'binary'  = good/bad (2 colors, 1 threshold)
+#                'trinary' = good/mid/bad (3 colors, 2 thresholds)
+#                'graded'  = continuous purple→green based on error
+DOT_FEEDBACK_MODE = 'graded'
+DOT_GRADED_MAX_ERROR_N = 3.0          # graded: error at which dot is fully purple
 
 # ------------------------------------------------------------------ #
 #  Trace border                                                        #
