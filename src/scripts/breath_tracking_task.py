@@ -40,10 +40,15 @@ from src.configs.breath_tracking import (
     MONITOR_SIZE_PIX,
     MONITOR_WIDTH_CM,
     N_REPS,
+    TRIAL_METHOD,
     OUTPUT_DIR,
     CONNECTION,
     DEVICE_TO_OPEN,
+    FORCE_SATURATION_HI,
+    FORCE_SATURATION_LO,
     RANGE_CAL_DURATION_SEC,
+    RANGE_CAL_PERCENTILE_HI,
+    RANGE_CAL_PERCENTILE_LO,
     RANGE_CAL_SCALE,
     TRACE_BORDER_COLOR,
     TRACE_BUFFER_SIZE,
@@ -61,6 +66,19 @@ from src.core.target_generator import TargetGenerator, calibrate_from_baseline
 # ======================================================================
 # Helpers
 # ======================================================================
+
+def _apply_gain(buffer, gain: float, center: float) -> list[float]:
+    """Return a perturbed copy of the buffer for display.
+
+    Applies a multiplicative gain around *center*:
+        perturbed = center + gain * (force - center)
+
+    When gain == 1.0 returns an unmodified copy.
+    """
+    if gain == 1.0:
+        return list(buffer)
+    return [center + gain * (f - center) for f in buffer]
+
 
 def _graded_dot_color(error: float, max_error: float) -> tuple[float, float, float]:
     """Map tracking error to a color on the green→yellow→red spectrum.
@@ -251,7 +269,7 @@ def run_experiment():
     trials = data.TrialHandler(
         trialList=trial_list,
         nReps=N_REPS,
-        method='random',
+        method=TRIAL_METHOD,
     )
 
     # y_min/y_max for dot positioning -- updated after range calibration
@@ -289,9 +307,9 @@ def run_experiment():
             win,
             text=(
                 "Breathing Range Calibration\n\n"
-                "Take 3 deep breaths:\n"
-                "Breathe IN as deeply as you can,\n"
-                "then OUT as far as you can.\n\n"
+                "Take several comfortable deep breaths.\n"
+                "Breathe more deeply than normal,\n"
+                "but not as hard as you can.\n\n"
                 "This helps us set the right difficulty level.\n\n"
                 "Press SPACE when ready."
             ),
@@ -327,12 +345,13 @@ def run_experiment():
                         phase='range_cal',
                         condition='',
                         trial_num=0,
+                        feedback_gain=1.0,
                     )
 
                 # Draw
                 remaining = max(0, RANGE_CAL_DURATION_SEC - elapsed)
                 status_text.text = (
-                    f"Breathe deeply -- {remaining:.0f}s remaining"
+                    f"Comfortable deep breaths -- {remaining:.0f}s remaining"
                 )
 
                 trace_border.draw()
@@ -350,29 +369,71 @@ def run_experiment():
 
         # Compute range calibration results
         if range_cal_forces and not escaped:
-            global_min = min(range_cal_forces)
-            global_max = max(range_cal_forces)
-            raw_amplitude = (global_max - global_min) / 2.0
-            global_amplitude = max(raw_amplitude * RANGE_CAL_SCALE, 0.5)
-            # Use range center so the target stays within the
-            # participant's comfortable range.
-            range_center = (global_max + global_min) / 2.0
+            sorted_forces = sorted(range_cal_forces)
+            raw_min = sorted_forces[0]
+            raw_max = sorted_forces[-1]
 
-            # Set dynamic y_range for trace and dot positioning
-            padding = (global_max - global_min) * 0.2
-            y_min = global_min - padding
-            y_max = global_max + padding
-            trace.y_min = y_min
-            trace.y_max = y_max
+            # Saturation detection (Rec 2): warn if sensor limits hit
+            saturated = any(
+                f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI
+                for f in range_cal_forces
+            )
+            if saturated:
+                n_sat = sum(
+                    1 for f in range_cal_forces
+                    if f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI
+                )
+                print(
+                    f"[cal] WARNING: {n_sat} samples near sensor limits "
+                    f"(≤{FORCE_SATURATION_LO} or ≥{FORCE_SATURATION_HI} N). "
+                    f"Belt may be too tight."
+                )
+                key = show_text_and_wait(
+                    win,
+                    text=(
+                        "Sensor Saturation Detected\n\n"
+                        "Some readings hit the sensor limits.\n"
+                        "The belt may be too tight.\n\n"
+                        "Consider loosening the belt slightly.\n"
+                        "Results may still be usable.\n\n"
+                        "Press SPACE to continue."
+                    ),
+                    key_list=['space', ESCAPE_KEY],
+                )
+                if key == ESCAPE_KEY:
+                    escaped = True
 
-            print(
-                f"Range calibration: min={global_min:.2f} N, "
-                f"max={global_max:.2f} N, center={range_center:.2f} N, "
-                f"amplitude={global_amplitude:.2f} N"
-            )
-            print(
-                f"Trace y_range set to: [{y_min:.2f}, {y_max:.2f}]"
-            )
+            if not escaped:
+                # Percentile clipping (Rec 1): reject outliers
+                n = len(sorted_forces)
+                lo_idx = int(n * RANGE_CAL_PERCENTILE_LO / 100)
+                hi_idx = int(n * RANGE_CAL_PERCENTILE_HI / 100) - 1
+                lo_idx = max(0, min(lo_idx, n - 1))
+                hi_idx = max(lo_idx, min(hi_idx, n - 1))
+                global_min = sorted_forces[lo_idx]
+                global_max = sorted_forces[hi_idx]
+
+                raw_amplitude = (global_max - global_min) / 2.0
+                global_amplitude = max(raw_amplitude * RANGE_CAL_SCALE, 0.5)
+                range_center = (global_max + global_min) / 2.0
+
+                # Set dynamic y_range for trace and dot positioning
+                padding = (global_max - global_min) * 0.2
+                y_min = global_min - padding
+                y_max = global_max + padding
+                trace.y_min = y_min
+                trace.y_max = y_max
+
+                print(
+                    f"Range calibration: raw=[{raw_min:.2f}, {raw_max:.2f}] N, "
+                    f"clipped P{RANGE_CAL_PERCENTILE_LO}/{RANGE_CAL_PERCENTILE_HI}="
+                    f"[{global_min:.2f}, {global_max:.2f}] N"
+                )
+                print(
+                    f"  center={range_center:.2f} N, "
+                    f"amplitude={global_amplitude:.2f} N, "
+                    f"y_range=[{y_min:.2f}, {y_max:.2f}]"
+                )
         else:
             # Fallback if no data was collected
             global_amplitude = 2.0
@@ -388,6 +449,7 @@ def run_experiment():
         for trial in trials:
             condition_name = trial['condition']
             condition_def = condition_map[condition_name]
+            feedback_gain = condition_def.feedback_gain
             trial_num = trials.thisN + 1
             total_trials = trials.nTotal
 
@@ -436,6 +498,7 @@ def run_experiment():
                         phase='baseline',
                         condition=condition_name,
                         trial_num=trial_num,
+                        feedback_gain=1.0,
                     )
 
                 # Draw
@@ -472,7 +535,8 @@ def run_experiment():
             print(
                 f"Trial {trial_num}: target center={range_center:.2f} N, "
                 f"amplitude={global_amplitude:.2f} N, "
-                f"baseline center={baseline_center:.2f} N"
+                f"baseline center={baseline_center:.2f} N, "
+                f"feedback_gain={feedback_gain}"
             )
 
             # ----------------------------------------------------------
@@ -507,6 +571,7 @@ def run_experiment():
                         phase='countdown',
                         condition=condition_name,
                         trial_num=trial_num,
+                        feedback_gain=feedback_gain,
                     )
 
                 # Extend the waveform backwards using the first segment's
@@ -536,7 +601,7 @@ def run_experiment():
                 status_text.text = "Get ready -- follow the dot!"
 
                 trace_border.draw()
-                trace.draw(list(buffer))
+                trace.draw(_apply_gain(buffer, feedback_gain, range_center))
                 target_dot.draw()
                 countdown_text.draw()
                 phase_title.draw()
@@ -584,6 +649,7 @@ def run_experiment():
                         phase='tracking',
                         condition=condition_name,
                         trial_num=trial_num,
+                        feedback_gain=feedback_gain,
                     )
 
                 # Map target force to screen y using the same math
@@ -621,7 +687,7 @@ def run_experiment():
                 )
 
                 trace_border.draw()
-                trace.draw(list(buffer))
+                trace.draw(_apply_gain(buffer, feedback_gain, range_center))
                 target_dot.draw()
                 phase_title.draw()
                 status_text.draw()

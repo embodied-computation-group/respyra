@@ -61,6 +61,10 @@ TRACE_BORDER_COLOR = '#333333'        # subtle border around trace area
 # ------------------------------------------------------------------ #
 RANGE_CAL_DURATION_SEC = 15.0         # one-time max-range calibration at session start
 RANGE_CAL_SCALE = 0.80                # fraction of max range used for target amplitude
+RANGE_CAL_PERCENTILE_LO = 5           # lower percentile for outlier rejection (0-100)
+RANGE_CAL_PERCENTILE_HI = 95          # upper percentile for outlier rejection (0-100)
+FORCE_SATURATION_LO = 0.0             # sensor floor (GDX-RB range: 0-50 N)
+FORCE_SATURATION_HI = 40.0            # sensor ceiling warning threshold
 BASELINE_DURATION_SEC = 10.0          # breathe-naturally baseline (per trial)
 COUNTDOWN_DURATION_SEC = 3.0          # 3..2..1 countdown before tracking
 TRACKING_DURATION_SEC = 30.0          # active tracking phase
@@ -74,12 +78,17 @@ SLOW_STEADY = ConditionDef('slow_steady', [SegmentDef(0.1, 3)])
 #   MIXED_RHYTHM: 3 cycles at 0.1 Hz + 1 cycle at 0.3 Hz = 33.33 s
 MIXED_RHYTHM = ConditionDef('mixed_rhythm', [SegmentDef(0.1, 3), SegmentDef(0.3, 1)])
 
-CONDITIONS = [SLOW_STEADY, MIXED_RHYTHM]
+#   PERTURBED_SLOW: same as SLOW_STEADY but visual trace is amplified.
+#   Participants must breathe with smaller amplitude to compensate.
+PERTURBED_SLOW = ConditionDef('perturbed_slow', [SegmentDef(0.1, 3)], feedback_gain=1.5)
+
+CONDITIONS = [SLOW_STEADY, PERTURBED_SLOW]
 
 # ------------------------------------------------------------------ #
 #  Trials                                                              #
 # ------------------------------------------------------------------ #
 N_REPS = 3                            # repetitions of each condition
+TRIAL_METHOD = 'sequential'           # 'sequential' = alternating, 'random' = shuffled
 
 # ------------------------------------------------------------------ #
 #  Data output                                                         #
@@ -95,6 +104,7 @@ DATA_COLUMNS = [
     'phase',
     'condition',
     'trial_num',
+    'feedback_gain',
 ]
 
 # ------------------------------------------------------------------ #

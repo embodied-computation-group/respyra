@@ -33,8 +33,14 @@ PHASE_COLORS = {
     'tracking': '#1a1a2e',    # near-black (no shading — trace stands out)
 }
 CONDITION_COLORS = {
-    'slow_steady': '#5b9bd5',   # steel blue
-    'mixed_rhythm': '#ed7d31',  # warm orange
+    'slow_steady': '#5b9bd5',     # steel blue
+    'mixed_rhythm': '#ed7d31',    # warm orange
+    'perturbed_slow': '#e05cda',  # magenta
+}
+CONDITION_SHORT = {
+    'slow_steady': 'SS',
+    'mixed_rhythm': 'MR',
+    'perturbed_slow': 'PS',
 }
 FORCE_COLOR = '#00e676'         # lime green (matches live trace)
 TARGET_COLOR = '#ffa726'        # orange
@@ -52,7 +58,7 @@ def load_session(csv_path: str) -> pd.DataFrame:
     df = pd.read_csv(csv_path)
 
     # Numeric columns (empty strings → NaN)
-    for col in ('timestamp', 'frame', 'force_n', 'target_force', 'error'):
+    for col in ('timestamp', 'frame', 'force_n', 'target_force', 'error', 'feedback_gain'):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce')
 
@@ -221,10 +227,12 @@ def _plot_full_trace(ax, df):
             continue
         t0 = trial_data['session_time'].iloc[0]
         ax.axvline(t0, color='#555555', linewidth=0.5, linestyle='--')
-        cond = trial_data['condition'].iloc[0]
-        cond_short = 'SS' if cond == 'slow_steady' else 'MR'
+        cond = trial_data['condition'].dropna().iloc[0] if trial_data['condition'].notna().any() else ''
+        cond_short = CONDITION_SHORT.get(cond, cond[:2].upper() if isinstance(cond, str) and cond else '??')
+        gain = trial_data['feedback_gain'].iloc[0] if 'feedback_gain' in trial_data.columns else 1.0
+        gain_str = f' g={gain}' if pd.notna(gain) and gain != 1.0 else ''
         ax.text(t0 + 0.3, ymax - (ymax - ymin) * 0.03,
-                f'T{int(trial_num)} {cond_short}', color='#aaaaaa',
+                f'T{int(trial_num)} {cond_short}{gain_str}', color='#aaaaaa',
                 fontsize=7, va='top', fontweight='bold')
 
 
@@ -248,10 +256,13 @@ def _plot_error_timeseries(ax, tracking):
     for i, trial_num in enumerate(trials):
         t_data = tracking[tracking['trial_num'] == trial_num]
         cond = t_data['condition'].iloc[0]
-        cond_short = 'SS' if cond == 'slow_steady' else 'MR'
+        cond_short = CONDITION_SHORT.get(cond, cond[:2].upper())
+        # Show gain in label when perturbation is active
+        gain = t_data['feedback_gain'].iloc[0] if 'feedback_gain' in t_data.columns else 1.0
+        gain_str = f' g={gain}' if pd.notna(gain) and gain != 1.0 else ''
         ax.plot(t_data['timestamp'], t_data['error'],
                 color=cmap[i], linewidth=0.7, alpha=0.8,
-                label=f'T{int(trial_num)} ({cond_short})')
+                label=f'T{int(trial_num)} ({cond_short}{gain_str})')
 
     ax.legend(loc='upper right', fontsize=7, facecolor='#1a1a2e',
               edgecolor='#333333', labelcolor='white', ncol=2)
@@ -425,7 +436,14 @@ def _plot_summary_text(ax, df, trial_stats, baseline_cal, csv_path):
             c_sd = cond_stats['mae'].std()
             c_rmse = cond_stats['rmse'].mean()
             label = cond.replace('_', ' ')
-            lines.append(f'{label}:')
+            # Show gain if present
+            cond_tracking = tracking[tracking['condition'] == cond]
+            if 'feedback_gain' in cond_tracking.columns:
+                gain = cond_tracking['feedback_gain'].dropna().iloc[0] if len(cond_tracking) > 0 else 1.0
+                gain_str = f' (gain={gain})' if gain != 1.0 else ''
+            else:
+                gain_str = ''
+            lines.append(f'{label}{gain_str}:')
             lines.append(f'  MAE = {c_mae:.3f} +/- {c_sd:.3f} N')
             lines.append(f'  RMSE = {c_rmse:.3f} N')
         lines.append('')
