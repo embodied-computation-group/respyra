@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Project Is
 
-**breathpy** is a Python project for building psychophysical experiments that integrate the Vernier Go Direct Respiration Belt (GDX-RB) with PsychoPy. Experiments are written in pure Python (no PsychoPy Builder/GUI).
+**respyra** is a Python project for building psychophysical experiments that integrate the Vernier Go Direct Respiration Belt (GDX-RB) with PsychoPy. Experiments are written in pure Python (no PsychoPy Builder/GUI).
 
 ## Architecture
 

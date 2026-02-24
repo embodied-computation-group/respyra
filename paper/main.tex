@@ -11,13 +11,13 @@
 \usepackage{siunitx}
 \usepackage{amsmath}
 
-\title{breathpy: An Open-Source Toolbox for Respiratory Motor Control Tracking with Visuomotor Perturbation}
+\title{respyra: An Open-Source Toolbox for Respiratory Motor Control Tracking with Visuomotor Perturbation}
 \shorttitle{Respiratory Motor Control Tracking}
 
 \authorsnames{Micah Allen}
 \authorsaffiliations{Aarhus University}
 
-\abstract{Respiratory interoception is increasingly recognized as a key modality linking bodily sensation to emotional experience and self-regulation. However, few tools exist for studying the sensorimotor dynamics of voluntary breathing control. Here we present \textit{breathpy}, an open-source Python toolbox that integrates a Vernier Go Direct Respiration Belt with PsychoPy to enable real-time respiratory motor control tracking experiments. Participants follow a sinusoidal target with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation), in which the displayed breathing trace is amplified or attenuated relative to ground truth. We report proof-of-concept data from a single participant completing six trials alternating between veridical feedback and a 1.5$\times$ gain perturbation condition. Results demonstrate that the participant achieved accurate respiratory tracking (overall MAE = \SI{0.174}{\newton}) and that the gain perturbation reliably increased tracking error (perturbed MAE = \SI{0.240}{\newton}) relative to veridical feedback (MAE = \SI{0.107}{\newton}), while remaining learnable within the session. The toolbox is freely available and designed to facilitate future research on respiratory sensorimotor control, interoceptive learning, and breathing-based interventions.}
+\abstract{Respiratory interoception is increasingly recognized as a key modality linking bodily sensation to emotional experience and self-regulation. However, few tools exist for studying the sensorimotor dynamics of voluntary breathing control. Here we present \textit{respyra}, an open-source Python toolbox that integrates a Vernier Go Direct Respiration Belt with PsychoPy to enable real-time respiratory motor control tracking experiments. Participants follow a sinusoidal target with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation), in which the displayed breathing trace is amplified or attenuated relative to ground truth. We report proof-of-concept data from a single participant completing six trials alternating between veridical feedback and a 1.5$\times$ gain perturbation condition. Results demonstrate that the participant achieved accurate respiratory tracking (overall MAE = \SI{0.174}{\newton}) and that the gain perturbation reliably increased tracking error (perturbed MAE = \SI{0.240}{\newton}) relative to veridical feedback (MAE = \SI{0.107}{\newton}), while remaining learnable within the session. The toolbox is freely available and designed to facilitate future research on respiratory sensorimotor control, interoceptive learning, and breathing-based interventions.}
 
 \keywords{respiratory interoception, motor control, breathing, visuomotor perturbation, psychophysics, open-source toolbox}
 
@@ -34,16 +34,16 @@ Measuring respiroception has relied primarily on detection paradigms, such as th
 
 The study of sensorimotor control offers well-established paradigms for investigating how the motor system adapts to perturbations in visual feedback. In visuomotor reaching studies, participants learn to compensate for rotated or scaled cursor feedback, revealing the dynamics of sensorimotor adaptation, error correction, and internal model updating \parencite[e.g.,][]{krakauer2019motor}. Applying analogous perturbation paradigms to respiratory control could illuminate how individuals monitor and correct their breathing output, with implications for understanding both healthy respiratory regulation and clinical conditions involving dysfunctional breathing patterns.
 
-Here we present \textit{breathpy}, an open-source Python toolbox for conducting respiratory motor control tracking experiments with real-time biofeedback and visuomotor perturbation capabilities. The toolbox integrates a commercially available respiration belt with PsychoPy for stimulus-precise experiment control. We describe the system architecture, experimental protocol, and report proof-of-concept data demonstrating that (a) participants can accurately track sinusoidal breathing targets and (b) visual gain perturbations reliably increase tracking error while remaining learnable within a session.
+Here we present \textit{respyra}, an open-source Python toolbox for conducting respiratory motor control tracking experiments with real-time biofeedback and visuomotor perturbation capabilities. The toolbox integrates a commercially available respiration belt with PsychoPy for stimulus-precise experiment control. We describe the system architecture, experimental protocol, and report proof-of-concept data demonstrating that (a) participants can accurately track sinusoidal breathing targets and (b) visual gain perturbations reliably increase tracking error while remaining learnable within a session.
 
 \section{Method}
 
 \subsection{Toolbox Architecture}
 
-\textit{breathpy} is implemented in Python 3.10 and integrates two primary components: the Vernier Go Direct Respiration Belt (GDX-RB; Vernier Software \& Technology) for real-time force-based respiratory measurement, and PsychoPy \parencite{peirce2019psychopy} for stimulus presentation and experiment control. The toolbox is organized into reusable core modules, configuration files, and experiment scripts, following a separation-of-concerns architecture (see Table~\ref{tab:modules}).
+\textit{respyra} is implemented in Python 3.10 and integrates two primary components: the Vernier Go Direct Respiration Belt (GDX-RB; Vernier Software \& Technology) for real-time force-based respiratory measurement, and PsychoPy \parencite{peirce2019psychopy} for stimulus presentation and experiment control. The toolbox is organized into reusable core modules, configuration files, and experiment scripts, following a separation-of-concerns architecture (see Table~\ref{tab:modules}).
 
 \begin{table}[ht]
-\caption{Core Modules of the breathpy Toolbox}
+\caption{Core Modules of the respyra Toolbox}
 \label{tab:modules}
 \begin{tabular}{lp{10cm}}
 \toprule
@@ -137,7 +137,7 @@ The gain perturbation condition produced consistently higher tracking errors tha
 
 \section{Discussion}
 
-We presented \textit{breathpy}, an open-source toolbox for studying respiratory motor control through real-time tracking with visuomotor perturbation. The proof-of-concept data demonstrate that the system produces stable, high-quality respiratory tracking data at 10~Hz and that participants can achieve precise control of their breathing to follow prescribed sinusoidal targets.
+We presented \textit{respyra}, an open-source toolbox for studying respiratory motor control through real-time tracking with visuomotor perturbation. The proof-of-concept data demonstrate that the system produces stable, high-quality respiratory tracking data at 10~Hz and that participants can achieve precise control of their breathing to follow prescribed sinusoidal targets.
 
 The visuomotor perturbation condition---in which the visual trace of breathing was amplified by a factor of 1.5 around the participant's center---reliably increased tracking error while remaining learnable. This finding parallels results from the visuomotor reaching literature, where cursor gain perturbations produce immediate performance costs followed by gradual adaptation \parencite{krakauer2019motor}. The observed improvement from the first to the third perturbed trial suggests that respiratory sensorimotor adaptation follows a similar trajectory, though systematic studies with larger samples are needed to characterize the time course and completeness of adaptation.
 
@@ -149,7 +149,7 @@ Several limitations should be noted. First, the proof-of-concept data come from 
 
 The respiratory motor control tracking paradigm opens several directions for future research. Within the interoceptive framework, the task could be combined with measures of respiratory interoceptive sensitivity \parencite{nikolova2022respiratory} to investigate whether perceptual sensitivity predicts motor control precision. The perturbation conditions could be extended to study sensorimotor adaptation dynamics---including savings, interference, and transfer---using the well-developed theoretical toolkit from the motor learning literature. Finally, the framework could support investigations of breathing-based interventions by quantifying how accurately individuals can implement prescribed breathing patterns (e.g., paced slow breathing at 0.1~Hz) and how this accuracy relates to downstream physiological and psychological outcomes \parencite{gholamrezaei2021psychophysiological, luo2025effect}.
 
-\textit{breathpy} is freely available at \url{https://github.com/embodied-computation-group/breathpy} under an open-source license.
+\textit{respyra} is freely available at \url{https://github.com/embodied-computation-group/respyra} under an open-source license.
 
 \printbibliography
 

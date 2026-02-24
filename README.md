@@ -1,4 +1,4 @@
-# breathpy
+# respyra
 
 Python framework for respiratory motor control experiments integrating the [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) (GDX-RB) with [PsychoPy](https://www.psychopy.org/). All experiments are written in pure Python (no PsychoPy Builder/GUI).
 
@@ -23,8 +23,8 @@ Participants follow a sinusoidal target dot with their breathing while their liv
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/embodied-computation-group/breathpy.git
-   cd breathpy
+   git clone https://github.com/embodied-computation-group/respyra.git
+   cd respyra
    ```
 
 2. Create a virtual environment with Python 3.10:
