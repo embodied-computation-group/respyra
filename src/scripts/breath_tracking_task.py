@@ -107,8 +107,8 @@ def run_experiment():
     # 4. Connect belt (BLE with USB fallback)
     # ------------------------------------------------------------------
     belt = None
+    print(f"[belt] Searching for device via {CONNECTION.upper()}...")
     try:
-        print(f"Attempting {CONNECTION} connection...")
         belt = BreathBelt(
             connection=CONNECTION,
             device_to_open=DEVICE_TO_OPEN,
@@ -116,11 +116,12 @@ def run_experiment():
             sensors=BELT_CHANNELS,
         )
         belt.start()
-        print(f"{CONNECTION.upper()} connection succeeded.")
+        print(f"[belt] Found device via {CONNECTION.upper()}. Connected and streaming.")
     except BreathBeltError as exc:
-        print(f"{CONNECTION.upper()} failed: {exc}")
+        print(f"[belt] {CONNECTION.upper()} failed: {exc}")
         if CONNECTION == 'ble':
-            print("Falling back to USB...")
+            print("[belt] Falling back to USB...")
+            print("[belt] Searching for device via USB...")
             try:
                 belt = BreathBelt(
                     connection='usb',
@@ -129,9 +130,10 @@ def run_experiment():
                     sensors=BELT_CHANNELS,
                 )
                 belt.start()
-                print("USB connection succeeded.")
+                print("[belt] Found device via USB. Connected and streaming.")
             except BreathBeltError as usb_exc:
-                print(f"USB also failed: {usb_exc}")
+                print(f"[belt] USB also failed: {usb_exc}")
+                print("[belt] No device found. Exiting.")
                 win.close()
                 core.quit()
                 return
@@ -633,7 +635,8 @@ def run_experiment():
     # Cleanup (always runs)
     # ==================================================================
     finally:
-        belt.stop()
+        if belt is not None:
+            belt.stop()
         logger.close()
 
         print(f"Data saved to: {filepath}")
