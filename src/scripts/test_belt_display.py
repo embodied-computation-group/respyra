@@ -11,8 +11,6 @@ Run from the project root:
 
 from collections import deque
 
-from psychopy import core, gui, visual
-
 from src.configs.test_experiment import (
     BG_COLOR,
     BELT_CHANNELS,
@@ -36,17 +34,69 @@ from src.configs.test_experiment import (
 )
 from src.core.breath_belt import BreathBelt, BreathBeltError
 from src.core.data_logger import DataLogger, create_session_file
-from src.core.display import SignalTrace, create_monitor, create_window
-from src.core.events import check_keys
 
 
 # ======================================================================
 # Setup
 # ======================================================================
 
+def _connect_belt():
+    """Connect to the breath belt before PsychoPy is imported.
+
+    On Windows, Bleak's BLE scanner requires the main thread with COM
+    in MTA mode.  Importing PsychoPy sets COM to STA, so belt
+    connection must happen first.
+
+    Returns the connected BreathBelt, or exits if no device is found.
+    """
+    belt = None
+    print(f"[belt] Searching for device via {CONNECTION.upper()}...")
+    try:
+        belt = BreathBelt(
+            connection=CONNECTION,
+            device_to_open=DEVICE_TO_OPEN,
+            period_ms=BELT_PERIOD_MS,
+            sensors=BELT_CHANNELS,
+        )
+        belt.start()
+        print(f"[belt] Found device via {CONNECTION.upper()}. Connected and streaming.")
+    except BreathBeltError as exc:
+        print(f"[belt] {CONNECTION.upper()} failed: {exc}")
+        if CONNECTION == 'ble':
+            print("[belt] Falling back to USB...")
+            print("[belt] Searching for device via USB...")
+            try:
+                belt = BreathBelt(
+                    connection='usb',
+                    device_to_open=None,
+                    period_ms=BELT_PERIOD_MS,
+                    sensors=BELT_CHANNELS,
+                )
+                belt.start()
+                print("[belt] Found device via USB. Connected and streaming.")
+            except BreathBeltError as usb_exc:
+                print(f"[belt] USB also failed: {usb_exc}")
+                print("[belt] No device found. Exiting.")
+                raise SystemExit(1)
+    return belt
+
+
 def run_experiment():
     # ------------------------------------------------------------------
-    # 1. Participant info dialog
+    # 1. Connect belt BEFORE importing PsychoPy (Windows BLE requires
+    #    main thread with COM MTA; PsychoPy import sets COM to STA)
+    # ------------------------------------------------------------------
+    belt = _connect_belt()
+
+    # ------------------------------------------------------------------
+    # 2. Import PsychoPy (safe now that BLE scanning is done)
+    # ------------------------------------------------------------------
+    from psychopy import core, gui, visual
+    from src.core.display import SignalTrace, create_monitor, create_window
+    from src.core.events import check_keys
+
+    # ------------------------------------------------------------------
+    # 3. Participant info dialog
     # ------------------------------------------------------------------
     exp_info = {'participant': '', 'session': '001'}
     dlg = gui.DlgFromDict(
@@ -55,14 +105,15 @@ def run_experiment():
         order=['participant', 'session'],
     )
     if not dlg.OK:
+        belt.stop()
         core.quit()
-        return  # safety -- core.quit() should not return
+        return
 
     participant = exp_info['participant']
     session = exp_info['session']
 
     # ------------------------------------------------------------------
-    # 2. Create session file
+    # 4. Create session file
     # ------------------------------------------------------------------
     filepath = create_session_file(
         participant_id=participant,
@@ -72,7 +123,7 @@ def run_experiment():
     print(f"Data will be saved to: {filepath}")
 
     # ------------------------------------------------------------------
-    # 3. Create monitor and window
+    # 5. Create monitor and window
     # ------------------------------------------------------------------
     mon = create_monitor(
         name=MONITOR_NAME,
@@ -88,40 +139,7 @@ def run_experiment():
     )
 
     # ------------------------------------------------------------------
-    # 4. Connect belt (BLE with USB fallback)
-    # ------------------------------------------------------------------
-    belt = None
-    try:
-        print(f"Attempting {CONNECTION} connection...")
-        belt = BreathBelt(
-            connection=CONNECTION,
-            device_to_open=DEVICE_TO_OPEN,
-            period_ms=BELT_PERIOD_MS,
-            sensors=BELT_CHANNELS,
-        )
-        belt.start()
-        print(f"{CONNECTION.upper()} connection succeeded.")
-    except BreathBeltError as exc:
-        print(f"{CONNECTION.upper()} failed: {exc}")
-        if CONNECTION == 'ble':
-            print("Falling back to USB...")
-            try:
-                belt = BreathBelt(
-                    connection='usb',
-                    device_to_open=None,
-                    period_ms=BELT_PERIOD_MS,
-                    sensors=BELT_CHANNELS,
-                )
-                belt.start()
-                print("USB connection succeeded.")
-            except BreathBeltError as usb_exc:
-                print(f"USB also failed: {usb_exc}")
-                win.close()
-                core.quit()
-                return
-
-    # ------------------------------------------------------------------
-    # 5-9. Pre-create stimuli, logger, clock (outside frame loop)
+    # 6. Pre-create stimuli, logger, clock (outside frame loop)
     # ------------------------------------------------------------------
     trace = SignalTrace(
         win,
@@ -239,7 +257,8 @@ def run_experiment():
     # Cleanup (always runs)
     # ==================================================================
     finally:
-        belt.stop()
+        if belt is not None:
+            belt.stop()
         data_logger.close()
 
         # End screen

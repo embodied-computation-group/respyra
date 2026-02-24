@@ -14,7 +14,6 @@ Run from the project root:
 from collections import deque
 
 import numpy as np
-from psychopy import core, data, gui, visual
 
 from src.configs.breath_tracking import (
     BASELINE_DURATION_SEC,
@@ -51,8 +50,6 @@ from src.configs.breath_tracking import (
 )
 from src.core.breath_belt import BreathBelt, BreathBeltError
 from src.core.data_logger import DataLogger, create_session_file
-from src.core.display import SignalTrace, create_monitor, create_window, show_text_and_wait
-from src.core.events import check_keys
 from src.core.target_generator import TargetGenerator, calibrate_from_baseline
 
 
@@ -60,52 +57,15 @@ from src.core.target_generator import TargetGenerator, calibrate_from_baseline
 # Main experiment
 # ======================================================================
 
-def run_experiment():
-    # ------------------------------------------------------------------
-    # 1. Participant info dialog
-    # ------------------------------------------------------------------
-    exp_info = {'participant': '', 'session': '001'}
-    dlg = gui.DlgFromDict(
-        exp_info,
-        title='Breath Tracking Task',
-        order=['participant', 'session'],
-    )
-    if not dlg.OK:
-        core.quit()
-        return
+def _connect_belt():
+    """Connect to the breath belt before PsychoPy is imported.
 
-    participant = exp_info['participant']
-    session = exp_info['session']
+    On Windows, Bleak's BLE scanner requires the main thread with COM
+    in MTA mode.  Importing PsychoPy sets COM to STA, so belt
+    connection must happen first.
 
-    # ------------------------------------------------------------------
-    # 2. Create session file
-    # ------------------------------------------------------------------
-    filepath = create_session_file(
-        participant_id=participant,
-        session=session,
-        output_dir=OUTPUT_DIR,
-    )
-    print(f"Data will be saved to: {filepath}")
-
-    # ------------------------------------------------------------------
-    # 3. Create monitor and window
-    # ------------------------------------------------------------------
-    mon = create_monitor(
-        name=MONITOR_NAME,
-        width_cm=MONITOR_WIDTH_CM,
-        distance_cm=MONITOR_DISTANCE_CM,
-        size_pix=MONITOR_SIZE_PIX,
-    )
-    win = create_window(
-        fullscr=FULLSCR,
-        monitor=mon,
-        units=UNITS,
-        color=BG_COLOR,
-    )
-
-    # ------------------------------------------------------------------
-    # 4. Connect belt (BLE with USB fallback)
-    # ------------------------------------------------------------------
+    Returns the connected BreathBelt, or exits if no device is found.
+    """
     belt = None
     print(f"[belt] Searching for device via {CONNECTION.upper()}...")
     try:
@@ -134,12 +94,69 @@ def run_experiment():
             except BreathBeltError as usb_exc:
                 print(f"[belt] USB also failed: {usb_exc}")
                 print("[belt] No device found. Exiting.")
-                win.close()
-                core.quit()
-                return
+                raise SystemExit(1)
+    return belt
+
+
+def run_experiment():
+    # ------------------------------------------------------------------
+    # 1. Connect belt BEFORE importing PsychoPy (Windows BLE requires
+    #    main thread with COM MTA; PsychoPy import sets COM to STA)
+    # ------------------------------------------------------------------
+    belt = _connect_belt()
 
     # ------------------------------------------------------------------
-    # 5. Pre-create ALL stimuli (before any frame loops)
+    # 2. Import PsychoPy (safe now that BLE scanning is done)
+    # ------------------------------------------------------------------
+    from psychopy import core, data, gui, visual
+    from src.core.display import SignalTrace, create_monitor, create_window, show_text_and_wait
+    from src.core.events import check_keys
+
+    # ------------------------------------------------------------------
+    # 3. Participant info dialog
+    # ------------------------------------------------------------------
+    exp_info = {'participant': '', 'session': '001'}
+    dlg = gui.DlgFromDict(
+        exp_info,
+        title='Breath Tracking Task',
+        order=['participant', 'session'],
+    )
+    if not dlg.OK:
+        belt.stop()
+        core.quit()
+        return
+
+    participant = exp_info['participant']
+    session = exp_info['session']
+
+    # ------------------------------------------------------------------
+    # 4. Create session file
+    # ------------------------------------------------------------------
+    filepath = create_session_file(
+        participant_id=participant,
+        session=session,
+        output_dir=OUTPUT_DIR,
+    )
+    print(f"Data will be saved to: {filepath}")
+
+    # ------------------------------------------------------------------
+    # 5. Create monitor and window
+    # ------------------------------------------------------------------
+    mon = create_monitor(
+        name=MONITOR_NAME,
+        width_cm=MONITOR_WIDTH_CM,
+        distance_cm=MONITOR_DISTANCE_CM,
+        size_pix=MONITOR_SIZE_PIX,
+    )
+    win = create_window(
+        fullscr=FULLSCR,
+        monitor=mon,
+        units=UNITS,
+        color=BG_COLOR,
+    )
+
+    # ------------------------------------------------------------------
+    # 6. Pre-create ALL stimuli (before any frame loops)
     # ------------------------------------------------------------------
     trace_left, trace_bottom, trace_right, trace_top = TRACE_RECT
     trace_center_y = (trace_bottom + trace_top) / 2
@@ -195,14 +212,14 @@ def run_experiment():
     )
 
     # ------------------------------------------------------------------
-    # 6. Create DataLogger, clock, signal buffer
+    # 7. Create DataLogger, clock, signal buffer
     # ------------------------------------------------------------------
     logger = DataLogger(filepath, columns=DATA_COLUMNS)
     exp_clock = core.Clock()
     buffer = deque(maxlen=TRACE_BUFFER_SIZE)
 
     # ------------------------------------------------------------------
-    # 7. Build trial order with TrialHandler
+    # 8. Build trial order with TrialHandler
     # ------------------------------------------------------------------
     condition_map = {c.name: c for c in CONDITIONS}
     trial_list = [{'condition': c.name} for c in CONDITIONS]
@@ -219,7 +236,7 @@ def run_experiment():
     all_trial_errors = []
 
     # ------------------------------------------------------------------
-    # 8. Show global instructions
+    # 9. Show global instructions
     # ------------------------------------------------------------------
     show_text_and_wait(
         win,
@@ -239,7 +256,7 @@ def run_experiment():
     )
 
     # ==================================================================
-    # 9. Range calibration phase (once per session)
+    # 10. Range calibration phase (once per session)
     # ==================================================================
     try:
         # Show range-cal instruction screen
@@ -341,7 +358,7 @@ def run_experiment():
             return  # finally block handles cleanup
 
         # ==============================================================
-        # 10. Trial loop
+        # 11. Trial loop
         # ==============================================================
         for trial in trials:
             condition_name = trial['condition']

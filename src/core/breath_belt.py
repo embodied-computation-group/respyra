@@ -31,11 +31,11 @@ Notes
   requiring a physical power-cycle.
 - The gdx wrapper uses *class-level* state, so only one BreathBelt
   instance should exist at a time.
-- **Windows STA/MTA workaround:** On Windows, importing PsychoPy
+- **Windows BLE + PsychoPy:** On Windows, importing PsychoPy
   (pyglet/wxPython) puts the main thread into COM STA mode, which
-  breaks Bleak's BLE scanner.  Device initialisation therefore runs
-  in a temporary background thread that gets a fresh MTA apartment.
-  On macOS/Linux this is harmless.
+  breaks Bleak's BLE scanner.  Bleak also requires the main thread
+  for Windows Runtime callbacks.  Therefore, ``start()`` must be
+  called on the main thread *before* PsychoPy is imported.
 """
 
 from __future__ import annotations
@@ -114,10 +114,9 @@ class BreathBelt:
     def start(self) -> None:
         """Open the device, configure sensors, and launch the reader thread.
 
-        Device initialisation (BLE scanning, sensor setup) runs in a
-        temporary background thread so that Bleak gets a fresh COM MTA
-        apartment on Windows, avoiding the STA conflict caused by
-        PsychoPy's GUI imports.  On macOS/Linux this is harmless.
+        On Windows, Bleak's BLE scanner requires the main thread *and*
+        a COM MTA apartment.  Importing PsychoPy sets COM to STA, so
+        ``start()`` must be called **before** ``import psychopy``.
 
         Raises
         ------
@@ -135,36 +134,13 @@ class BreathBelt:
             self._sensors,
         )
 
-        # Run device init in a background thread so BLE scanning gets a
-        # fresh COM apartment (MTA) on Windows.
-        init_error: list[BaseException] = []
-
-        def _init_wrapper() -> None:
-            try:
-                self._init_device()
-            except Exception as exc:
-                init_error.append(exc)
-
-        init_thread = threading.Thread(
-            target=_init_wrapper,
-            name="BreathBelt-init",
-            daemon=True,
-        )
-        init_thread.start()
-        init_thread.join(timeout=30.0)
-
-        if init_thread.is_alive():
+        try:
+            self._init_device()
+        except BreathBeltError:
             self._cleanup_gdx()
-            raise BreathBeltError(
-                "Device initialisation timed out after 30 s. "
-                "Is the belt powered on and in range?"
-            )
-
-        if init_error:
-            exc = init_error[0]
+            raise
+        except Exception as exc:
             self._cleanup_gdx()
-            if isinstance(exc, BreathBeltError):
-                raise exc
             raise BreathBeltError(
                 f"Failed to initialise belt: {exc}"
             ) from exc
@@ -299,9 +275,8 @@ class BreathBelt:
     def _init_device(self) -> None:
         """Open the device, configure sensors, and begin streaming.
 
-        Designed to run in a background thread so that BLE scanning
-        (which requires COM MTA mode on Windows) is not blocked by
-        PsychoPy's STA initialisation on the main thread.
+        Must run on the main thread — Bleak's BLE scanner requires it
+        for Windows Runtime callbacks.
         """
         self._gdx = _gdx_module.gdx()
         print(f"[belt] Scanning {self._connection.upper()}...")
