@@ -1,0 +1,1355 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/apasortcite//global/global/global}
+    \entry{banellis2026interoceptive}{article}{}{}
+      \name{author}{9}{}{%
+        {{un=0,uniquepart=base,hash=36aa6ae87e6ce122824872a9ef2b3653}{%
+           family={Banellis},
+           familyi={B\bibinitperiod},
+           given={Leah},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e22e5554c8c68a2adb9e926dc3198cc7}{%
+           family={Nikolova},
+           familyi={N\bibinitperiod},
+           given={Niia},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a61f078f25b13abd810481267c7097df}{%
+           family={Ehmsen},
+           familyi={E\bibinitperiod},
+           given={Julie\bibnamedelima F.},
+           giveni={J\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fcb82ab15b5ea96471a55745c2292a59}{%
+           family={Courtin},
+           familyi={C\bibinitperiod},
+           given={Abigail\bibnamedelima S.},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=48a346c4612cca3438812ff152b8ef0e}{%
+           family={Vejl{ø}},
+           familyi={V\bibinitperiod},
+           given={Malthe},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5914ee098bcb92db72467268b02565f2}{%
+           family={Tyrer},
+           familyi={T\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=52b333b2d6f58de36e2a3af244f4e31a}{%
+           family={Böhme},
+           familyi={B\bibinitperiod},
+           given={Rebecca\bibnamedelima A.},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c897f0de7a8239c7a0bddb3a9ffcf9bf}{%
+           family={Fardo},
+           familyi={F\bibinitperiod},
+           given={Francesca},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a5080fdae46d5fa09b0968eaa03a752f}{%
+           family={Allen},
+           familyi={A\bibinitperiod},
+           given={Micah\bibnamedelima G.},
+           giveni={M\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{33a814ef5abb1e17aa1102505d017a39}
+      \strng{fullhash}{b4a71d23764adec2f82e3177c183573a}
+      \strng{fullhashraw}{b4a71d23764adec2f82e3177c183573a}
+      \strng{bibnamehash}{b4a71d23764adec2f82e3177c183573a}
+      \strng{authorbibnamehash}{b4a71d23764adec2f82e3177c183573a}
+      \strng{authornamehash}{33a814ef5abb1e17aa1102505d017a39}
+      \strng{authorfullhash}{b4a71d23764adec2f82e3177c183573a}
+      \strng{authorfullhashraw}{b4a71d23764adec2f82e3177c183573a}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Communications Psychology}
+      \field{title}{Interoceptive ability is uncorrelated across respiratory and cardiac axes in a large scale psychophysical study}
+      \field{year}{2026}
+      \verb{doi}
+      \verb 10.1038/s44271-026-00404-z
+      \endverb
+    \endentry
+    \entry{garfinkel2015knowing}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=700c95e054106318cecb4a12ebc8545a}{%
+           family={Garfinkel},
+           familyi={G\bibinitperiod},
+           given={Sarah\bibnamedelima N.},
+           giveni={S\bibinitperiod\bibinitdelim N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a18faa5d293b699968705a564971492b}{%
+           family={Seth},
+           familyi={S\bibinitperiod},
+           given={Anil\bibnamedelima K.},
+           giveni={A\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=aa5aaf33b4bf6399141bcac4970c9708}{%
+           family={Barrett},
+           familyi={B\bibinitperiod},
+           given={Adam\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=70e5a73111c1b00017a3853078abff6d}{%
+           family={Suzuki},
+           familyi={S\bibinitperiod},
+           given={Keisuke},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=43af36734fd8bac612dff7786a9a36b8}{%
+           family={Critchley},
+           familyi={C\bibinitperiod},
+           given={Hugo\bibnamedelima D.},
+           giveni={H\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8d1a584a5c6cf4202c5cf6dd4c7f03dd}
+      \strng{fullhash}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{fullhashraw}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{bibnamehash}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{authorbibnamehash}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{authornamehash}{8d1a584a5c6cf4202c5cf6dd4c7f03dd}
+      \strng{authorfullhash}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{authorfullhashraw}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biological Psychology}
+      \field{title}{Knowing your own heart: {D}istinguishing interoceptive accuracy from interoceptive awareness}
+      \field{volume}{104}
+      \field{year}{2015}
+      \field{pages}{65\bibrangedash 74}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/j.biopsycho.2014.11.004
+      \endverb
+    \endentry
+    \entry{gholamrezaei2021psychophysiological}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=d5b860fc5d7afd95b7e0d70ce23d5a1d}{%
+           family={Gholamrezaei},
+           familyi={G\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=351c38b9789111c76af1589fd833d37f}{%
+           family={Van\bibnamedelima Diest},
+           familyi={V\bibinitperiod\bibinitdelim D\bibinitperiod},
+           given={Ilse},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=890357f9283bac254e35b10549d6034c}{%
+           family={Aziz},
+           familyi={A\bibinitperiod},
+           given={Qasim},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dfe89a47be5716c07b122a06b13b41d7}{%
+           family={Vlaeyen},
+           familyi={V\bibinitperiod},
+           given={Johan\bibnamedelimb W.\bibnamedelimi S.},
+           giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=274b07e7b46af10d9e161f43c285a01e}{%
+           family={Van\bibnamedelima Oudenhove},
+           familyi={V\bibinitperiod\bibinitdelim O\bibinitperiod},
+           given={Lukas},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{bfebcdb0f53f54f2095a2acc4fc2431a}
+      \strng{fullhash}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{fullhashraw}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{bibnamehash}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{authorbibnamehash}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{authornamehash}{bfebcdb0f53f54f2095a2acc4fc2431a}
+      \strng{authorfullhash}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{authorfullhashraw}{2bb423cf50b2a2a0742d57b04805687d}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychophysiology}
+      \field{title}{Psychophysiological responses to various slow, deep breathing techniques}
+      \field{volume}{58}
+      \field{year}{2021}
+      \field{pages}{e13712}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1111/psyp.13712
+      \endverb
+    \endentry
+    \entry{harrison2021interoception}{article}{}{}
+      \name{author}{13}{}{%
+        {{un=0,uniquepart=base,hash=61a337a5108d0ae4d36cef046e5f50c7}{%
+           family={Harrison},
+           familyi={H\bibinitperiod},
+           given={Oliver\bibnamedelima K.},
+           giveni={O\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9059095e764fdc810ffb4fdcded0e3c7}{%
+           family={Köchli},
+           familyi={K\bibinitperiod},
+           given={Laura},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8042364fbcf90b5e4662b1176018e26c}{%
+           family={Marino},
+           familyi={M\bibinitperiod},
+           given={Stephanie},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=77800f317a5ed5274a3f69adde911325}{%
+           family={Luechinger},
+           familyi={L\bibinitperiod},
+           given={Roger},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ecb64cfdcac027942e483856837db31b}{%
+           family={Hennel},
+           familyi={H\bibinitperiod},
+           given={Franciszek},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ec994e808dffc65ae653ed68382baed0}{%
+           family={Brand},
+           familyi={B\bibinitperiod},
+           given={Katja},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cb1eb4c685ec4285023764d7db92ad64}{%
+           family={Hess},
+           familyi={H\bibinitperiod},
+           given={Alexander\bibnamedelima J.},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b5812f2e3b0d147e87e38918b7d38956}{%
+           family={Frässle},
+           familyi={F\bibinitperiod},
+           given={Stefan},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7bcbe3fa550984903ff27cf46e9106b2}{%
+           family={Iglesias},
+           familyi={I\bibinitperiod},
+           given={Sandra},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2dced9dae3d6e6d8cbc36f6ef363fd94}{%
+           family={Vinckier},
+           familyi={V\bibinitperiod},
+           given={Fabien},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0c5ad90c7829087495bf51d29fdd4a5e}{%
+           family={Petzschner},
+           familyi={P\bibinitperiod},
+           given={Frederike\bibnamedelima H.},
+           giveni={F\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0b7c69f7dc4f1a8822391ca84368a23f}{%
+           family={Harrison},
+           familyi={H\bibinitperiod},
+           given={Samuel\bibnamedelima J.},
+           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=607b8d8c1c9c37da0687116527a85b21}{%
+           family={Stephan},
+           familyi={S\bibinitperiod},
+           given={Klaas\bibnamedelima E.},
+           giveni={K\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4155dc85d356c69bb228d209741bb02f}
+      \strng{fullhash}{b33014fb95611f151a41743b839eaca0}
+      \strng{fullhashraw}{b33014fb95611f151a41743b839eaca0}
+      \strng{bibnamehash}{b33014fb95611f151a41743b839eaca0}
+      \strng{authorbibnamehash}{b33014fb95611f151a41743b839eaca0}
+      \strng{authornamehash}{4155dc85d356c69bb228d209741bb02f}
+      \strng{authorfullhash}{b33014fb95611f151a41743b839eaca0}
+      \strng{authorfullhashraw}{b33014fb95611f151a41743b839eaca0}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Neuron}
+      \field{number}{24}
+      \field{title}{Interoception of breathing and its relationship with anxiety}
+      \field{volume}{109}
+      \field{year}{2021}
+      \field{pages}{4080\bibrangedash 4093.e8}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1016/j.neuron.2021.09.045
+      \endverb
+    \endentry
+    \entry{krakauer2019motor}{book}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=cf675af16b372565d5a699077c9f6746}{%
+           family={Krakauer},
+           familyi={K\bibinitperiod},
+           given={John\bibnamedelima W.},
+           giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a3f3faeb9e814fe670fb8e937e80b5e9}{%
+           family={Hadjiosif},
+           familyi={H\bibinitperiod},
+           given={Alkis\bibnamedelima M.},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=107cdbc1053b5baff69de9dcfdbc5c0e}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Jing},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=760540db0a661d2a84c77e239a60c0d1}{%
+           family={Wong},
+           familyi={W\bibinitperiod},
+           given={Aaron\bibnamedelima L.},
+           giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d614ad5d64267bf9ce4385752b9a3a26}{%
+           family={Haith},
+           familyi={H\bibinitperiod},
+           given={Adrian\bibnamedelima M.},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{60b9700a362ff1927be369ab4478a554}
+      \strng{fullhash}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{fullhashraw}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{bibnamehash}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{authorbibnamehash}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{authornamehash}{60b9700a362ff1927be369ab4478a554}
+      \strng{authorfullhash}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{authorfullhashraw}{c323d42cb3cbffe759dabf9d924ab64c}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Comprehensive Physiology}
+      \field{number}{2}
+      \field{title}{Motor learning}
+      \field{volume}{9}
+      \field{year}{2019}
+      \field{pages}{613\bibrangedash 663}
+      \range{pages}{51}
+      \verb{doi}
+      \verb 10.1002/cphy.c170043
+      \endverb
+    \endentry
+    \entry{luo2025effect}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=1e7db31f89452e516182215cb8b2592b}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={Qianyi},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7d1e7d6cd0412db4540cc9a2cfa01074}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Xinran},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=de39e83f774915088c3b81000c307958}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Jingjing},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6ce05eea436d8d388a948a6c40dc76c5}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Qiu},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6b70cfe3f5fe7e3d08d4ab4a75177d40}{%
+           family={Wei},
+           familyi={W\bibinitperiod},
+           given={Dongtao},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{36a678cedf644d4a69aa0279d6b878b9}
+      \strng{fullhash}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{fullhashraw}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{bibnamehash}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{authorbibnamehash}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{authornamehash}{36a678cedf644d4a69aa0279d6b878b9}
+      \strng{authorfullhash}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{authorfullhashraw}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{title}{The effect of slow breathing in regulating anxiety}
+      \field{volume}{15}
+      \field{year}{2025}
+      \field{pages}{8417}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-025-92017-5
+      \endverb
+    \endentry
+    \entry{molle2022respiratory}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=45e5c788688c72dac7cfab27e7d109d3}{%
+           family={Mollé},
+           familyi={M\bibinitperiod},
+           given={Loïc},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8767a833d90a74b27a6879bedf02bc19}{%
+           family={Coste},
+           familyi={C\bibinitperiod},
+           given={Antoine},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{fullhash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{fullhashraw}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{bibnamehash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{authorbibnamehash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{authornamehash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{authorfullhash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{authorfullhashraw}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Neurophysiology}
+      \field{title}{The respiratory modulation of interoception}
+      \field{volume}{127}
+      \field{year}{2022}
+      \field{pages}{896\bibrangedash 899}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1152/jn.00027.2022
+      \endverb
+    \endentry
+    \entry{nikolova2022respiratory}{article}{}{}
+      \name{author}{10}{}{%
+        {{un=0,uniquepart=base,hash=e22e5554c8c68a2adb9e926dc3198cc7}{%
+           family={Nikolova},
+           familyi={N\bibinitperiod},
+           given={Niia},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=baad14be03f27307da849d417c3acb8a}{%
+           family={Harrison},
+           familyi={H\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=65a4641c770d0febdd22fbf106a70d76}{%
+           family={Toohey},
+           familyi={T\bibinitperiod},
+           given={Sophie},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1f625f7dd871e2db14fb24e80e8692dc}{%
+           family={Br{æ}ndholt},
+           familyi={B\bibinitperiod},
+           given={Malthe},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d00ea5cc04df6977872f25fa6a2fc12c}{%
+           family={Legrand},
+           familyi={L\bibinitperiod},
+           given={Nicolas},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=94ff7c647c4203cd09b9c677b8fa1924}{%
+           family={Correa},
+           familyi={C\bibinitperiod},
+           given={Camile},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=48a346c4612cca3438812ff152b8ef0e}{%
+           family={Vejl{ø}},
+           familyi={V\bibinitperiod},
+           given={Malthe},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dcef2ae00f2b63bd23ec7b4d00e5400d}{%
+           family={Jensen},
+           familyi={J\bibinitperiod},
+           given={Melina\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c897f0de7a8239c7a0bddb3a9ffcf9bf}{%
+           family={Fardo},
+           familyi={F\bibinitperiod},
+           given={Francesca},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d350dad708895e6fbdf9bac039387d95}{%
+           family={Allen},
+           familyi={A\bibinitperiod},
+           given={Micah},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7fc79f194b16aeebbde8e7d1379b96ef}
+      \strng{fullhash}{620343503f5b3a0281d96166f65bc41f}
+      \strng{fullhashraw}{620343503f5b3a0281d96166f65bc41f}
+      \strng{bibnamehash}{620343503f5b3a0281d96166f65bc41f}
+      \strng{authorbibnamehash}{620343503f5b3a0281d96166f65bc41f}
+      \strng{authornamehash}{7fc79f194b16aeebbde8e7d1379b96ef}
+      \strng{authorfullhash}{620343503f5b3a0281d96166f65bc41f}
+      \strng{authorfullhashraw}{620343503f5b3a0281d96166f65bc41f}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biological Psychology}
+      \field{title}{The respiratory resistance sensitivity task: {A}n automated method for quantifying respiratory interoception and metacognition}
+      \field{volume}{170}
+      \field{year}{2022}
+      \field{pages}{108325}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.biopsycho.2022.108325
+      \endverb
+    \endentry
+    \entry{peirce2019psychopy}{article}{}{}
+      \name{author}{8}{}{%
+        {{un=0,uniquepart=base,hash=f2e4ce272b4ea0700e7efe8ff3cf8f34}{%
+           family={Peirce},
+           familyi={P\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a15a04a473b8bb5f754722fc04c8e408}{%
+           family={Gray},
+           familyi={G\bibinitperiod},
+           given={Jeremy\bibnamedelima R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=693bf13408fccc3c446a33dac9ad35c5}{%
+           family={Simpson},
+           familyi={S\bibinitperiod},
+           given={Sol},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9e37b250da187ee820cc4fca78ef61c9}{%
+           family={MacAskill},
+           familyi={M\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bae96ab1c1a55e1e9e83948109508857}{%
+           family={Höchenberger},
+           familyi={H\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8faaf4d6bb5eedc495a92ec28d3609ab}{%
+           family={Sogo},
+           familyi={S\bibinitperiod},
+           given={Hiroyuki},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=15ea00e86864b07ebb5c463db9664b35}{%
+           family={Kastman},
+           familyi={K\bibinitperiod},
+           given={Erik},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=afcf8214ddcc7a7545319db05af0a19a}{%
+           family={Lindel{ø}v},
+           familyi={L\bibinitperiod},
+           given={Jonas\bibnamedelima Kristoffer},
+           giveni={J\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4cbe73db80033e25adda6fc935a5dd03}
+      \strng{fullhash}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{fullhashraw}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{bibnamehash}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{authorbibnamehash}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{authornamehash}{4cbe73db80033e25adda6fc935a5dd03}
+      \strng{authorfullhash}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{authorfullhashraw}{4aff3326ecf56239a206e56b2dc1199a}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Behavior Research Methods}
+      \field{number}{1}
+      \field{title}{{PsychoPy2}: {E}xperiments in behavior made easy}
+      \field{volume}{51}
+      \field{year}{2019}
+      \field{pages}{195\bibrangedash 203}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.3758/s13428-018-01193-y
+      \endverb
+    \endentry
+    \entry{suksasilp2022towards}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=d6915b448616a4ba81ea319d69a1ae3d}{%
+           family={Suksasilp},
+           familyi={S\bibinitperiod},
+           given={Chatrin},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=700c95e054106318cecb4a12ebc8545a}{%
+           family={Garfinkel},
+           familyi={G\bibinitperiod},
+           given={Sarah\bibnamedelima N.},
+           giveni={S\bibinitperiod\bibinitdelim N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{fullhash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{fullhashraw}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{bibnamehash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{authorbibnamehash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{authornamehash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{authorfullhash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{authorfullhashraw}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biological Psychology}
+      \field{title}{Towards a comprehensive assessment of interoception in a multi-dimensional framework}
+      \field{volume}{168}
+      \field{year}{2022}
+      \field{pages}{108262}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.biopsycho.2022.108262
+      \endverb
+    \endentry
+  \enddatalist
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{banellis2026interoceptive}{article}{}{}
+      \name{author}{9}{}{%
+        {{un=0,uniquepart=base,hash=36aa6ae87e6ce122824872a9ef2b3653}{%
+           family={Banellis},
+           familyi={B\bibinitperiod},
+           given={Leah},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e22e5554c8c68a2adb9e926dc3198cc7}{%
+           family={Nikolova},
+           familyi={N\bibinitperiod},
+           given={Niia},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a61f078f25b13abd810481267c7097df}{%
+           family={Ehmsen},
+           familyi={E\bibinitperiod},
+           given={Julie\bibnamedelima F.},
+           giveni={J\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fcb82ab15b5ea96471a55745c2292a59}{%
+           family={Courtin},
+           familyi={C\bibinitperiod},
+           given={Abigail\bibnamedelima S.},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=48a346c4612cca3438812ff152b8ef0e}{%
+           family={Vejl{ø}},
+           familyi={V\bibinitperiod},
+           given={Malthe},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5914ee098bcb92db72467268b02565f2}{%
+           family={Tyrer},
+           familyi={T\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=52b333b2d6f58de36e2a3af244f4e31a}{%
+           family={Böhme},
+           familyi={B\bibinitperiod},
+           given={Rebecca\bibnamedelima A.},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c897f0de7a8239c7a0bddb3a9ffcf9bf}{%
+           family={Fardo},
+           familyi={F\bibinitperiod},
+           given={Francesca},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a5080fdae46d5fa09b0968eaa03a752f}{%
+           family={Allen},
+           familyi={A\bibinitperiod},
+           given={Micah\bibnamedelima G.},
+           giveni={M\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{33a814ef5abb1e17aa1102505d017a39}
+      \strng{fullhash}{b4a71d23764adec2f82e3177c183573a}
+      \strng{fullhashraw}{b4a71d23764adec2f82e3177c183573a}
+      \strng{bibnamehash}{b4a71d23764adec2f82e3177c183573a}
+      \strng{authorbibnamehash}{b4a71d23764adec2f82e3177c183573a}
+      \strng{authornamehash}{33a814ef5abb1e17aa1102505d017a39}
+      \strng{authorfullhash}{b4a71d23764adec2f82e3177c183573a}
+      \strng{authorfullhashraw}{b4a71d23764adec2f82e3177c183573a}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Communications Psychology}
+      \field{title}{Interoceptive ability is uncorrelated across respiratory and cardiac axes in a large scale psychophysical study}
+      \field{year}{2026}
+      \verb{doi}
+      \verb 10.1038/s44271-026-00404-z
+      \endverb
+    \endentry
+    \entry{garfinkel2015knowing}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=700c95e054106318cecb4a12ebc8545a}{%
+           family={Garfinkel},
+           familyi={G\bibinitperiod},
+           given={Sarah\bibnamedelima N.},
+           giveni={S\bibinitperiod\bibinitdelim N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a18faa5d293b699968705a564971492b}{%
+           family={Seth},
+           familyi={S\bibinitperiod},
+           given={Anil\bibnamedelima K.},
+           giveni={A\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=aa5aaf33b4bf6399141bcac4970c9708}{%
+           family={Barrett},
+           familyi={B\bibinitperiod},
+           given={Adam\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=70e5a73111c1b00017a3853078abff6d}{%
+           family={Suzuki},
+           familyi={S\bibinitperiod},
+           given={Keisuke},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=43af36734fd8bac612dff7786a9a36b8}{%
+           family={Critchley},
+           familyi={C\bibinitperiod},
+           given={Hugo\bibnamedelima D.},
+           giveni={H\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8d1a584a5c6cf4202c5cf6dd4c7f03dd}
+      \strng{fullhash}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{fullhashraw}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{bibnamehash}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{authorbibnamehash}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{authornamehash}{8d1a584a5c6cf4202c5cf6dd4c7f03dd}
+      \strng{authorfullhash}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \strng{authorfullhashraw}{6e18c5b4d0fae7ade7ea9d783ddee4ac}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biological Psychology}
+      \field{title}{Knowing your own heart: {D}istinguishing interoceptive accuracy from interoceptive awareness}
+      \field{volume}{104}
+      \field{year}{2015}
+      \field{pages}{65\bibrangedash 74}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/j.biopsycho.2014.11.004
+      \endverb
+    \endentry
+    \entry{gholamrezaei2021psychophysiological}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=d5b860fc5d7afd95b7e0d70ce23d5a1d}{%
+           family={Gholamrezaei},
+           familyi={G\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=351c38b9789111c76af1589fd833d37f}{%
+           family={Van\bibnamedelima Diest},
+           familyi={V\bibinitperiod\bibinitdelim D\bibinitperiod},
+           given={Ilse},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=890357f9283bac254e35b10549d6034c}{%
+           family={Aziz},
+           familyi={A\bibinitperiod},
+           given={Qasim},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dfe89a47be5716c07b122a06b13b41d7}{%
+           family={Vlaeyen},
+           familyi={V\bibinitperiod},
+           given={Johan\bibnamedelimb W.\bibnamedelimi S.},
+           giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=274b07e7b46af10d9e161f43c285a01e}{%
+           family={Van\bibnamedelima Oudenhove},
+           familyi={V\bibinitperiod\bibinitdelim O\bibinitperiod},
+           given={Lukas},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{bfebcdb0f53f54f2095a2acc4fc2431a}
+      \strng{fullhash}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{fullhashraw}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{bibnamehash}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{authorbibnamehash}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{authornamehash}{bfebcdb0f53f54f2095a2acc4fc2431a}
+      \strng{authorfullhash}{2bb423cf50b2a2a0742d57b04805687d}
+      \strng{authorfullhashraw}{2bb423cf50b2a2a0742d57b04805687d}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychophysiology}
+      \field{title}{Psychophysiological responses to various slow, deep breathing techniques}
+      \field{volume}{58}
+      \field{year}{2021}
+      \field{pages}{e13712}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1111/psyp.13712
+      \endverb
+    \endentry
+    \entry{harrison2021interoception}{article}{}{}
+      \name{author}{13}{}{%
+        {{un=0,uniquepart=base,hash=61a337a5108d0ae4d36cef046e5f50c7}{%
+           family={Harrison},
+           familyi={H\bibinitperiod},
+           given={Oliver\bibnamedelima K.},
+           giveni={O\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9059095e764fdc810ffb4fdcded0e3c7}{%
+           family={Köchli},
+           familyi={K\bibinitperiod},
+           given={Laura},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8042364fbcf90b5e4662b1176018e26c}{%
+           family={Marino},
+           familyi={M\bibinitperiod},
+           given={Stephanie},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=77800f317a5ed5274a3f69adde911325}{%
+           family={Luechinger},
+           familyi={L\bibinitperiod},
+           given={Roger},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ecb64cfdcac027942e483856837db31b}{%
+           family={Hennel},
+           familyi={H\bibinitperiod},
+           given={Franciszek},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ec994e808dffc65ae653ed68382baed0}{%
+           family={Brand},
+           familyi={B\bibinitperiod},
+           given={Katja},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cb1eb4c685ec4285023764d7db92ad64}{%
+           family={Hess},
+           familyi={H\bibinitperiod},
+           given={Alexander\bibnamedelima J.},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b5812f2e3b0d147e87e38918b7d38956}{%
+           family={Frässle},
+           familyi={F\bibinitperiod},
+           given={Stefan},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7bcbe3fa550984903ff27cf46e9106b2}{%
+           family={Iglesias},
+           familyi={I\bibinitperiod},
+           given={Sandra},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2dced9dae3d6e6d8cbc36f6ef363fd94}{%
+           family={Vinckier},
+           familyi={V\bibinitperiod},
+           given={Fabien},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0c5ad90c7829087495bf51d29fdd4a5e}{%
+           family={Petzschner},
+           familyi={P\bibinitperiod},
+           given={Frederike\bibnamedelima H.},
+           giveni={F\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0b7c69f7dc4f1a8822391ca84368a23f}{%
+           family={Harrison},
+           familyi={H\bibinitperiod},
+           given={Samuel\bibnamedelima J.},
+           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=607b8d8c1c9c37da0687116527a85b21}{%
+           family={Stephan},
+           familyi={S\bibinitperiod},
+           given={Klaas\bibnamedelima E.},
+           giveni={K\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4155dc85d356c69bb228d209741bb02f}
+      \strng{fullhash}{b33014fb95611f151a41743b839eaca0}
+      \strng{fullhashraw}{b33014fb95611f151a41743b839eaca0}
+      \strng{bibnamehash}{b33014fb95611f151a41743b839eaca0}
+      \strng{authorbibnamehash}{b33014fb95611f151a41743b839eaca0}
+      \strng{authornamehash}{4155dc85d356c69bb228d209741bb02f}
+      \strng{authorfullhash}{b33014fb95611f151a41743b839eaca0}
+      \strng{authorfullhashraw}{b33014fb95611f151a41743b839eaca0}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Neuron}
+      \field{number}{24}
+      \field{title}{Interoception of breathing and its relationship with anxiety}
+      \field{volume}{109}
+      \field{year}{2021}
+      \field{pages}{4080\bibrangedash 4093.e8}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1016/j.neuron.2021.09.045
+      \endverb
+    \endentry
+    \entry{krakauer2019motor}{book}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=cf675af16b372565d5a699077c9f6746}{%
+           family={Krakauer},
+           familyi={K\bibinitperiod},
+           given={John\bibnamedelima W.},
+           giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a3f3faeb9e814fe670fb8e937e80b5e9}{%
+           family={Hadjiosif},
+           familyi={H\bibinitperiod},
+           given={Alkis\bibnamedelima M.},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=107cdbc1053b5baff69de9dcfdbc5c0e}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Jing},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=760540db0a661d2a84c77e239a60c0d1}{%
+           family={Wong},
+           familyi={W\bibinitperiod},
+           given={Aaron\bibnamedelima L.},
+           giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d614ad5d64267bf9ce4385752b9a3a26}{%
+           family={Haith},
+           familyi={H\bibinitperiod},
+           given={Adrian\bibnamedelima M.},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{60b9700a362ff1927be369ab4478a554}
+      \strng{fullhash}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{fullhashraw}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{bibnamehash}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{authorbibnamehash}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{authornamehash}{60b9700a362ff1927be369ab4478a554}
+      \strng{authorfullhash}{c323d42cb3cbffe759dabf9d924ab64c}
+      \strng{authorfullhashraw}{c323d42cb3cbffe759dabf9d924ab64c}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Comprehensive Physiology}
+      \field{number}{2}
+      \field{title}{Motor learning}
+      \field{volume}{9}
+      \field{year}{2019}
+      \field{pages}{613\bibrangedash 663}
+      \range{pages}{51}
+      \verb{doi}
+      \verb 10.1002/cphy.c170043
+      \endverb
+    \endentry
+    \entry{luo2025effect}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=1e7db31f89452e516182215cb8b2592b}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={Qianyi},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7d1e7d6cd0412db4540cc9a2cfa01074}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Xinran},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=de39e83f774915088c3b81000c307958}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Jingjing},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6ce05eea436d8d388a948a6c40dc76c5}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Qiu},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6b70cfe3f5fe7e3d08d4ab4a75177d40}{%
+           family={Wei},
+           familyi={W\bibinitperiod},
+           given={Dongtao},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{36a678cedf644d4a69aa0279d6b878b9}
+      \strng{fullhash}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{fullhashraw}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{bibnamehash}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{authorbibnamehash}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{authornamehash}{36a678cedf644d4a69aa0279d6b878b9}
+      \strng{authorfullhash}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \strng{authorfullhashraw}{abdd06f87c6f25d4f812dae10dbb4d5e}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{title}{The effect of slow breathing in regulating anxiety}
+      \field{volume}{15}
+      \field{year}{2025}
+      \field{pages}{8417}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-025-92017-5
+      \endverb
+    \endentry
+    \entry{molle2022respiratory}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=45e5c788688c72dac7cfab27e7d109d3}{%
+           family={Mollé},
+           familyi={M\bibinitperiod},
+           given={Loïc},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8767a833d90a74b27a6879bedf02bc19}{%
+           family={Coste},
+           familyi={C\bibinitperiod},
+           given={Antoine},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{fullhash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{fullhashraw}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{bibnamehash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{authorbibnamehash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{authornamehash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{authorfullhash}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \strng{authorfullhashraw}{44a1f8e6e0ece2057bf72d4aa233ccfa}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Neurophysiology}
+      \field{title}{The respiratory modulation of interoception}
+      \field{volume}{127}
+      \field{year}{2022}
+      \field{pages}{896\bibrangedash 899}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1152/jn.00027.2022
+      \endverb
+    \endentry
+    \entry{nikolova2022respiratory}{article}{}{}
+      \name{author}{10}{}{%
+        {{un=0,uniquepart=base,hash=e22e5554c8c68a2adb9e926dc3198cc7}{%
+           family={Nikolova},
+           familyi={N\bibinitperiod},
+           given={Niia},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=baad14be03f27307da849d417c3acb8a}{%
+           family={Harrison},
+           familyi={H\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=65a4641c770d0febdd22fbf106a70d76}{%
+           family={Toohey},
+           familyi={T\bibinitperiod},
+           given={Sophie},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1f625f7dd871e2db14fb24e80e8692dc}{%
+           family={Br{æ}ndholt},
+           familyi={B\bibinitperiod},
+           given={Malthe},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d00ea5cc04df6977872f25fa6a2fc12c}{%
+           family={Legrand},
+           familyi={L\bibinitperiod},
+           given={Nicolas},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=94ff7c647c4203cd09b9c677b8fa1924}{%
+           family={Correa},
+           familyi={C\bibinitperiod},
+           given={Camile},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=48a346c4612cca3438812ff152b8ef0e}{%
+           family={Vejl{ø}},
+           familyi={V\bibinitperiod},
+           given={Malthe},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dcef2ae00f2b63bd23ec7b4d00e5400d}{%
+           family={Jensen},
+           familyi={J\bibinitperiod},
+           given={Melina\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c897f0de7a8239c7a0bddb3a9ffcf9bf}{%
+           family={Fardo},
+           familyi={F\bibinitperiod},
+           given={Francesca},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d350dad708895e6fbdf9bac039387d95}{%
+           family={Allen},
+           familyi={A\bibinitperiod},
+           given={Micah},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7fc79f194b16aeebbde8e7d1379b96ef}
+      \strng{fullhash}{620343503f5b3a0281d96166f65bc41f}
+      \strng{fullhashraw}{620343503f5b3a0281d96166f65bc41f}
+      \strng{bibnamehash}{620343503f5b3a0281d96166f65bc41f}
+      \strng{authorbibnamehash}{620343503f5b3a0281d96166f65bc41f}
+      \strng{authornamehash}{7fc79f194b16aeebbde8e7d1379b96ef}
+      \strng{authorfullhash}{620343503f5b3a0281d96166f65bc41f}
+      \strng{authorfullhashraw}{620343503f5b3a0281d96166f65bc41f}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biological Psychology}
+      \field{title}{The respiratory resistance sensitivity task: {A}n automated method for quantifying respiratory interoception and metacognition}
+      \field{volume}{170}
+      \field{year}{2022}
+      \field{pages}{108325}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.biopsycho.2022.108325
+      \endverb
+    \endentry
+    \entry{peirce2019psychopy}{article}{}{}
+      \name{author}{8}{}{%
+        {{un=0,uniquepart=base,hash=f2e4ce272b4ea0700e7efe8ff3cf8f34}{%
+           family={Peirce},
+           familyi={P\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a15a04a473b8bb5f754722fc04c8e408}{%
+           family={Gray},
+           familyi={G\bibinitperiod},
+           given={Jeremy\bibnamedelima R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=693bf13408fccc3c446a33dac9ad35c5}{%
+           family={Simpson},
+           familyi={S\bibinitperiod},
+           given={Sol},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9e37b250da187ee820cc4fca78ef61c9}{%
+           family={MacAskill},
+           familyi={M\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bae96ab1c1a55e1e9e83948109508857}{%
+           family={Höchenberger},
+           familyi={H\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8faaf4d6bb5eedc495a92ec28d3609ab}{%
+           family={Sogo},
+           familyi={S\bibinitperiod},
+           given={Hiroyuki},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=15ea00e86864b07ebb5c463db9664b35}{%
+           family={Kastman},
+           familyi={K\bibinitperiod},
+           given={Erik},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=afcf8214ddcc7a7545319db05af0a19a}{%
+           family={Lindel{ø}v},
+           familyi={L\bibinitperiod},
+           given={Jonas\bibnamedelima Kristoffer},
+           giveni={J\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4cbe73db80033e25adda6fc935a5dd03}
+      \strng{fullhash}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{fullhashraw}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{bibnamehash}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{authorbibnamehash}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{authornamehash}{4cbe73db80033e25adda6fc935a5dd03}
+      \strng{authorfullhash}{4aff3326ecf56239a206e56b2dc1199a}
+      \strng{authorfullhashraw}{4aff3326ecf56239a206e56b2dc1199a}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Behavior Research Methods}
+      \field{number}{1}
+      \field{title}{{PsychoPy2}: {E}xperiments in behavior made easy}
+      \field{volume}{51}
+      \field{year}{2019}
+      \field{pages}{195\bibrangedash 203}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.3758/s13428-018-01193-y
+      \endverb
+    \endentry
+    \entry{suksasilp2022towards}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=d6915b448616a4ba81ea319d69a1ae3d}{%
+           family={Suksasilp},
+           familyi={S\bibinitperiod},
+           given={Chatrin},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=700c95e054106318cecb4a12ebc8545a}{%
+           family={Garfinkel},
+           familyi={G\bibinitperiod},
+           given={Sarah\bibnamedelima N.},
+           giveni={S\bibinitperiod\bibinitdelim N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{fullhash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{fullhashraw}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{bibnamehash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{authorbibnamehash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{authornamehash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{authorfullhash}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \strng{authorfullhashraw}{7f6a139bbe01f5e11439f6a65e73a6e1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biological Psychology}
+      \field{title}{Towards a comprehensive assessment of interoception in a multi-dimensional framework}
+      \field{volume}{168}
+      \field{year}{2022}
+      \field{pages}{108262}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.biopsycho.2022.108262
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
