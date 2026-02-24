@@ -5,3 +5,12 @@ __pycache__/
 .DS_Store
 data/
 *.egg-info/
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.bbl
+paper/*.bcf
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.run.xml
