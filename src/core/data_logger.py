@@ -105,6 +105,17 @@ class DataLogger:
 
     # ---- writing -------------------------------------------------- #
 
+    def log_row(self, **kwargs) -> None:
+        """Append a row using keyword arguments matched to column names.
+
+        Any column not present in *kwargs* is written as an empty string.
+        This is the generic counterpart to :meth:`log_sample` — use it when
+        your experiment needs a custom column schema.
+        """
+        row = [kwargs.get(col, '') for col in self.columns]
+        self._writer.writerow(row)
+        self._file.flush()
+
     def log_sample(
         self,
         timestamp: float,
