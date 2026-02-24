@@ -6,12 +6,12 @@ thread+queue pattern: the background thread pushes samples and the
 main thread drains them with get_all() at ~50 ms intervals.
 
 Run from the project root:
-    python -m src.demos.demo_threaded_belt
+    python -m respyra.demos.demo_threaded_belt
 """
 
 import time
 
-from src.core.breath_belt import BreathBelt, BreathBeltError
+from respyra.core.breath_belt import BreathBelt, BreathBeltError
 
 
 DURATION_SEC = 10       # total run time

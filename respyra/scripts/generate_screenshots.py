@@ -6,7 +6,7 @@ session data (no belt required) and saves PNGs to media/screenshots/.
 
 Usage
 -----
-    python -m src.scripts.generate_screenshots
+    python -m respyra.scripts.generate_screenshots
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from pathlib import Path
 import numpy as np
 from psychopy import core, visual
 
-from src.configs.breath_tracking import (
+from respyra.configs.breath_tracking import (
     BG_COLOR,
     DOT_GRADED_MAX_ERROR_N,
     DOT_RADIUS,
@@ -31,8 +31,8 @@ from src.configs.breath_tracking import (
     TRACE_Y_RANGE,
     UNITS,
 )
-from src.core.display import SignalTrace, create_monitor, create_window
-from src.scripts.breath_tracking_task import _graded_dot_color
+from respyra.core.display import SignalTrace, create_monitor, create_window
+from respyra.scripts.breath_tracking_task import _graded_dot_color
 
 
 # ------------------------------------------------------------------ #

@@ -9,23 +9,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Architecture
 
 ```
-src/core/       → Reusable modules (breath belt I/O, display utils, data logging, etc.)
-src/configs/    → Experiment parameter files (timing, conditions, display settings)
-src/scripts/    → Runnable experiment sessions (import from core/ and configs/)
-src/demos/      → Standalone single-feature test scripts
-media/          → Stimulus assets (images, sounds, text files)
-docs/context/   → Reference docs for agents and developers
+respyra/core/       → Reusable modules (breath belt I/O, display utils, data logging, etc.)
+respyra/configs/    → Experiment parameter files (timing, conditions, display settings)
+respyra/scripts/    → Runnable experiment sessions (import from core/ and configs/)
+respyra/demos/      → Standalone single-feature test scripts
+respyra/utils/      → Post-session visualization and analysis tools
+media/              → Stimulus assets (images, sounds, text files)
+docs/context/       → Reference docs for agents and developers
 ```
 
-**Code flow:** A script in `src/scripts/` imports modules from `src/core/` and parameters from `src/configs/`, loads stimuli from `media/`, runs the experiment, and saves data.
+**Code flow:** A script in `respyra/scripts/` imports modules from `respyra/core/` and parameters from `respyra/configs/`, loads stimuli from `media/`, runs the experiment, and saves data.
 
 **Import convention:**
 ```python
-from src.core import breath_belt
-from src.core import display_utils
+from respyra.core import breath_belt
+from respyra.core import display_utils
 ```
 
-`src/` and `src/core/` are Python packages (`__init__.py` present).
+All subdirectories under `respyra/` are Python packages (`__init__.py` present). The package is installable via `pip install -e .`.
 
 ## Key Dependencies
 
@@ -49,7 +50,7 @@ Read these before working on experiment code:
 - **Use PsychoPy's data module** (`ExperimentHandler`, `TrialHandler`, `StairHandler`) — do not write custom CSV logging.
 - **Vernier belt:** always pass explicit args to `select_sensors()` and `start()` to prevent interactive prompts. Minimum sampling period 10 ms.
 - **Monitor calibration** required for `'deg'`/`'cm'` units — use `monitors.Monitor` with physical screen dimensions and viewing distance.
-- Experiment parameters belong in `src/configs/`, not hardcoded in scripts.
+- Experiment parameters belong in `respyra/configs/`, not hardcoded in scripts.
 
 ## Agents
 

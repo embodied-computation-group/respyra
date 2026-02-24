@@ -7,7 +7,7 @@ dot stays within their comfortable breathing amplitude.
 
 Usage
 -----
-    from src.core.target_generator import (
+    from respyra.core.target_generator import (
         SegmentDef, ConditionDef, TargetGenerator, calibrate_from_baseline,
     )
 

@@ -46,7 +46,7 @@ import threading
 import time
 from typing import Optional
 
-from src.core.gdx import gdx as _gdx_module
+from respyra.core.gdx import gdx as _gdx_module
 
 logger = logging.getLogger(__name__)
 

@@ -1,10 +1,10 @@
 """Configuration for the respiratory motor control tracking task.
 
 All experiment parameters live here so the script in
-``src/scripts/breath_tracking_task.py`` contains no magic numbers.
+``respyra/scripts/breath_tracking_task.py`` contains no magic numbers.
 """
 
-from src.core.target_generator import ConditionDef, SegmentDef
+from respyra.core.target_generator import ConditionDef, SegmentDef
 
 # ------------------------------------------------------------------ #
 #  Belt connection                                                     #

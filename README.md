@@ -42,15 +42,22 @@ Participants follow a sinusoidal target dot with their breathing while their liv
    source .venv/bin/activate
    ```
 
-3. Install dependencies:
+3. Install in development mode:
    ```bash
-   pip install -r requirements.txt
+   pip install -e .
+   ```
+
+   For post-session visualization (optional):
+   ```bash
+   pip install -e ".[vis]"
    ```
 
 ## Running the experiment
 
 ```bash
-python -m src.scripts.breath_tracking_task
+python -m respyra.scripts.breath_tracking_task
+# or, after pip install:
+respyra-task
 ```
 
 ### Session flow
@@ -67,7 +74,7 @@ python -m src.scripts.breath_tracking_task
 
 ### Experimental conditions
 
-Conditions are defined in `src/configs/breath_tracking.py` using composable frequency segments:
+Conditions are defined in `respyra/configs/breath_tracking.py` using composable frequency segments:
 
 | Condition | Pattern | Feedback gain |
 |---|---|---|
@@ -88,7 +95,9 @@ The target dot changes color based on real-time tracking error:
 ## Post-session visualization
 
 ```bash
-python -m src.utils.vis.plot_session data/sub-01_ses-001_2026-02-24.csv
+python -m respyra.utils.vis.plot_session data/sub-01_ses-001_2026-02-24.csv
+# or, after pip install:
+respyra-plot data/sub-01_ses-001_2026-02-24.csv
 ```
 
 Generates a 6-panel summary figure saved as `{csv_stem}_summary.png`:
@@ -103,7 +112,7 @@ Generates a 6-panel summary figure saved as `{csv_stem}_summary.png`:
 ## Project structure
 
 ```
-src/
+respyra/
   core/             Reusable modules
     breath_belt.py    Non-blocking belt I/O (threaded reader + queue)
     display.py        PsychoPy window, SignalTrace waveform renderer
@@ -123,9 +132,9 @@ data/               Session output (gitignored)
 ## Demos
 
 ```bash
-python -m src.demos.demo_belt_connection   # Test belt connectivity (terminal only)
-python -m src.demos.demo_display           # PsychoPy display with synthetic data
-python -m src.demos.demo_threaded_belt     # Threaded belt queue-draining pattern
+python -m respyra.demos.demo_belt_connection   # Test belt connectivity (terminal only)
+python -m respyra.demos.demo_display           # PsychoPy display with synthetic data
+python -m respyra.demos.demo_threaded_belt     # Threaded belt queue-draining pattern
 ```
 
 ## Platform notes

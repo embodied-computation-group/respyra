@@ -54,8 +54,8 @@ respyra/
 │   ├── psychopy/psychopy_startup.md
 │   └── vernier/vernier.md
 ├── media/                          # stimulus files: images, sounds, text
-├── src/
-│   ├── __init__.py
+├── respyra/
+│   ├── __init__.py                 # package root, contains __version__
 │   ├── core/                       # reusable, modular experiment functions
 │   │   └── __init__.py             #   e.g. breath belt interface, timing utils,
 │   │                               #   stimulus helpers, data processing
@@ -63,24 +63,27 @@ respyra/
 │   │                               #   variables and setup parameters
 │   ├── scripts/                    # experiment-level wrappers that import
 │   │                               #   from core/ and configs/ to run a full session
-│   └── demos/                      # brief, standalone demos for testing
-│                                   #   individual components
+│   ├── demos/                      # brief, standalone demos for testing
+│   │                               #   individual components
+│   └── utils/vis/                  # post-session visualization
+├── pyproject.toml                  # packaging metadata and dependencies
+└── LICENSE
 ```
 
 ### Where to put code
 
-- **`src/core/`** — Highly modular functions and classes. Each module should do one thing well: breath belt I/O, PsychoPy window/stimulus setup, response collection, data logging, etc. These are imported by scripts and demos. Keep them independent of any single experiment.
-- **`src/configs/`** — Python files or YAML/JSON files defining experiment parameters: timing values, condition lists, display settings, file paths. Scripts import these rather than hardcoding values.
-- **`src/scripts/`** — Top-level experiment scripts. Each script is a runnable session: it imports core modules and a config, sets up the experiment, runs the trial loop, and saves data. Name them descriptively (e.g. `breath_pacing_task.py`).
-- **`src/demos/`** — Short, self-contained scripts for testing or demonstrating a single feature (e.g. `demo_belt_connection.py`, `demo_visual_stim.py`). These can be quick-and-dirty.
+- **`respyra/core/`** — Highly modular functions and classes. Each module should do one thing well: breath belt I/O, PsychoPy window/stimulus setup, response collection, data logging, etc. These are imported by scripts and demos. Keep them independent of any single experiment.
+- **`respyra/configs/`** — Python files or YAML/JSON files defining experiment parameters: timing values, condition lists, display settings, file paths. Scripts import these rather than hardcoding values.
+- **`respyra/scripts/`** — Top-level experiment scripts. Each script is a runnable session: it imports core modules and a config, sets up the experiment, runs the trial loop, and saves data. Name them descriptively (e.g. `breath_pacing_task.py`).
+- **`respyra/demos/`** — Short, self-contained scripts for testing or demonstrating a single feature (e.g. `demo_belt_connection.py`, `demo_visual_stim.py`). These can be quick-and-dirty.
 - **`media/`** — All stimulus assets. Reference from scripts via relative path (`../media/` or configure in the config file).
 
 ### Import convention
 
 Core modules are importable as a package:
 ```python
-from src.core import breath_belt
-from src.core import display_utils
+from respyra.core import breath_belt
+from respyra.core import display_utils
 ```
 
 ## Design Philosophy

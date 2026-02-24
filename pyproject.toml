@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "respyra"
+dynamic = ["version"]
+description = "Open-source toolbox for respiratory motor control tracking with visuomotor perturbation"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10,<3.11"
+authors = [
+    { name = "Micah Allen" },
+]
+keywords = [
+    "respiratory interoception",
+    "motor control",
+    "breathing",
+    "visuomotor perturbation",
+    "psychophysics",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "psychopy>=2026.1.0",
+    "godirect>=1.2.1",
+    "numpy",
+]
+
+[project.optional-dependencies]
+vis = ["pandas", "matplotlib"]
+
+[project.scripts]
+respyra-task = "respyra.scripts.breath_tracking_task:run_experiment"
+respyra-plot = "respyra.utils.vis.plot_session:main"
+respyra-screenshots = "respyra.scripts.generate_screenshots:main"
+
+[project.urls]
+Homepage = "https://github.com/embodied-computation-group/respyra"
+Repository = "https://github.com/embodied-computation-group/respyra"
+
+[tool.hatch.version]
+path = "respyra/__init__.py"

@@ -6,12 +6,12 @@ waveform on a PsychoPy window, records force samples and button-press
 events to an incremental CSV, and saves everything on exit.
 
 Run from the project root:
-    python -m src.scripts.test_belt_display
+    python -m respyra.scripts.test_belt_display
 """
 
 from collections import deque
 
-from src.configs.test_experiment import (
+from respyra.configs.test_experiment import (
     BG_COLOR,
     BELT_CHANNELS,
     BELT_PERIOD_MS,
@@ -32,8 +32,8 @@ from src.configs.test_experiment import (
     TRACE_Y_RANGE,
     UNITS,
 )
-from src.core.breath_belt import BreathBelt, BreathBeltError
-from src.core.data_logger import DataLogger, create_session_file
+from respyra.core.breath_belt import BreathBelt, BreathBeltError
+from respyra.core.data_logger import DataLogger, create_session_file
 
 
 # ======================================================================
@@ -92,8 +92,8 @@ def run_experiment():
     # 2. Import PsychoPy (safe now that BLE scanning is done)
     # ------------------------------------------------------------------
     from psychopy import core, gui, visual
-    from src.core.display import SignalTrace, create_monitor, create_window
-    from src.core.events import check_keys
+    from respyra.core.display import SignalTrace, create_monitor, create_window
+    from respyra.core.events import check_keys
 
     # ------------------------------------------------------------------
     # 3. Participant info dialog
@@ -175,7 +175,7 @@ def run_experiment():
     # ------------------------------------------------------------------
     # Instruction phase
     # ------------------------------------------------------------------
-    from src.core.display import show_text_and_wait
+    from respyra.core.display import show_text_and_wait
     show_text_and_wait(
         win,
         text=(

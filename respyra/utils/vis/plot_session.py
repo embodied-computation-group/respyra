@@ -6,8 +6,8 @@ experimenters evaluate participant performance and verify task operation.
 
 Usage
 -----
-    python -m src.utils.vis.plot_session data/sub-01_ses-001_2026-02-24.csv
-    python -m src.utils.vis.plot_session data/*.csv --no-show
+    python -m respyra.utils.vis.plot_session data/sub-01_ses-001_2026-02-24.csv
+    python -m respyra.utils.vis.plot_session data/*.csv --no-show
 
 The figure is saved as ``{csv_stem}_summary.png`` alongside the CSV.
 """

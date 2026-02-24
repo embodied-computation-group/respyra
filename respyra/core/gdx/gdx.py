@@ -9,7 +9,7 @@ import time
 # gdx_vpython.py contains functions for a canvas with data collection buttons
 # Patched: make vpython import optional since we don't use it
 try:
-    from src.core.gdx import gdx_vpython
+    from respyra.core.gdx import gdx_vpython
     vp = gdx_vpython.ver_vpython()
 except (ImportError, ModuleNotFoundError):
     vp = None

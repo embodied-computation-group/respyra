@@ -6,7 +6,7 @@ with immediate flush.
 
 Usage
 -----
-    from src.core.data_logger import create_session_file, DataLogger
+    from respyra.core.data_logger import create_session_file, DataLogger
 
     filepath = create_session_file("01")
     with DataLogger(filepath) as log:

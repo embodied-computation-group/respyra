@@ -1,3 +1,0 @@
-psychopy>=2026.1.0
-godirect>=1.2.1
-numpy

@@ -6,12 +6,12 @@ to USB if BLE fails, then prints 100 samples (roughly 10 seconds at the
 default 100 ms period).
 
 Run from the project root:
-    python -m src.demos.demo_belt_connection
+    python -m respyra.demos.demo_belt_connection
 """
 
 import time
 
-from src.core.breath_belt import BreathBelt, BreathBeltError
+from respyra.core.breath_belt import BreathBelt, BreathBeltError
 
 
 def main():

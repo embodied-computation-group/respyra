@@ -8,7 +8,7 @@ full breathing range.  Each trial then has three phases: baseline
 (natural breathing for center calibration), countdown, and tracking.
 
 Run from the project root:
-    python -m src.scripts.breath_tracking_task
+    python -m respyra.scripts.breath_tracking_task
 """
 
 import colorsys
@@ -16,7 +16,7 @@ from collections import deque
 
 import numpy as np
 
-from src.configs.breath_tracking import (
+from respyra.configs.breath_tracking import (
     BASELINE_DURATION_SEC,
     BELT_CHANNELS,
     BELT_PERIOD_MS,
@@ -58,9 +58,9 @@ from src.configs.breath_tracking import (
     TRACKING_DURATION_SEC,
     UNITS,
 )
-from src.core.breath_belt import BreathBelt, BreathBeltError
-from src.core.data_logger import DataLogger, create_session_file
-from src.core.target_generator import TargetGenerator, calibrate_from_baseline
+from respyra.core.breath_belt import BreathBelt, BreathBeltError
+from respyra.core.data_logger import DataLogger, create_session_file
+from respyra.core.target_generator import TargetGenerator, calibrate_from_baseline
 
 
 # ======================================================================
@@ -152,8 +152,8 @@ def run_experiment():
     # 2. Import PsychoPy (safe now that BLE scanning is done)
     # ------------------------------------------------------------------
     from psychopy import core, data, gui, visual
-    from src.core.display import SignalTrace, create_monitor, create_window, show_text_and_wait
-    from src.core.events import check_keys
+    from respyra.core.display import SignalTrace, create_monitor, create_window, show_text_and_wait
+    from respyra.core.events import check_keys
 
     # ------------------------------------------------------------------
     # 3. Participant info dialog

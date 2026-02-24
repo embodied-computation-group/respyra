@@ -6,7 +6,7 @@ it with draw_signal_trace().  Press SPACE to print a marker to the
 console.  Press ESCAPE to quit.
 
 Run from the project root:
-    python -m src.demos.demo_display
+    python -m respyra.demos.demo_display
 """
 
 import math
@@ -14,8 +14,8 @@ from collections import deque
 
 from psychopy import core
 
-from src.core.display import create_window, draw_signal_trace
-from src.core.events import check_keys
+from respyra.core.display import create_window, draw_signal_trace
+from respyra.core.events import check_keys
 
 
 # -- Parameters --
