@@ -437,20 +437,12 @@ def run_experiment():
             phase_title.text = f"GET READY -- Trial {trial_num}/{total_trials}"
             exp_clock.reset()
 
-            # Show the dot at its t=0 starting position during countdown
-            # so the participant knows where to aim before tracking begins.
-            target_t0 = target_gen.get_target(0.0)
-            y_span = y_max - y_min
-            if y_span == 0:
-                normed_t0 = 0.5
-            else:
-                normed_t0 = float(np.clip(
-                    (target_t0 - y_min) / y_span, 0.0, 1.0,
-                ))
-            dot_y_t0 = trace_bottom + normed_t0 * (trace_top - trace_bottom)
-            target_dot.pos = (trace_right + DOT_X_OFFSET, dot_y_t0)
+            # Dot begins moving during countdown using a negative time
+            # offset so it seamlessly continues into tracking at t=0.
+            # This lets the participant "lock on" before scoring begins.
             target_dot.fillColor = DOT_COLOR_GOOD
             target_dot.lineColor = DOT_COLOR_GOOD
+            y_span = y_max - y_min
 
             while exp_clock.getTime() < COUNTDOWN_DURATION_SEC:
                 frame_count += 1
@@ -468,6 +460,19 @@ def run_experiment():
                         condition=condition_name,
                         trial_num=trial_num,
                     )
+
+                # Move dot along the target waveform (negative time
+                # maps to the tail end of the cycle via Python modulo)
+                preview_t = elapsed - COUNTDOWN_DURATION_SEC  # -3 → 0
+                target_force = target_gen.get_target(preview_t)
+                if y_span == 0:
+                    normed = 0.5
+                else:
+                    normed = float(np.clip(
+                        (target_force - y_min) / y_span, 0.0, 1.0,
+                    ))
+                dot_y = trace_bottom + normed * (trace_top - trace_bottom)
+                target_dot.pos = (trace_right + DOT_X_OFFSET, dot_y)
 
                 # Large countdown number (3, 2, 1)
                 count_num = int(COUNTDOWN_DURATION_SEC - elapsed) + 1
