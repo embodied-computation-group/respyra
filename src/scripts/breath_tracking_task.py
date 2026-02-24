@@ -437,12 +437,16 @@ def run_experiment():
             phase_title.text = f"GET READY -- Trial {trial_num}/{total_trials}"
             exp_clock.reset()
 
-            # Dot begins moving during countdown using a negative time
-            # offset so it seamlessly continues into tracking at t=0.
-            # This lets the participant "lock on" before scoring begins.
-            target_dot.fillColor = DOT_COLOR_GOOD
-            target_dot.lineColor = DOT_COLOR_GOOD
+            # Dot starts at the participant's current respiratory position
+            # and blends into the target waveform over the countdown.  Uses
+            # the first segment's frequency to extend the waveform backwards
+            # (avoids cross-segment wrapping artifacts).  Neutral color
+            # signals that error is not yet being recorded.
+            target_dot.fillColor = '#aaaaaa'
+            target_dot.lineColor = '#aaaaaa'
             y_span = y_max - y_min
+            current_force = buffer[-1] if buffer else range_center
+            first_freq = condition_def.segments[0].freq_hz
 
             while exp_clock.getTime() < COUNTDOWN_DURATION_SEC:
                 frame_count += 1
@@ -461,15 +465,21 @@ def run_experiment():
                         trial_num=trial_num,
                     )
 
-                # Move dot along the target waveform (negative time
-                # maps to the tail end of the cycle via Python modulo)
+                # Extend the waveform backwards using the first segment's
+                # frequency.  Blend from participant's current position
+                # into the target trajectory over the countdown duration.
                 preview_t = elapsed - COUNTDOWN_DURATION_SEC  # -3 → 0
-                target_force = target_gen.get_target(preview_t)
+                extended_target = range_center + global_amplitude * np.sin(
+                    2.0 * np.pi * first_freq * preview_t
+                )
+                blend = elapsed / COUNTDOWN_DURATION_SEC  # 0 → 1
+                dot_force = current_force * (1.0 - blend) + extended_target * blend
+
                 if y_span == 0:
                     normed = 0.5
                 else:
                     normed = float(np.clip(
-                        (target_force - y_min) / y_span, 0.0, 1.0,
+                        (dot_force - y_min) / y_span, 0.0, 1.0,
                     ))
                 dot_y = trace_bottom + normed * (trace_top - trace_bottom)
                 target_dot.pos = (trace_right + DOT_X_OFFSET, dot_y)
