@@ -2,8 +2,10 @@
 """Respiratory motor control tracking task.
 
 Participants follow a sinusoidal target dot with their breathing while
-the live respiratory waveform is displayed.  Each trial has three phases:
-baseline (natural breathing for calibration), countdown, and tracking.
+the live respiratory waveform is displayed.  The session begins with a
+range calibration phase (3 deep breaths) to establish the participant's
+full breathing range.  Each trial then has three phases: baseline
+(natural breathing for center calibration), countdown, and tracking.
 
 Run from the project root:
     python -m src.scripts.breath_tracking_task
@@ -37,6 +39,9 @@ from src.configs.breath_tracking import (
     OUTPUT_DIR,
     CONNECTION,
     DEVICE_TO_OPEN,
+    RANGE_CAL_DURATION_SEC,
+    RANGE_CAL_SCALE,
+    TRACE_BORDER_COLOR,
     TRACE_BUFFER_SIZE,
     TRACE_COLOR,
     TRACE_RECT,
@@ -134,6 +139,9 @@ def run_experiment():
     # ------------------------------------------------------------------
     # 5. Pre-create ALL stimuli (before any frame loops)
     # ------------------------------------------------------------------
+    trace_left, trace_bottom, trace_right, trace_top = TRACE_RECT
+    trace_center_y = (trace_bottom + trace_top) / 2
+
     trace = SignalTrace(
         win,
         trace_rect=TRACE_RECT,
@@ -141,12 +149,31 @@ def run_experiment():
         color=TRACE_COLOR,
     )
 
+    trace_border = visual.Rect(
+        win,
+        width=trace_right - trace_left,
+        height=trace_top - trace_bottom,
+        pos=((trace_left + trace_right) / 2, (trace_bottom + trace_top) / 2),
+        lineColor=TRACE_BORDER_COLOR,
+        lineWidth=1.0,
+        fillColor=None,
+    )
+
+    phase_title = visual.TextStim(
+        win,
+        text='',
+        color='#aaaaaa',
+        height=0.05,
+        pos=(0.0, 0.45),
+        bold=True,
+    )
+
     status_text = visual.TextStim(
         win,
         text='',
         color='white',
         height=0.03,
-        pos=(0.0, -0.42),
+        pos=(0.0, trace_bottom - 0.06),
         wrapWidth=1.5,
     )
 
@@ -155,7 +182,7 @@ def run_experiment():
         text='',
         color='white',
         height=0.15,
-        pos=(0.0, 0.0),
+        pos=(0.0, trace_center_y),
     )
 
     target_dot = visual.Circle(
@@ -183,8 +210,7 @@ def run_experiment():
         method='random',
     )
 
-    # Unpack trace rect bounds for target-dot y-mapping
-    trace_left, trace_bottom, trace_right, trace_top = TRACE_RECT
+    # y_min/y_max for dot positioning -- updated after range calibration
     y_min, y_max = TRACE_Y_RANGE
 
     # Accumulate per-trial mean errors for the final summary
@@ -200,7 +226,8 @@ def run_experiment():
             "You will see your live breathing signal on screen.\n"
             "A yellow dot will appear at the right edge of the trace.\n\n"
             "Your goal: breathe so your signal follows the dot.\n\n"
-            "Each trial has three phases:\n"
+            "First, we will calibrate your breathing range.\n"
+            "Then, each trial has three phases:\n"
             "  1. Baseline -- breathe naturally (10 s)\n"
             "  2. Countdown -- get ready (3 s)\n"
             "  3. Tracking -- follow the dot (30 s)\n\n"
@@ -210,9 +237,110 @@ def run_experiment():
     )
 
     # ==================================================================
-    # 9. Trial loop
+    # 9. Range calibration phase (once per session)
     # ==================================================================
     try:
+        # Show range-cal instruction screen
+        key = show_text_and_wait(
+            win,
+            text=(
+                "Breathing Range Calibration\n\n"
+                "Take 3 deep breaths:\n"
+                "Breathe IN as deeply as you can,\n"
+                "then OUT as far as you can.\n\n"
+                "This helps us set the right difficulty level.\n\n"
+                "Press SPACE when ready."
+            ),
+            key_list=['space', ESCAPE_KEY],
+        )
+
+        escaped = False
+        if key == ESCAPE_KEY:
+            print("Escape pressed -- ending experiment.")
+            escaped = True
+
+        # Range calibration frame loop
+        range_cal_forces = []
+
+        if not escaped:
+            phase_title.text = "RANGE CALIBRATION"
+            exp_clock.reset()
+            frame_count = 0
+
+            while exp_clock.getTime() < RANGE_CAL_DURATION_SEC:
+                frame_count += 1
+                elapsed = exp_clock.getTime()
+
+                # Drain belt samples
+                new_samples = belt.get_all()
+                for _ts, force in new_samples:
+                    buffer.append(force)
+                    range_cal_forces.append(force)
+                    logger.log_row(
+                        timestamp=round(elapsed, 4),
+                        frame=frame_count,
+                        force_n=round(force, 4),
+                        phase='range_cal',
+                        condition='',
+                        trial_num=0,
+                    )
+
+                # Draw
+                remaining = max(0, RANGE_CAL_DURATION_SEC - elapsed)
+                status_text.text = (
+                    f"Breathe deeply -- {remaining:.0f}s remaining"
+                )
+
+                trace_border.draw()
+                trace.draw(list(buffer))
+                phase_title.draw()
+                status_text.draw()
+                win.flip()
+
+                # Check escape
+                keys = check_keys([ESCAPE_KEY])
+                if keys:
+                    print("Escape pressed during range calibration.")
+                    escaped = True
+                    break
+
+        # Compute range calibration results
+        if range_cal_forces and not escaped:
+            global_min = min(range_cal_forces)
+            global_max = max(range_cal_forces)
+            raw_amplitude = (global_max - global_min) / 2.0
+            global_amplitude = max(raw_amplitude * RANGE_CAL_SCALE, 0.5)
+            # Use range center so the target stays within the
+            # participant's comfortable range.
+            range_center = (global_max + global_min) / 2.0
+
+            # Set dynamic y_range for trace and dot positioning
+            padding = (global_max - global_min) * 0.2
+            y_min = global_min - padding
+            y_max = global_max + padding
+            trace.y_min = y_min
+            trace.y_max = y_max
+
+            print(
+                f"Range calibration: min={global_min:.2f} N, "
+                f"max={global_max:.2f} N, center={range_center:.2f} N, "
+                f"amplitude={global_amplitude:.2f} N"
+            )
+            print(
+                f"Trace y_range set to: [{y_min:.2f}, {y_max:.2f}]"
+            )
+        else:
+            # Fallback if no data was collected
+            global_amplitude = 2.0
+            range_center = 5.0
+            print("Range calibration: no data collected, using defaults")
+
+        if escaped:
+            return  # finally block handles cleanup
+
+        # ==============================================================
+        # 10. Trial loop
+        # ==============================================================
         for trial in trials:
             condition_name = trial['condition']
             condition_def = condition_map[condition_name]
@@ -235,16 +363,17 @@ def run_experiment():
                 print("Escape pressed -- ending experiment.")
                 break
 
-            # Keep the signal buffer continuous within a trial but start
-            # fresh so previous-trial data does not bleed into the trace.
+            # Start fresh signal buffer per trial so previous-trial data
+            # does not bleed into the trace display.
             buffer.clear()
             baseline_forces = []
             frame_count = 0
-            escaped = False  # tracks escape presses within phase loops
+            escaped = False
 
             # ----------------------------------------------------------
-            # b) Baseline phase (natural breathing for calibration)
+            # b) Baseline phase (natural breathing for center calibration)
             # ----------------------------------------------------------
+            phase_title.text = f"BASELINE -- Trial {trial_num}/{total_trials}"
             exp_clock.reset()
 
             while exp_clock.getTime() < BASELINE_DURATION_SEC:
@@ -267,8 +396,13 @@ def run_experiment():
 
                 # Draw
                 remaining = max(0, BASELINE_DURATION_SEC - elapsed)
-                status_text.text = f"Breathe naturally -- {remaining:.0f}s remaining"
+                status_text.text = (
+                    f"Breathe naturally -- {remaining:.0f}s remaining"
+                )
+
+                trace_border.draw()
                 trace.draw(list(buffer))
+                phase_title.draw()
                 status_text.draw()
                 win.flip()
 
@@ -283,19 +417,40 @@ def run_experiment():
                 break
 
             # ----------------------------------------------------------
-            # c) Calibrate from baseline
+            # c) Calibrate from baseline (center from baseline, amplitude
+            #    from range calibration)
             # ----------------------------------------------------------
-            center, amplitude = calibrate_from_baseline(baseline_forces)
-            target_gen = TargetGenerator(condition_def, center, amplitude)
+            baseline_center, _baseline_amp = calibrate_from_baseline(baseline_forces)
+            # Target uses range_center (midpoint of full achievable range)
+            # so the sinusoidal target stays within [global_min, global_max].
+            # Baseline center is logged for offline drift analysis.
+            target_gen = TargetGenerator(condition_def, range_center, global_amplitude)
             print(
-                f"Trial {trial_num}: calibrated center={center:.2f} N, "
-                f"amplitude={amplitude:.2f} N"
+                f"Trial {trial_num}: target center={range_center:.2f} N, "
+                f"amplitude={global_amplitude:.2f} N, "
+                f"baseline center={baseline_center:.2f} N"
             )
 
             # ----------------------------------------------------------
             # d) Countdown phase (3..2..1)
             # ----------------------------------------------------------
+            phase_title.text = f"GET READY -- Trial {trial_num}/{total_trials}"
             exp_clock.reset()
+
+            # Show the dot at its t=0 starting position during countdown
+            # so the participant knows where to aim before tracking begins.
+            target_t0 = target_gen.get_target(0.0)
+            y_span = y_max - y_min
+            if y_span == 0:
+                normed_t0 = 0.5
+            else:
+                normed_t0 = float(np.clip(
+                    (target_t0 - y_min) / y_span, 0.0, 1.0,
+                ))
+            dot_y_t0 = trace_bottom + normed_t0 * (trace_top - trace_bottom)
+            target_dot.pos = (trace_right + DOT_X_OFFSET, dot_y_t0)
+            target_dot.fillColor = DOT_COLOR_GOOD
+            target_dot.lineColor = DOT_COLOR_GOOD
 
             while exp_clock.getTime() < COUNTDOWN_DURATION_SEC:
                 frame_count += 1
@@ -321,8 +476,11 @@ def run_experiment():
 
                 status_text.text = "Get ready -- follow the dot!"
 
+                trace_border.draw()
                 trace.draw(list(buffer))
+                target_dot.draw()
                 countdown_text.draw()
+                phase_title.draw()
                 status_text.draw()
                 win.flip()
 
@@ -339,6 +497,7 @@ def run_experiment():
             # ----------------------------------------------------------
             # e) Tracking phase
             # ----------------------------------------------------------
+            phase_title.text = f"TRACKING -- Trial {trial_num}/{total_trials}"
             exp_clock.reset()
             trial_errors = []
 
@@ -391,10 +550,14 @@ def run_experiment():
                         target_dot.lineColor = DOT_COLOR_BAD
 
                 remaining = max(0, TRACKING_DURATION_SEC - tracking_t)
-                status_text.text = f"Follow the dot -- {remaining:.0f}s remaining"
+                status_text.text = (
+                    f"Follow the dot -- {remaining:.0f}s remaining"
+                )
 
+                trace_border.draw()
                 trace.draw(list(buffer))
                 target_dot.draw()
+                phase_title.draw()
                 status_text.draw()
                 win.flip()
 

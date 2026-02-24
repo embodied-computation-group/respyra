@@ -28,8 +28,8 @@ BG_COLOR = (-1, -1, -1)              # black
 # ------------------------------------------------------------------ #
 #  Waveform trace                                                      #
 # ------------------------------------------------------------------ #
-TRACE_RECT = (-0.6, -0.3, 0.55, 0.3)  # (left, bottom, right, top) in window units
-TRACE_Y_RANGE = (0, 15)              # force range in Newtons (narrower than test_experiment)
+TRACE_RECT = (-0.6, -0.15, 0.55, 0.35)  # (left, bottom, right, top) in window units
+TRACE_Y_RANGE = (0, 10)              # default force range; overridden dynamically after range cal
 TRACE_COLOR = 'lime'
 TRACE_DURATION_SEC = 5.0             # seconds of signal visible on screen
 TRACE_BUFFER_SIZE = int(TRACE_DURATION_SEC * (1000 / BELT_PERIOD_MS))  # samples
@@ -44,9 +44,16 @@ DOT_COLOR_BAD = 'red'                 # when tracking error > threshold
 ERROR_THRESHOLD_N = 1.0               # acceptable error band in Newtons
 
 # ------------------------------------------------------------------ #
+#  Trace border                                                        #
+# ------------------------------------------------------------------ #
+TRACE_BORDER_COLOR = '#333333'        # subtle border around trace area
+
+# ------------------------------------------------------------------ #
 #  Phase timing                                                        #
 # ------------------------------------------------------------------ #
-BASELINE_DURATION_SEC = 10.0          # breathe-naturally baseline
+RANGE_CAL_DURATION_SEC = 15.0         # one-time max-range calibration at session start
+RANGE_CAL_SCALE = 0.80                # fraction of max range used for target amplitude
+BASELINE_DURATION_SEC = 10.0          # breathe-naturally baseline (per trial)
 COUNTDOWN_DURATION_SEC = 3.0          # 3..2..1 countdown before tracking
 TRACKING_DURATION_SEC = 30.0          # active tracking phase
 

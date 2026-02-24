@@ -27,6 +27,7 @@ import pandas as pd
 # -- Colors ----------------------------------------------------------------
 
 PHASE_COLORS = {
+    'range_cal': '#3d2a2a',   # dark warm (one-time calibration)
     'baseline': '#2a2a3d',    # dark indigo
     'countdown': '#2a3340',   # dark teal
     'tracking': '#1a1a2e',    # near-black (no shading — trace stands out)
@@ -43,7 +44,7 @@ ZERO_LINE_COLOR = '#666666'
 
 # -- Data loading ----------------------------------------------------------
 
-PHASE_ORDER = {'baseline': 0, 'countdown': 1, 'tracking': 2}
+PHASE_ORDER = {'range_cal': 0, 'baseline': 1, 'countdown': 2, 'tracking': 3}
 
 
 def load_session(csv_path: str) -> pd.DataFrame:
