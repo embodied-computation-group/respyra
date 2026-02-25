@@ -1,14 +1,21 @@
 # Configuration file for the Sphinx documentation builder.
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-import importlib.metadata
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so autodoc can import respyra even when the
+# package is not pip-installed (e.g., CI doc builds on Python 3.12).
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+import respyra  # noqa: E402
 
 # -- Project information -----------------------------------------------------
 
 project = "respyra"
 author = "Micah Allen"
 copyright = "2026, Micah Allen"
-release = importlib.metadata.version("respyra")
+release = respyra.__version__
 
 # -- General configuration ---------------------------------------------------
 

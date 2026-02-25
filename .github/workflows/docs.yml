@@ -27,8 +27,9 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install ".[docs]"
-          # Install vis deps so intersphinx can resolve pandas/matplotlib
+          # Install doc tools directly (not via .[docs]) because the package
+          # requires Python 3.10 while the doc build uses 3.12.
+          pip install sphinx "python-docs-theme>=2025.1" "myst-parser>=3.0" sphinx-autodoc-typehints
           pip install pandas matplotlib numpy
 
       - name: Build HTML
