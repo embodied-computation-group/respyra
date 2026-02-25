@@ -8,6 +8,8 @@ data/
 dist/
 build/
 docs/_build/
+.claude/
+.coverage
 
 # LaTeX build artifacts
 paper/*.aux
