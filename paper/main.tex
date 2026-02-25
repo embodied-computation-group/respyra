@@ -1,44 +1,82 @@
-\documentclass[man,floatsintext,12pt]{apa7}
+\documentclass[12pt]{article}
 
-\usepackage[american]{babel}
-\usepackage{csquotes}
-\usepackage[style=apa,sortcites=true,sorting=nyt,backend=biber]{biblatex}
-\DeclareLanguageMapping{american}{american-apa}
-\addbibresource{references.bib}
-
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+
+% Python code style (gastropy-style)
+\definecolor{codebg}{gray}{0.95}
+\definecolor{codekw}{RGB}{128,0,128}
+\definecolor{codestr}{RGB}{0,128,0}
+\definecolor{codecmt}{gray}{0.5}
+
+\lstdefinestyle{python}{
+    language=Python,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{codekw}\bfseries,
+    stringstyle=\color{codestr},
+    commentstyle=\color{codecmt}\itshape,
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{codebg},
+    xleftmargin=2em,
+    framexleftmargin=1.5em,
+    numbers=none,
+    tabsize=4,
+    morekeywords={replace, ConditionDef, SegmentDef, TrialConfig, CONFIG,
+                   ExperimentState, build_conditions},
+}
+\lstset{style=python}
 
 \title{respyra: A General-Purpose Respiratory Tracking Toolbox for Interoception Research}
-\shorttitle{Respiratory Tracking Toolbox}
 
-\authorsnames{Micah Allen}
-\authorsaffiliations{Aarhus University}
-
-\abstract{Respiratory interoception is increasingly recognized as a key modality linking bodily sensation to emotional experience and self-regulation. However, few tools exist for studying the sensorimotor dynamics of voluntary breathing control. Here we present \textit{respyra}, an open-source Python toolbox that integrates a Vernier Go Direct Respiration Belt with PsychoPy to enable real-time respiratory tracking experiments. Participants follow a sinusoidal target with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation), in which the displayed breathing trace is amplified or attenuated relative to ground truth. The visuomotor perturbation is designed to dissociate two components of respiratory control: veridical feedback conditions measure baseline respiratory tracking ability, while perturbed conditions probe the capacity to remap sensorimotor relationships when visual feedback is altered. We report a single-participant validation study comprising 48 trials across four sessions under veridical and $2\times$ gain perturbation conditions in a blocked, counterbalanced design. The participant achieved accurate respiratory tracking under veridical feedback (visual MAE = \SI{0.243}{\newton}) with substantially increased error under perturbation (visual MAE = \SI{0.538}{\newton}; perturbation ratio = $2.2\times$). Perturbed trials showed within-block adaptation that degraded across sessions, while veridical performance remained stable---suggesting that fatigue selectively impairs sensorimotor remapping rather than basic respiratory control. Split-half reliability was good (Spearman--Brown = .86). The toolbox is freely available and designed to facilitate research on respiratory sensorimotor control, interoceptive learning, and breathing-based interventions.}
-
-\keywords{respiratory interoception, sensorimotor adaptation, breathing, visuomotor perturbation, psychophysics, open-source toolbox}
+\author{
+    Micah Allen\textsuperscript{1,2,*} \\[6pt]
+    \small\textsuperscript{1}Center of Functionally Integrative Neuroscience, Aarhus University, Denmark \\
+    \small\textsuperscript{2}Cambridge Psychiatry, University of Cambridge, United Kingdom \\[4pt]
+    \small\textsuperscript{*}Corresponding author: \href{mailto:micah@cfin.au.dk}{micah@cfin.au.dk}
+}
+\date{}
 
 \begin{document}
 \maketitle
 
+\begin{abstract}
+Respiratory interoception is increasingly recognized as a key modality linking bodily sensation to emotional experience and self-regulation. However, few tools exist for studying the sensorimotor dynamics of voluntary breathing control. Here we present \textit{respyra}, an open-source Python toolbox that integrates a Vernier Go Direct Respiration Belt with PsychoPy to enable real-time respiratory tracking experiments. Participants follow a sinusoidal target with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation), in which the displayed breathing trace is amplified or attenuated relative to ground truth. The visuomotor perturbation is designed to dissociate two components of respiratory control: veridical feedback conditions measure baseline respiratory tracking ability, while perturbed conditions probe the capacity to remap sensorimotor relationships when visual feedback is altered. We report a single-participant validation study comprising 48 trials across four sessions under veridical and $2\times$ gain perturbation conditions in a blocked, counterbalanced design. The participant achieved accurate respiratory tracking under veridical feedback (visual MAE = \SI{0.243}{\newton}) with substantially increased error under perturbation (visual MAE = \SI{0.538}{\newton}; perturbation ratio = $2.2\times$). Perturbed trials showed within-block adaptation that degraded across sessions, while veridical performance remained stable---suggesting that fatigue selectively impairs sensorimotor remapping rather than basic respiratory control. Split-half reliability was good (Spearman--Brown = .86). The toolbox is freely available and designed to facilitate research on respiratory sensorimotor control, interoceptive learning, and breathing-based interventions.
+\end{abstract}
+
+\noindent\textbf{Keywords:} respiratory interoception, sensorimotor adaptation, breathing, visuomotor perturbation, psychophysics, open-source toolbox
+
+\onehalfspacing
+
 \section{Introduction}
 
-Interoception---the sensing, interpretation, and integration of signals originating from within the body---is increasingly recognized as a fundamental mechanism underlying emotional experience, cognitive function, and behavioral self-regulation \parencite{garfinkel2015knowing, suksasilp2022towards}. Contemporary research distinguishes between interoceptive accuracy (objective behavioral performance), interoceptive sensibility (self-reported beliefs), and interoceptive awareness (metacognitive correspondence between accuracy and confidence), revealing that these dimensions are largely modality-specific \parencite{garfinkel2015knowing, banellis2026interoceptive}.
+Interoception---the sensing, interpretation, and integration of signals originating from within the body---is increasingly recognized as a fundamental mechanism underlying emotional experience, cognitive function, and behavioral self-regulation \citep{garfinkel2015knowing, suksasilp2022towards}. Contemporary research distinguishes between interoceptive accuracy (objective behavioral performance), interoceptive sensibility (self-reported beliefs), and interoceptive awareness (metacognitive correspondence between accuracy and confidence), revealing that these dimensions are largely modality-specific \citep{garfinkel2015knowing, banellis2026interoceptive}.
 
-While the cardiac axis has dominated interoception research, respiratory interoception---or respiroception---offers a uniquely important physiological modality because it is closely linked to affect and, critically, is amenable to direct conscious control \parencite{nikolova2022respiratory, harrison2021interoception}. Slow deep breathing at approximately 0.1~Hz stimulates arterial baroreceptors, enhances respiratory sinus arrhythmia, and reduces sympathetic output \parencite{gholamrezaei2021psychophysiological}. Beyond autonomic regulation, paced slow breathing reduces anticipatory anxiety and suppresses cortical beta-band arousal markers \parencite{luo2025effect}. The respiratory cycle itself modulates neural oscillations and differentially gates exteroceptive versus interoceptive processing across inhalation and exhalation phases \parencite{molle2022respiratory}.
+While the cardiac axis has dominated interoception research, respiratory interoception---or respiroception---offers a uniquely important physiological modality because it is closely linked to affect and, critically, is amenable to direct conscious control \citep{nikolova2022respiratory, harrison2021interoception}. Slow deep breathing at approximately 0.1~Hz stimulates arterial baroreceptors, enhances respiratory sinus arrhythmia, and reduces sympathetic output \citep{gholamrezaei2021psychophysiological}. Beyond autonomic regulation, paced slow breathing reduces anticipatory anxiety and suppresses cortical beta-band arousal markers \citep{luo2025effect}. The respiratory cycle itself modulates neural oscillations and differentially gates exteroceptive versus interoceptive processing across inhalation and exhalation phases \citep{molle2022respiratory}.
 
-Measuring respiroception has relied primarily on detection paradigms, such as the Filter Detection Task \parencite{harrison2021interoception} and the Respiratory Resistance Sensitivity Task \parencite{nikolova2022respiratory}, which quantify perceptual sensitivity to inspiratory loads. However, these approaches focus on interoceptive detection rather than on the sensorimotor dynamics of voluntary breathing control---that is, the ability to precisely modulate one's own respiratory output to match a prescribed target. This motor control dimension of breathing is central to breathing-based interventions and meditation practices, yet it has received comparatively little experimental attention.
+Measuring respiroception has relied primarily on detection paradigms, such as the Filter Detection Task \citep{harrison2021interoception} and the Respiratory Resistance Sensitivity Task \citep{nikolova2022respiratory}, which quantify perceptual sensitivity to inspiratory loads. However, these approaches focus on interoceptive detection rather than on the sensorimotor dynamics of voluntary breathing control---that is, the ability to precisely modulate one's own respiratory output to match a prescribed target. This motor control dimension of breathing is central to breathing-based interventions and meditation practices, yet it has received comparatively little experimental attention.
 
-The study of sensorimotor control offers well-established paradigms for investigating how the motor system adapts to perturbations in visual feedback. In visuomotor reaching studies, participants learn to compensate for rotated or scaled cursor feedback, revealing the dynamics of sensorimotor adaptation, error correction, and internal model updating \parencite[e.g.,][]{krakauer2019motor}. Importantly, veridical and perturbed feedback conditions probe dissociable constructs: veridical tracking reflects baseline motor control ability, while perturbed tracking additionally engages the capacity to remap sensorimotor relationships when feedback is altered. The ratio of perturbed to veridical error isolates this remapping cost independent of baseline ability, offering a promising individual-differences metric for future group studies. Applying analogous perturbation paradigms to respiratory control could illuminate how individuals monitor and correct their breathing output, with implications for understanding both healthy respiratory regulation and clinical conditions involving dysfunctional breathing patterns.
+The study of sensorimotor control offers well-established paradigms for investigating how the motor system adapts to perturbations in visual feedback. In visuomotor reaching studies, participants learn to compensate for rotated or scaled cursor feedback, revealing the dynamics of sensorimotor adaptation, error correction, and internal model updating \citep[e.g.,][]{krakauer2019motor}. Importantly, veridical and perturbed feedback conditions probe dissociable constructs: veridical tracking reflects baseline motor control ability, while perturbed tracking additionally engages the capacity to remap sensorimotor relationships when feedback is altered. The ratio of perturbed to veridical error isolates this remapping cost independent of baseline ability, offering a promising individual-differences metric for future group studies. Applying analogous perturbation paradigms to respiratory control could illuminate how individuals monitor and correct their breathing output, with implications for understanding both healthy respiratory regulation and clinical conditions involving dysfunctional breathing patterns.
 
 Here we present \textit{respyra}, an open-source Python toolbox for conducting respiratory tracking experiments with real-time biofeedback and visuomotor perturbation capabilities (Figure~\ref{fig:schematic}). The toolbox integrates a commercially available respiration belt with PsychoPy for stimulus-precise experiment control. We describe the system architecture and experimental protocol, and report a single-participant validation study (48 trials across four sessions) demonstrating that (a) participants can accurately track sinusoidal breathing targets under veridical feedback, (b) visual gain perturbations reliably increase tracking error, (c) perturbed trials show within-block adaptation that degrades with fatigue while veridical performance remains stable, and (d) the task produces reliable trial-level measurements.
 
 \section{Method}
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{fig_task_schematic.png}
 \caption{Schematic of the respiromotor tracking task. \textbf{(A)}~Task overview: the participant wears a respiration belt and views a monitor displaying their breathing trace in real time. A sinusoidal target guides the desired breathing pattern. Visual biofeedback can be veridically displayed or scaled by a gain factor $g$, creating a closed-loop sensorimotor control paradigm with afferent feedback and motor correction. \textbf{(B)}~Belt detail: the Vernier Go Direct Respiration Belt (GDX-RB) consists of an elastic strap with an embedded force sensor module that transmits data wirelessly via Bluetooth Low Energy (BLE).}
@@ -47,9 +85,9 @@ Here we present \textit{respyra}, an open-source Python toolbox for conducting r
 
 \subsection{Toolbox Architecture}
 
-\textit{respyra} is implemented in Python 3.10 and integrates two primary components: the Vernier Go Direct Respiration Belt (GDX-RB; Vernier Software \& Technology) for real-time force-based respiratory measurement, and PsychoPy \parencite{peirce2019psychopy} for stimulus presentation and experiment control. The GDX-RB was selected because it is inexpensive, well-documented, available worldwide through educational science suppliers, and offers wireless (BLE) operation out of the box---making it accessible to researchers and teaching laboratories without specialized biomedical equipment budgets. The toolbox is organized into reusable core modules, configuration files, and experiment scripts, following a separation-of-concerns architecture (see Table~\ref{tab:modules}).
+\textit{respyra} is implemented in Python 3.10 and integrates two primary components: the Vernier Go Direct Respiration Belt (GDX-RB; Vernier Software \& Technology) for real-time force-based respiratory measurement, and PsychoPy \citep{peirce2019psychopy} for stimulus presentation and experiment control. The GDX-RB was selected because it is inexpensive, well-documented, available worldwide through educational science suppliers, and offers wireless (BLE) operation out of the box---making it accessible to researchers and teaching laboratories without specialized biomedical equipment budgets. The toolbox is organized into reusable core modules, configuration files, and experiment scripts, following a separation-of-concerns architecture (see Table~\ref{tab:modules}).
 
-\begin{table}[ht]
+\begin{table}[htbp]
 \caption{Core Modules of the respyra Toolbox}
 \label{tab:modules}
 \begin{tabular}{lp{10cm}}
@@ -67,7 +105,7 @@ Module & Description \\
 
 The respiration belt measures chest expansion force in Newtons (0--50~N range) via a force sensor embedded in an elastic chest strap. The belt communicates with the host computer via Bluetooth Low Energy (BLE) or USB. To resolve a platform-specific conflict on Windows---where PsychoPy's graphics backend initializes COM in single-threaded apartment (STA) mode while the BLE scanner requires multi-threaded apartment (MTA) mode---the toolbox connects the belt \textit{before} importing PsychoPy modules.
 
-Experimental conditions are defined using a \texttt{ConditionDef} dataclass specifying a name, a list of \texttt{SegmentDef} objects (each with a target frequency in Hz and an integer cycle count), and an optional \texttt{feedback\_gain} parameter. The use of integer cycle counts ensures phase continuity at segment boundaries, allowing seamless composition of multi-frequency waveforms.
+Experimental conditions are defined using a \texttt{ConditionDef} dataclass specifying a name, a list of \texttt{SegmentDef} objects (each with a target frequency in Hz and an integer cycle count), and an optional \texttt{feedback\_gain} parameter. The use of integer cycle counts ensures phase continuity at segment boundaries, allowing seamless composition of multi-frequency waveforms. Experiment parameters are organized into a hierarchical configuration dataclass (\texttt{ExperimentConfig}), enabling researchers to create new experimental designs by overriding specific parameters from a base configuration (see Appendix~A). Full documentation including an experiment creation tutorial is available at \url{https://embodied-computation-group.github.io/respyra/}.
 
 \subsection{Visual Feedback and Perturbation}
 
@@ -131,7 +169,7 @@ Prior to each session, the participant completed the range calibration procedure
 
 Table~\ref{tab:session_stats} presents session-level descriptive statistics. The participant maintained a breathing rate close to the 0.1~Hz (6~BPM) target across all sessions ($M = 6.1$~BPM). Under veridical feedback, visual MAE was \SI{0.243}{\newton} ($SD = \SI{0.070}{\newton}$ across sessions), indicating accurate respiratory tracking. Under perturbation ($g = 2.0$), visual MAE increased to \SI{0.538}{\newton} ($SD = \SI{0.255}{\newton}$), yielding a mean perturbation ratio of $2.2\times$ (range: 1.68--2.61 across sessions). Figure~\ref{fig:examples} shows representative veridical and perturbed trial traces, and Figure~\ref{fig:qc} presents a complete session quality-control summary.
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{fig1_example_trials.png}
 \caption{Representative single-trial traces from Session~2. \textbf{Top row}: Veridical trial ($g = 1.0$). \textbf{Bottom row}: Perturbed trial ($g = 2.0$). Left panels show the target waveform (dashed) and displayed breathing trace (solid). Center panels show the visual error time series. Right panels show the error distribution with kernel density estimate. The perturbed trial shows larger and more variable errors, with characteristic overcorrection oscillations due to the amplified visual feedback.}
@@ -148,7 +186,7 @@ Session~2 showed the best overall perturbed performance (visual MAE = \SI{0.259}
 
 The RMSE/MAE ratio for veridical trials remained close to the normal-distribution reference value of 1.253 ($M = 1.25$), indicating consistent, well-regulated tracking errors. For perturbed trials, the ratio was elevated ($M = 1.50$), and reached 1.72 in Session~4, indicating increasingly heavy-tailed error distributions. Session~4 perturbed trials showed extreme excess kurtosis ($M = 10.6$) with individual errors reaching up to \SI{10}{\newton}, consistent with intermittent large deviations characteristic of attentional lapses or fatigue-driven control breakdown.
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{fig2_session_performance.png}
 \caption{Session-level performance and within-block adaptation. \textbf{(A)}~Mean visual MAE by session and condition. Error bars indicate $\pm 1\,SD$. \textbf{(B)}~Perturbation ratio (perturbed visual MAE / veridical MAE) across sessions, showing a U-shaped trajectory consistent with initial learning followed by fatigue. \textbf{(C,~D)}~Within-block visual MAE across the six trials within each condition's block, plotted separately for veridical~(C) and perturbed~(D) trials. Each line represents one session. Perturbed trials show within-block adaptation in early sessions that reverses by Session~4.}
@@ -163,14 +201,14 @@ Inspiration was consistently associated with larger tracking errors than expirat
 
 Split-half reliability (odd vs.\ even trials) for visual MAE yielded $r = .759$. After Spearman--Brown correction, estimated full-test reliability was .857, indicating good measurement reliability at the trial level (Figure~\ref{fig:reliability}).
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.6\textwidth]{fig3_reliability.png}
 \caption{Split-half reliability of visual MAE. Scatter plot of odd-trial versus even-trial mean visual MAE for each trial pair. Marker shape indicates condition (circles = veridical, squares = perturbed). Marker color indicates session. Spearman--Brown corrected reliability = .857.}
 \label{fig:reliability}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{fig4_qc_session.png}
 \caption{Example quality-control session summary (Session~1) generated by the toolbox's built-in visualization module. Panels show the full-session force trace with target overlay, signed error time series, per-trial MAE, error distributions, and calibration stability. This automated diagnostic output facilitates rapid data quality assessment after each session.}
@@ -191,16 +229,116 @@ The RMSE/MAE ratio proved informative as a secondary metric of control quality. 
 
 The finding that inspiration was consistently harder to control than expiration aligns with known biomechanical asymmetries in respiratory control. Inspiration is an active muscular process (primarily diaphragmatic), while expiration at rest is largely passive (elastic recoil). Under visual gain perturbation, the active inspiratory phase may be more susceptible to overcorrection and motor noise amplification, producing the observed heavier-tailed error distribution.
 
-The toolbox addresses several practical challenges in respiratory psychophysics. The percentile-based calibration with saturation detection provides robust target scaling even when individual data contain outlier breaths or sensor artifacts. The non-blocking belt interface ensures that respiratory sampling does not disrupt PsychoPy's frame-locked timing. The modular architecture---separating belt I/O, display rendering, target generation, and data logging into independent components---facilitates extension to new experimental designs.
+The toolbox addresses several practical challenges in respiratory psychophysics. The percentile-based calibration with saturation detection provides robust target scaling even when individual data contain outlier breaths or sensor artifacts. The non-blocking belt interface ensures that respiratory sampling does not disrupt PsychoPy's frame-locked timing. The modular architecture---separating belt I/O, display rendering, target generation, and data logging into independent components---facilitates extension to new experimental designs. Comprehensive online documentation, including installation guides, a user guide, API reference, and a step-by-step tutorial for creating custom experiments, is available at the project website.
 
 Several practical challenges also emerged during the validation study that highlight areas for future improvement. Session~1 produced an unusually large calibration amplitude because the participant breathed too deeply during range calibration, resulting in a target waveform that was difficult to sustain---particularly under the $2\times$ gain perturbation where the required breathing amplitude was halved. In Session~3, a tightened belt compressed the usable force range and produced sensations of air hunger (inability to exhale fully), degrading performance. These observations suggest that calibrating from comfortable normal breathing---rather than maximal range---and accounting for the gain factor when setting target amplitude may produce more ecologically valid operating ranges in future iterations.
 
 Several limitations should be noted. First, the validation data come from a single experienced participant (the developer), and performance may differ substantially in naive participants. However, the 48-trial, four-session design provides substantially more evidence than a single proof-of-concept session, and the good split-half reliability (Spearman--Brown = .857) indicates that the task produces stable individual measurements. Second, the within-session fatigue effects (degraded perturbed performance in Sessions~3--4) complicate interpretation of the session effects, and future studies should include rest periods between sessions or spread sessions across multiple days. Third, the 10~Hz sampling rate, while sufficient for tracking slow breathing patterns ($\sim$0.1~Hz), may limit the resolution of fine-grained error dynamics. Fourth, while the Vernier GDX-RB provides a reliable and affordable single-band force measurement, some applications may require more sophisticated respiratory monitoring such as dual-band respiratory inductance plethysmography (RIP); the toolbox's modular sensor interface is designed to accommodate such extensions.
 
-The respiratory tracking paradigm opens several directions for future research. The dissociation between respiratory control ability (veridical MAE) and sensorimotor flexibility (perturbation ratio) provides a framework for individual-differences research. In group studies, the perturbation ratio could be correlated with measures of respiratory interoceptive sensitivity \parencite{nikolova2022respiratory} to investigate whether perceptual sensitivity to breathing predicts the capacity for sensorimotor remapping. Clinical populations with dysfunctional breathing patterns---including panic disorder, chronic hyperventilation, and chronic obstructive pulmonary disease---may show selective deficits in either baseline control or perturbation adaptation. The adaptation dynamics observed here (within-block learning, cross-session savings, fatigue effects) can be further characterized using the well-developed theoretical toolkit from the motor learning literature, including studies of savings, interference, and transfer \parencite{krakauer2019motor}. Finally, the framework could support investigations of breathing-based interventions by quantifying how accurately individuals can implement prescribed breathing patterns (e.g., paced slow breathing at 0.1~Hz) and how this accuracy relates to downstream physiological and psychological outcomes \parencite{gholamrezaei2021psychophysiological, luo2025effect}.
+The respiratory tracking paradigm opens several directions for future research. The dissociation between respiratory control ability (veridical MAE) and sensorimotor flexibility (perturbation ratio) provides a framework for individual-differences research. In group studies, the perturbation ratio could be correlated with measures of respiratory interoceptive sensitivity \citep{nikolova2022respiratory} to investigate whether perceptual sensitivity to breathing predicts the capacity for sensorimotor remapping. Clinical populations with dysfunctional breathing patterns---including panic disorder, chronic hyperventilation, and chronic obstructive pulmonary disease---may show selective deficits in either baseline control or perturbation adaptation. The adaptation dynamics observed here (within-block learning, cross-session savings, fatigue effects) can be further characterized using the well-developed theoretical toolkit from the motor learning literature, including studies of savings, interference, and transfer \citep{krakauer2019motor}. Finally, the framework could support investigations of breathing-based interventions by quantifying how accurately individuals can implement prescribed breathing patterns (e.g., paced slow breathing at 0.1~Hz) and how this accuracy relates to downstream physiological and psychological outcomes \citep{gholamrezaei2021psychophysiological, luo2025effect}.
 
 \textit{respyra} is freely available at \url{https://github.com/embodied-computation-group/respyra} under an MIT license.
 
-\printbibliography
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\clearpage
+\appendix
+\section*{Appendix A: Creating Custom Experiments}
+\addcontentsline{toc}{section}{Appendix A: Creating Custom Experiments}
+\label{app:config}
+
+The toolbox provides a structured configuration system that allows researchers to create new experiments by overriding parameters from a base configuration, without modifying source code. This appendix demonstrates the key patterns; full documentation is available at \url{https://embodied-computation-group.github.io/respyra/creating_experiments.html}.
+
+\subsection*{Running an Experiment}
+
+Experiments are launched from the command line using the \texttt{--config} flag to specify a configuration:
+
+\begin{lstlisting}
+# Built-in config by short name
+respyra-task --config demo
+
+# Custom config file
+respyra-task --config experiments/my_study.py
+\end{lstlisting}
+
+\subsection*{Customizing Parameters}
+
+Custom configs inherit from a base configuration and override specific fields using Python's \texttt{dataclasses.replace()}:
+
+\begin{lstlisting}
+from dataclasses import replace
+from defaults import CONFIG as _BASE
+from respyra.configs.experiment_config import TrialConfig
+from respyra.configs.presets import slow_steady
+
+CONFIG = replace(
+    _BASE,
+    name="My Study",
+    timing=replace(_BASE.timing, tracking_duration_sec=50.0),
+    display=replace(_BASE.display, fullscr=True),
+    trial=TrialConfig(
+        conditions=[slow_steady(n_cycles=5)] * 4,
+        n_reps=1,
+        method="sequential",
+    ),
+)
+\end{lstlisting}
+
+\subsection*{Defining Conditions}
+
+The \texttt{presets} module provides factory functions for common paradigms. Custom conditions can also be built directly from \texttt{ConditionDef} and \texttt{SegmentDef}:
+
+\begin{lstlisting}
+from respyra.configs.presets import slow_steady, perturbed_slow
+from respyra.core.target_generator import ConditionDef, SegmentDef
+
+# Preset factories
+easy = slow_steady(freq_hz=0.1, n_cycles=3)
+hard = perturbed_slow(feedback_gain=2.0, n_cycles=4)
+
+# Custom: graded gain levels
+conditions = [
+    ConditionDef("gain_1.0", [SegmentDef(0.1, 3)], feedback_gain=1.0),
+    ConditionDef("gain_1.5", [SegmentDef(0.1, 3)], feedback_gain=1.5),
+    ConditionDef("gain_2.0", [SegmentDef(0.1, 3)], feedback_gain=2.0),
+]
+\end{lstlisting}
+
+\subsection*{Counterbalanced Designs}
+
+For studies requiring counterbalancing, a \texttt{build\_conditions()} function receives the session number at runtime and returns the appropriate trial order:
+
+\begin{lstlisting}
+def build_conditions(session_num):
+    if int(session_num) % 2 == 1:
+        return [SLOW] * 6 + [PERTURBED] * 6  # A-B
+    else:
+        return [PERTURBED] * 6 + [SLOW] * 6  # B-A
+
+CONFIG = replace(_BASE, trial=TrialConfig(
+    conditions=build_conditions(1),
+    build_conditions=build_conditions,
+))
+\end{lstlisting}
+
+\subsection*{Composing Custom Flows}
+
+For non-standard experiment structures, individual phase functions can be imported from the runner module and composed freely:
+
+\begin{lstlisting}
+from respyra.core.runner import (
+    connect_belt, setup_display, run_range_calibration,
+    run_baseline, run_countdown, run_tracking,
+    ExperimentState,
+)
+
+belt = connect_belt(cfg)
+win, stimuli = setup_display(cfg)
+# ... create state, then compose phases as needed
+run_range_calibration(state, cfg)
+run_countdown(state, cfg, condition, ...)
+run_tracking(state, cfg, condition, target_gen, ...)
+\end{lstlisting}
 
 \end{document}
