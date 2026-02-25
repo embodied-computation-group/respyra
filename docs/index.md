@@ -111,6 +111,13 @@ BLE issues, sensor saturation, frame drops, and more
 Swap in a different respiratory sensor
 :::
 
+:::{grid-item-card} Contributing
+:link: contributing
+:link-type: doc
+
+Development setup, testing, linting, and pull requests
+:::
+
 ::::
 
 ```{toctree}
@@ -125,4 +132,5 @@ examples/index
 visualization
 troubleshooting
 adapting_belt
+contributing
 ```

@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/embodied-computation-group/respyra/actions/workflows/test.yml"><img alt="Tests" src="https://github.com/embodied-computation-group/respyra/actions/workflows/test.yml/badge.svg"></a>
   <a href="https://pypi.org/project/respyra/"><img alt="PyPI" src="https://img.shields.io/pypi/v/respyra?color=blue"></a>
   <a href="https://embodied-computation-group.github.io/respyra/"><img alt="Docs" src="https://img.shields.io/badge/docs-online-brightgreen"></a>
   <a href="https://github.com/embodied-computation-group/respyra/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow"></a>
@@ -68,11 +69,21 @@ python3.10 -m venv .venv
 source .venv/bin/activate
 ```
 
-Install in editable mode:
+Install in editable mode with dev extras:
 
 ```bash
-pip install -e ".[vis]"
+pip install -e ".[dev,vis]"
 ```
+
+### Running tests
+
+```bash
+pytest tests/ -v
+```
+
+PsychoPy and godirect are mocked at the `sys.modules` level so the test suite
+runs without hardware or heavy dependencies. See [CONTRIBUTING.md](CONTRIBUTING.md)
+for details on the mock strategy and adding new tests.
 
 ### Requirements
 
@@ -197,6 +208,11 @@ Full documentation is available at **[embodied-computation-group.github.io/respy
 **Linux**: Requires udev rules for USB access. See the [installation guide](https://embodied-computation-group.github.io/respyra/installation.html#linux).
 
 **macOS**: Works with both BLE and USB out of the box.
+
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for development
+setup, testing, linting, and pull request guidelines.
 
 ## License
 
