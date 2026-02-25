@@ -44,43 +44,56 @@ Session data is saved incrementally to a CSV file in `data/`, with one row per s
 
 ## Configuration
 
-All experiment parameters are defined in `respyra/configs/breath_tracking.py`. Edit this file to customise the task.
+Experiments are configured using {class}`~respyra.configs.experiment_config.ExperimentConfig`, a structured dataclass that groups all parameters into sub-configs. Run experiments with the `--config` flag:
 
-### Belt settings
+```bash
+# Built-in config by short name
+respyra-task --config demo
+respyra-task --config validation_study
 
-| Parameter | Default | Description |
-|---|---|---|
-| `CONNECTION` | `'ble'` | Connection type: `'ble'` or `'usb'` |
-| `DEVICE_TO_OPEN` | `'proximity_pairing'` | BLE device selection strategy |
-| `BELT_PERIOD_MS` | `100` | Sampling interval in ms (100 = 10 Hz) |
-| `BELT_CHANNELS` | `[1]` | Sensor channels (1 = Force in Newtons) |
+# Custom config file
+respyra-task --config experiments/my_study.py
+```
 
-### Display settings
+Custom configs start from a base and override fields with {func}`dataclasses.replace`:
 
-| Parameter | Default | Description |
-|---|---|---|
-| `FULLSCR` | `False` | Full-screen mode (set `True` for data collection) |
-| `MONITOR_WIDTH_CM` | `53.0` | Physical screen width in cm |
-| `MONITOR_DISTANCE_CM` | `57.0` | Viewing distance in cm |
-| `MONITOR_SIZE_PIX` | `(1920, 1080)` | Screen resolution |
-| `UNITS` | `'height'` | PsychoPy coordinate system |
+```python
+from dataclasses import replace
+from defaults import CONFIG as _BASE
 
-### Phase timing
+CONFIG = replace(
+    _BASE,
+    name="My Study",
+    timing=replace(_BASE.timing, tracking_duration_sec=60.0),
+    display=replace(_BASE.display, fullscr=True),
+)
+```
 
-| Parameter | Default | Description |
-|---|---|---|
-| `RANGE_CAL_DURATION_SEC` | `15.0` | Range calibration duration (seconds) |
-| `BASELINE_DURATION_SEC` | `10.0` | Baseline per trial (seconds) |
-| `COUNTDOWN_DURATION_SEC` | `3.0` | Countdown per trial (seconds) |
-| `TRACKING_DURATION_SEC` | `30.0` | Tracking per trial (seconds) |
+See {doc}`creating_experiments` for the full tutorial, including condition presets, counterbalanced designs, and custom experiment flows.
 
-### Trial structure
+### Key parameter groups
 
-| Parameter | Default | Description |
-|---|---|---|
-| `CONDITIONS` | `[SLOW_STEADY, PERTURBED_SLOW]` | List of condition objects |
-| `N_REPS` | `3` | Repetitions per condition |
-| `TRIAL_METHOD` | `'sequential'` | `'sequential'` or `'random'` |
+| Sub-config | Controls |
+|---|---|
+| `BeltConfig` | Connection type, sampling rate, sensor channels |
+| `DisplayConfig` | Window mode, monitor dimensions, coordinate units |
+| `TimingConfig` | Phase durations (calibration, baseline, countdown, tracking) |
+| `TraceConfig` | Waveform display area, color, scroll duration |
+| `DotConfig` | Target dot appearance, feedback mode, error thresholds |
+| `RangeCalConfig` | Calibration scaling, percentile clipping, saturation limits |
+| `TrialConfig` | Conditions list, repetitions, ordering, counterbalancing function |
+
+### Condition presets
+
+The {mod}`respyra.configs.presets` module provides factory functions for common paradigms:
+
+```python
+from respyra.configs.presets import slow_steady, perturbed_slow, mixed_rhythm
+
+easy = slow_steady(freq_hz=0.1, n_cycles=3)
+perturbed = perturbed_slow(feedback_gain=2.0)
+mixed = mixed_rhythm(freq_slow=0.1, freq_fast=0.25)
+```
 
 ## Defining conditions
 
