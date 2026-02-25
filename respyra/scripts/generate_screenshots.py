@@ -32,7 +32,7 @@ from respyra.configs.breath_tracking import (
     UNITS,
 )
 from respyra.core.display import SignalTrace, create_monitor, create_window
-from respyra.scripts.breath_tracking_task import _graded_dot_color
+from respyra.core.runner import graded_dot_color as _graded_dot_color
 
 # ------------------------------------------------------------------ #
 #  Real session data (from sub-micah_ses-001_2026-02-24_205556.csv)   #

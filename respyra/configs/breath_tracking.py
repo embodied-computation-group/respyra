@@ -101,6 +101,7 @@ DATA_COLUMNS = [
     "force_n",
     "target_force",
     "error",
+    "compensated_error",
     "phase",
     "condition",
     "trial_num",
@@ -111,3 +112,75 @@ DATA_COLUMNS = [
 #  Input                                                               #
 # ------------------------------------------------------------------ #
 ESCAPE_KEY = "escape"
+
+# ------------------------------------------------------------------ #
+#  Structured config (for use with respyra.core.runner)                #
+# ------------------------------------------------------------------ #
+from respyra.configs.experiment_config import (  # noqa: E402
+    BeltConfig,
+    DisplayConfig,
+    DotConfig,
+    ExperimentConfig,
+    RangeCalConfig,
+    TimingConfig,
+    TraceConfig,
+    TrialConfig,
+)
+
+CONFIG = ExperimentConfig(
+    name="Breath Tracking Task",
+    belt=BeltConfig(
+        connection=CONNECTION,
+        device_to_open=DEVICE_TO_OPEN,
+        period_ms=BELT_PERIOD_MS,
+        channels=BELT_CHANNELS,
+    ),
+    display=DisplayConfig(
+        fullscr=FULLSCR,
+        monitor_name=MONITOR_NAME,
+        monitor_width_cm=MONITOR_WIDTH_CM,
+        monitor_distance_cm=MONITOR_DISTANCE_CM,
+        monitor_size_pix=MONITOR_SIZE_PIX,
+        units=UNITS,
+        bg_color=BG_COLOR,
+    ),
+    trace=TraceConfig(
+        rect=TRACE_RECT,
+        y_range=TRACE_Y_RANGE,
+        color=TRACE_COLOR,
+        border_color=TRACE_BORDER_COLOR,
+        duration_sec=TRACE_DURATION_SEC,
+    ),
+    dot=DotConfig(
+        radius=DOT_RADIUS,
+        x_offset=DOT_X_OFFSET,
+        color_good=DOT_COLOR_GOOD,
+        color_bad=DOT_COLOR_BAD,
+        color_mid=DOT_COLOR_MID,
+        feedback_mode=DOT_FEEDBACK_MODE,
+        error_threshold_n=ERROR_THRESHOLD_N,
+        error_threshold_mid_n=ERROR_THRESHOLD_MID_N,
+        graded_max_error_n=DOT_GRADED_MAX_ERROR_N,
+    ),
+    timing=TimingConfig(
+        range_cal_duration_sec=RANGE_CAL_DURATION_SEC,
+        baseline_duration_sec=BASELINE_DURATION_SEC,
+        countdown_duration_sec=COUNTDOWN_DURATION_SEC,
+        tracking_duration_sec=TRACKING_DURATION_SEC,
+    ),
+    range_cal=RangeCalConfig(
+        scale=RANGE_CAL_SCALE,
+        percentile_lo=RANGE_CAL_PERCENTILE_LO,
+        percentile_hi=RANGE_CAL_PERCENTILE_HI,
+        force_saturation_lo=FORCE_SATURATION_LO,
+        force_saturation_hi=FORCE_SATURATION_HI,
+    ),
+    trial=TrialConfig(
+        conditions=CONDITIONS,
+        n_reps=N_REPS,
+        method=TRIAL_METHOD,
+    ),
+    output_dir=OUTPUT_DIR,
+    escape_key=ESCAPE_KEY,
+    data_columns=DATA_COLUMNS,
+)

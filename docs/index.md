@@ -76,6 +76,13 @@ Run demos and your first experiment in minutes
 Session flow, configuration, conditions, data output
 :::
 
+:::{grid-item-card} Creating Experiments
+:link: creating_experiments
+:link-type: doc
+
+Custom configs, condition presets, counterbalancing, and advanced flows
+:::
+
 :::{grid-item-card} API Reference
 :link: api/index
 :link-type: doc
@@ -127,6 +134,7 @@ Development setup, testing, linting, and pull requests
 installation
 quickstart
 userguide
+creating_experiments
 api/index
 examples/index
 visualization

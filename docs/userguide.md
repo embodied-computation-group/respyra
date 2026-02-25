@@ -44,43 +44,56 @@ Session data is saved incrementally to a CSV file in `data/`, with one row per s
 
 ## Configuration
 
-All experiment parameters are defined in `respyra/configs/breath_tracking.py`. Edit this file to customise the task.
+Experiments are configured using {class}`~respyra.configs.experiment_config.ExperimentConfig`, a structured dataclass that groups all parameters into sub-configs. Run experiments with the `--config` flag:
 
-### Belt settings
+```bash
+# Built-in config by short name
+respyra-task --config demo
+respyra-task --config validation_study
 
-| Parameter | Default | Description |
-|---|---|---|
-| `CONNECTION` | `'ble'` | Connection type: `'ble'` or `'usb'` |
-| `DEVICE_TO_OPEN` | `'proximity_pairing'` | BLE device selection strategy |
-| `BELT_PERIOD_MS` | `100` | Sampling interval in ms (100 = 10 Hz) |
-| `BELT_CHANNELS` | `[1]` | Sensor channels (1 = Force in Newtons) |
+# Custom config file
+respyra-task --config experiments/my_study.py
+```
 
-### Display settings
+Custom configs start from a base and override fields with {func}`dataclasses.replace`:
 
-| Parameter | Default | Description |
-|---|---|---|
-| `FULLSCR` | `False` | Full-screen mode (set `True` for data collection) |
-| `MONITOR_WIDTH_CM` | `53.0` | Physical screen width in cm |
-| `MONITOR_DISTANCE_CM` | `57.0` | Viewing distance in cm |
-| `MONITOR_SIZE_PIX` | `(1920, 1080)` | Screen resolution |
-| `UNITS` | `'height'` | PsychoPy coordinate system |
+```python
+from dataclasses import replace
+from defaults import CONFIG as _BASE
 
-### Phase timing
+CONFIG = replace(
+    _BASE,
+    name="My Study",
+    timing=replace(_BASE.timing, tracking_duration_sec=60.0),
+    display=replace(_BASE.display, fullscr=True),
+)
+```
 
-| Parameter | Default | Description |
-|---|---|---|
-| `RANGE_CAL_DURATION_SEC` | `15.0` | Range calibration duration (seconds) |
-| `BASELINE_DURATION_SEC` | `10.0` | Baseline per trial (seconds) |
-| `COUNTDOWN_DURATION_SEC` | `3.0` | Countdown per trial (seconds) |
-| `TRACKING_DURATION_SEC` | `30.0` | Tracking per trial (seconds) |
+See {doc}`creating_experiments` for the full tutorial, including condition presets, counterbalanced designs, and custom experiment flows.
 
-### Trial structure
+### Key parameter groups
 
-| Parameter | Default | Description |
-|---|---|---|
-| `CONDITIONS` | `[SLOW_STEADY, PERTURBED_SLOW]` | List of condition objects |
-| `N_REPS` | `3` | Repetitions per condition |
-| `TRIAL_METHOD` | `'sequential'` | `'sequential'` or `'random'` |
+| Sub-config | Controls |
+|---|---|
+| `BeltConfig` | Connection type, sampling rate, sensor channels |
+| `DisplayConfig` | Window mode, monitor dimensions, coordinate units |
+| `TimingConfig` | Phase durations (calibration, baseline, countdown, tracking) |
+| `TraceConfig` | Waveform display area, color, scroll duration |
+| `DotConfig` | Target dot appearance, feedback mode, error thresholds |
+| `RangeCalConfig` | Calibration scaling, percentile clipping, saturation limits |
+| `TrialConfig` | Conditions list, repetitions, ordering, counterbalancing function |
+
+### Condition presets
+
+The {mod}`respyra.configs.presets` module provides factory functions for common paradigms:
+
+```python
+from respyra.configs.presets import slow_steady, perturbed_slow, mixed_rhythm
+
+easy = slow_steady(freq_hz=0.1, n_cycles=3)
+perturbed = perturbed_slow(feedback_gain=2.0)
+mixed = mixed_rhythm(freq_slow=0.1, freq_fast=0.25)
+```
 
 ## Defining conditions
 
@@ -110,13 +123,13 @@ Using integer cycle counts per segment ensures phase continuity at boundaries �
 
 ## Visual feedback modes
 
-The target dot's color provides real-time tracking error feedback. Three modes are available (set via `DOT_FEEDBACK_MODE`):
+The target dot's color provides real-time tracking error feedback. Three modes are available (set via `DotConfig.feedback_mode`):
 
-**Graded** (default) — Continuous green → yellow → red color mapping using HSV interpolation. Error 0 = pure green; error ≥ `DOT_GRADED_MAX_ERROR_N` (3.0 N) = pure red.
+**Graded** (default) — Continuous green → yellow → red color mapping using HSV interpolation. Error 0 = pure green; error ≥ `graded_max_error_n` (3.0 N) = pure red.
 
-**Binary** — Two-color threshold: yellow (good, error ≤ `ERROR_THRESHOLD_N`) or red (poor).
+**Binary** — Two-color threshold: yellow (good, error ≤ `error_threshold_n`) or red (poor).
 
-**Trinary** — Three-color: yellow (good, ≤ 1.0 N), orange (moderate, ≤ 2.0 N), red (poor, > 2.0 N).
+**Trinary** — Three-color: yellow (good, ≤ `error_threshold_n`), orange (moderate, ≤ `error_threshold_mid_n`), red (poor).
 
 ## Visuomotor perturbation
 
@@ -130,7 +143,7 @@ f_display = center + gain × (f_actual − center)
 - `gain > 1.0` — amplified: small breathing excursions look larger on screen
 - `gain < 1.0` — attenuated: large breathing excursions look smaller
 
-The **target dot**, **tracking error computation**, and **color feedback** are always based on the true (unperturbed) signal — only the waveform trace is distorted. This creates a sensorimotor mismatch analogous to cursor rotation in visuomotor reaching studies.
+The **target dot** position follows the true target waveform, but the **dot color feedback** reflects the *visual* (compensated) error — the discrepancy between the target and the gain-perturbed trace. Only the waveform trace is visually distorted. This creates a sensorimotor mismatch analogous to cursor rotation in visuomotor reaching studies.
 
 ## Data output format
 
@@ -143,6 +156,7 @@ The session CSV contains one row per sample with these columns:
 | `force_n` | float | Force reading in Newtons from the respiration belt |
 | `target_force` | float | Target force value (tracking phase only) |
 | `error` | float | Signed error: target − actual (tracking phase only) |
+| `compensated_error` | float | Signed error: target − displayed force, i.e. after gain (tracking only) |
 | `phase` | str | `range_cal`, `baseline`, `countdown`, or `tracking` |
 | `condition` | str | Condition name (e.g., `slow_steady`) |
 | `trial_num` | int | Trial number (1-indexed) |
