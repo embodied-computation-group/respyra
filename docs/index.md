@@ -90,6 +90,13 @@ Auto-generated docs from source code docstrings
 Annotated walkthroughs of demos and experiment scripts
 :::
 
+:::{grid-item-card} Visualization
+:link: visualization
+:link-type: doc
+
+Summary figures, panel walkthrough, programmatic use
+:::
+
 :::{grid-item-card} Troubleshooting
 :link: troubleshooting
 :link-type: doc
@@ -115,6 +122,7 @@ quickstart
 userguide
 api/index
 examples/index
+visualization
 troubleshooting
 adapting_belt
 ```
