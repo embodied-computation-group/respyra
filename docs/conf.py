@@ -26,6 +26,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
+    "sphinx_design",
 ]
 
 # MyST (Markdown) settings
@@ -73,5 +74,5 @@ html_title = f"respyra {release}"
 
 # Project logo — displayed in the sidebar/header of the Sphinx site.
 # Path is relative to the docs/ directory (where conf.py lives).
-html_logo = "../media/respyra_icon_transparent.png"
-html_favicon = "../media/respyra_icon_transparent.png"
+html_logo = "../media/respyra_icon.png"
+html_favicon = "../media/respyra_icon.png"

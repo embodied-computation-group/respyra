@@ -39,6 +39,7 @@ docs = [
     "python-docs-theme>=2025.1",
     "myst-parser>=3.0",
     "sphinx-autodoc-typehints",
+    "sphinx-design",
 ]
 
 [project.scripts]

@@ -1,4 +1,4 @@
-```{image} ../media/respyra_icon_transparent.png
+```{image} ../media/respyra_icon.png
 :alt: respyra logo
 :width: 200px
 :align: center
@@ -49,7 +49,61 @@ Or with a belt connected:
 respyra-task
 ```
 
-See {doc}`installation` and {doc}`quickstart` for full details.
+## Documentation
+
+::::{grid} 2 2 3 3
+:gutter: 3
+
+:::{grid-item-card} Installation
+:link: installation
+:link-type: doc
+
+Python 3.10 setup, PyPI install, platform notes
+:::
+
+:::{grid-item-card} Quick Start
+:link: quickstart
+:link-type: doc
+
+Run demos and your first experiment in minutes
+:::
+
+:::{grid-item-card} User Guide
+:link: userguide
+:link-type: doc
+
+Session flow, configuration, conditions, data output
+:::
+
+:::{grid-item-card} API Reference
+:link: api/index
+:link-type: doc
+
+Auto-generated docs from source code docstrings
+:::
+
+:::{grid-item-card} Examples
+:link: examples/index
+:link-type: doc
+
+Annotated walkthroughs of demos and experiment scripts
+:::
+
+:::{grid-item-card} Troubleshooting
+:link: troubleshooting
+:link-type: doc
+
+BLE issues, sensor saturation, frame drops, and more
+:::
+
+:::{grid-item-card} Adapting the Belt
+:link: adapting_belt
+:link-type: doc
+
+Swap in a different respiratory sensor
+:::
+
+::::
 
 ```{toctree}
 :maxdepth: 2
