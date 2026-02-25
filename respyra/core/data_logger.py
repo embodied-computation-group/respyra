@@ -111,6 +111,13 @@ class DataLogger:
         Any column not present in *kwargs* is written as an empty string.
         This is the generic counterpart to :meth:`log_sample` — use it when
         your experiment needs a custom column schema.
+
+        Parameters
+        ----------
+        **kwargs
+            Keyword arguments whose keys must match column names passed at
+            init (or :data:`DEFAULT_COLUMNS`).  Unrecognised keys are
+            silently ignored; missing columns are written as empty strings.
         """
         row = [kwargs.get(col, '') for col in self.columns]
         self._writer.writerow(row)

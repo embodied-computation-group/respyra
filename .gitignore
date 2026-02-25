@@ -7,6 +7,7 @@ data/
 *.egg-info/
 dist/
 build/
+docs/_build/
 
 # LaTeX build artifacts
 paper/*.aux

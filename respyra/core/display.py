@@ -1,7 +1,10 @@
-"""PsychoPy window creation and stimulus helper functions.
+"""PsychoPy window creation, stimulus helpers, and real-time waveform rendering.
 
-Thin wrappers around PsychoPy's visual and monitors modules that enforce
-project defaults (height units, black background, pre-created stimuli).
+Provides thin wrappers around PsychoPy's ``visual`` and ``monitors`` modules
+that enforce project defaults (``'height'`` units, black background,
+pre-created stimuli).  Also contains :class:`SignalTrace`, a pre-allocated
+``ShapeStim`` for rendering scrolling waveforms without per-frame allocations,
+and :func:`draw_signal_trace`, a convenience wrapper with automatic caching.
 """
 
 from psychopy import monitors, visual, event
@@ -12,7 +15,8 @@ import numpy as np
 # Monitor profile
 # ---------------------------------------------------------------------------
 
-def create_monitor(name, width_cm, distance_cm, size_pix):
+def create_monitor(name: str, width_cm: float, distance_cm: float,
+                   size_pix: tuple[int, int]) -> monitors.Monitor:
     """Create, configure, and save a PsychoPy monitor profile.
 
     Parameters
@@ -42,8 +46,8 @@ def create_monitor(name, width_cm, distance_cm, size_pix):
 # Window
 # ---------------------------------------------------------------------------
 
-def create_window(fullscr=False, monitor=None, units='height',
-                  color=(-1, -1, -1), **kwargs):
+def create_window(fullscr: bool = False, monitor=None, units: str = 'height',
+                  color: tuple = (-1, -1, -1), **kwargs) -> visual.Window:
     """Create a PsychoPy window with sensible project defaults.
 
     Parameters
@@ -86,7 +90,8 @@ def create_window(fullscr=False, monitor=None, units='height',
 # Text display
 # ---------------------------------------------------------------------------
 
-def show_text_and_wait(win, text, key_list=None, color='white'):
+def show_text_and_wait(win: visual.Window, text: str, key_list: list[str] | None = None,
+                      color: str | tuple = 'white') -> str:
     """Draw a text screen and block until the participant presses a key.
 
     Parameters

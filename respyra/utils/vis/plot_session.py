@@ -54,7 +54,20 @@ PHASE_ORDER = {'range_cal': 0, 'baseline': 1, 'countdown': 2, 'tracking': 3}
 
 
 def load_session(csv_path: str) -> pd.DataFrame:
-    """Read a session CSV and coerce types."""
+    """Read a session CSV, coerce column types, and add monotonic session time.
+
+    Parameters
+    ----------
+    csv_path : str
+        Path to a CSV file produced by :class:`respyra.core.data_logger.DataLogger`.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame sorted by ``(trial_num, phase_order, timestamp)`` with an
+        additional ``session_time`` column providing monotonic elapsed time
+        across phase boundaries.
+    """
     df = pd.read_csv(csv_path)
 
     # Numeric columns (empty strings → NaN)
@@ -113,7 +126,20 @@ def _build_session_time(df: pd.DataFrame) -> pd.Series:
 # -- Per-trial statistics --------------------------------------------------
 
 def compute_trial_stats(df: pd.DataFrame) -> pd.DataFrame:
-    """Compute per-trial summary statistics from tracking data."""
+    """Compute per-trial summary statistics from the tracking phase.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Session dataframe as returned by :func:`load_session`.
+
+    Returns
+    -------
+    pd.DataFrame
+        One row per trial with columns: ``trial_num``, ``condition``,
+        ``mae`` (mean absolute error in Newtons), ``mae_sd``,
+        ``rmse``, and ``n_samples``.  Empty if no tracking data exists.
+    """
     tracking = df[df['phase'] == 'tracking'].copy()
     if tracking.empty:
         return pd.DataFrame()
@@ -131,7 +157,21 @@ def compute_trial_stats(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def compute_baseline_cal(df: pd.DataFrame) -> pd.DataFrame:
-    """Compute per-trial baseline calibration (center ± amplitude)."""
+    """Compute per-trial baseline calibration (center and amplitude).
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Session dataframe as returned by :func:`load_session`.
+
+    Returns
+    -------
+    pd.DataFrame
+        One row per trial with columns: ``trial_num``, ``condition``,
+        ``force_min``, ``force_max``, ``force_mean``, ``center``
+        (midpoint of min/max), and ``amplitude`` (half-range, minimum 0.5 N).
+        Empty if no baseline data exists.
+    """
     baseline = df[df['phase'] == 'baseline'].dropna(subset=['force_n'])
     if baseline.empty:
         return pd.DataFrame()
@@ -151,7 +191,25 @@ def compute_baseline_cal(df: pd.DataFrame) -> pd.DataFrame:
 # -- Plotting --------------------------------------------------------------
 
 def plot_session(df: pd.DataFrame, csv_path: str) -> plt.Figure:
-    """Create the 6-panel summary figure."""
+    """Create a 6-panel summary figure for one session.
+
+    Panels: (1) full session force trace with target overlay,
+    (2) signed tracking error per trial, (3) per-trial MAE bar chart,
+    (4) error distribution by condition, (5) baseline calibration stability,
+    (6) summary statistics text.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Session dataframe as returned by :func:`load_session`.
+    csv_path : str
+        Original CSV path, used for the figure title.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The completed figure (not yet saved or shown).
+    """
     fig, axes = plt.subplots(3, 2, figsize=(16, 12))
     fig.patch.set_facecolor('#0e0e1a')
 
@@ -465,7 +523,12 @@ def _plot_summary_text(ax, df, trial_stats, baseline_cal, csv_path):
 
 # -- CLI -------------------------------------------------------------------
 
-def main():
+def main() -> None:
+    """CLI entry point: parse arguments and generate summary figures.
+
+    Processes one or more session CSV files, saving each as
+    ``{csv_stem}_summary.png`` alongside the original.
+    """
     parser = argparse.ArgumentParser(
         description='Generate a 6-panel summary figure from a breath tracking session CSV.',
     )

@@ -34,6 +34,12 @@ dependencies = [
 
 [project.optional-dependencies]
 vis = ["pandas", "matplotlib"]
+docs = [
+    "sphinx>=7.3",
+    "python-docs-theme>=2025.1",
+    "myst-parser>=3.0",
+    "sphinx-autodoc-typehints",
+]
 
 [project.scripts]
 respyra-task = "respyra.scripts.breath_tracking_task:run_experiment"
@@ -42,6 +48,7 @@ respyra-screenshots = "respyra.scripts.generate_screenshots:main"
 
 [project.urls]
 Homepage = "https://github.com/embodied-computation-group/respyra"
+Documentation = "https://embodied-computation-group.github.io/respyra/"
 Repository = "https://github.com/embodied-computation-group/respyra"
 
 [tool.hatch.version]
