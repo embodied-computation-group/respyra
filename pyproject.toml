@@ -34,7 +34,7 @@ dependencies = [
 
 [project.optional-dependencies]
 vis = ["pandas", "matplotlib"]
-dev = ["ruff>=0.9"]
+dev = ["ruff>=0.9", "pytest>=8.0", "pytest-cov"]
 docs = [
     "sphinx>=7.3",
     "python-docs-theme>=2025.1",
