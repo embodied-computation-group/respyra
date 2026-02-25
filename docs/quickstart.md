@@ -35,9 +35,14 @@ Runs for 10 seconds, draining queued samples and reporting the effective sample 
 Run the respiratory tracking task:
 
 ```bash
+# Default configuration
 respyra-task
-# or equivalently:
-python -m respyra.scripts.breath_tracking_task
+
+# Built-in config by short name
+respyra-task --config demo
+
+# Custom config file
+respyra-task --config experiments/my_study.py
 ```
 
 This will:
@@ -48,6 +53,8 @@ This will:
 5. Save data to `data/sub-{id}_ses-{session}_{timestamp}.csv`
 
 Press **ESCAPE** at any time to end early (data up to that point is saved).
+
+See {doc}`creating_experiments` for a full tutorial on customizing experiments.
 
 ## Post-session visualization
 

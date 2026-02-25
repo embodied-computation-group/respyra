@@ -44,7 +44,7 @@ docs = [
 ]
 
 [project.scripts]
-respyra-task = "respyra.scripts.breath_tracking_task:run_experiment"
+respyra-task = "respyra.scripts.breath_tracking_task:main"
 respyra-plot = "respyra.utils.vis.plot_session:main"
 respyra-screenshots = "respyra.scripts.generate_screenshots:main"
 
