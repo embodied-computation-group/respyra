@@ -25,8 +25,15 @@ def load_sessions(paths: list[str]) -> pd.DataFrame:
     frames = []
     for p in sorted(paths):
         df = pd.read_csv(p)
-        for col in ("timestamp", "frame", "force_n", "target_force",
-                     "error", "compensated_error", "feedback_gain"):
+        for col in (
+            "timestamp",
+            "frame",
+            "force_n",
+            "target_force",
+            "error",
+            "compensated_error",
+            "feedback_gain",
+        ):
             if col in df.columns:
                 df[col] = pd.to_numeric(df[col], errors="coerce")
         if "trial_num" in df.columns:
@@ -192,25 +199,27 @@ def compute_trial_stats(df: pd.DataFrame) -> pd.DataFrame:
         insp = grp[grp["breath_phase"] == "inspiration"]
         exp = grp[grp["breath_phase"] == "expiration"]
 
-        rows.append({
-            "session": sess,
-            "trial_num": tnum,
-            "condition": cond,
-            "feedback_gain": gain,
-            "raw_mae": grp["abs_error"].mean(),
-            "raw_sd": grp["abs_error"].std(),
-            "comp_mae": grp["abs_comp_error"].mean(),
-            "comp_sd": grp["abs_comp_error"].std(),
-            "insp_raw_mae": insp["abs_error"].mean() if len(insp) else np.nan,
-            "insp_comp_mae": insp["abs_comp_error"].mean() if len(insp) else np.nan,
-            "exp_raw_mae": exp["abs_error"].mean() if len(exp) else np.nan,
-            "exp_comp_mae": exp["abs_comp_error"].mean() if len(exp) else np.nan,
-            "breathing_rate_bpm": resp["breathing_rate_bpm"],
-            "breathing_depth_n": resp["breathing_depth_n"],
-            "n_complete_cycles": resp["n_complete_cycles"],
-            "cycle_duration_cv": resp["cycle_duration_cv"],
-            "n_samples": len(grp),
-        })
+        rows.append(
+            {
+                "session": sess,
+                "trial_num": tnum,
+                "condition": cond,
+                "feedback_gain": gain,
+                "raw_mae": grp["abs_error"].mean(),
+                "raw_sd": grp["abs_error"].std(),
+                "comp_mae": grp["abs_comp_error"].mean(),
+                "comp_sd": grp["abs_comp_error"].std(),
+                "insp_raw_mae": insp["abs_error"].mean() if len(insp) else np.nan,
+                "insp_comp_mae": insp["abs_comp_error"].mean() if len(insp) else np.nan,
+                "exp_raw_mae": exp["abs_error"].mean() if len(exp) else np.nan,
+                "exp_comp_mae": exp["abs_comp_error"].mean() if len(exp) else np.nan,
+                "breathing_rate_bpm": resp["breathing_rate_bpm"],
+                "breathing_depth_n": resp["breathing_depth_n"],
+                "n_complete_cycles": resp["n_complete_cycles"],
+                "cycle_duration_cv": resp["cycle_duration_cv"],
+                "n_samples": len(grp),
+            }
+        )
 
     trials = pd.DataFrame(rows)
 
@@ -243,9 +252,7 @@ def compute_session_stats(df: pd.DataFrame, trials: pd.DataFrame) -> pd.DataFram
         sess_sorted = sess_sorted.sort_values(["trial_num", "_phase_ord", "timestamp"])
         # Sum max timestamp per (trial, phase) group + inter-phase gaps
         phase_durations = (
-            sess_sorted.groupby(["trial_num", "phase"])["timestamp"]
-            .max()
-            .reset_index()
+            sess_sorted.groupby(["trial_num", "phase"])["timestamp"].max().reset_index()
         )
         total_sec = phase_durations["timestamp"].sum()
         duration_min = total_sec / 60.0
@@ -253,24 +260,26 @@ def compute_session_stats(df: pd.DataFrame, trials: pd.DataFrame) -> pd.DataFram
         slow = st[st["condition"] == "slow_steady"]
         pert = st[st["condition"] == "perturbed_slow"]
 
-        rows.append({
-            "session": sess,
-            "n_trials": len(st),
-            "duration_min": duration_min,
-            "breathing_rate_bpm_mean": st["breathing_rate_bpm"].mean(),
-            "breathing_rate_bpm_sd": st["breathing_rate_bpm"].std(),
-            "breathing_depth_n_mean": st["breathing_depth_n"].mean(),
-            "breathing_depth_n_sd": st["breathing_depth_n"].std(),
-            "n_cycles": int(st["n_complete_cycles"].sum()),
-            "cycle_cv_mean": st["cycle_duration_cv"].mean(),
-            "slow_raw_mae": slow["raw_mae"].mean(),
-            "slow_raw_sd": slow["raw_mae"].std(),
-            "slow_comp_mae": slow["comp_mae"].mean(),
-            "slow_comp_sd": slow["comp_mae"].std(),
-            "pert_raw_mae": pert["raw_mae"].mean(),
-            "pert_raw_sd": pert["raw_mae"].std(),
-            "pert_comp_mae": pert["comp_mae"].mean(),
-            "pert_comp_sd": pert["comp_mae"].std(),
-        })
+        rows.append(
+            {
+                "session": sess,
+                "n_trials": len(st),
+                "duration_min": duration_min,
+                "breathing_rate_bpm_mean": st["breathing_rate_bpm"].mean(),
+                "breathing_rate_bpm_sd": st["breathing_rate_bpm"].std(),
+                "breathing_depth_n_mean": st["breathing_depth_n"].mean(),
+                "breathing_depth_n_sd": st["breathing_depth_n"].std(),
+                "n_cycles": int(st["n_complete_cycles"].sum()),
+                "cycle_cv_mean": st["cycle_duration_cv"].mean(),
+                "slow_raw_mae": slow["raw_mae"].mean(),
+                "slow_raw_sd": slow["raw_mae"].std(),
+                "slow_comp_mae": slow["comp_mae"].mean(),
+                "slow_comp_sd": slow["comp_mae"].std(),
+                "pert_raw_mae": pert["raw_mae"].mean(),
+                "pert_raw_sd": pert["raw_mae"].std(),
+                "pert_comp_mae": pert["comp_mae"].mean(),
+                "pert_comp_sd": pert["comp_mae"].std(),
+            }
+        )
 
     return pd.DataFrame(rows)

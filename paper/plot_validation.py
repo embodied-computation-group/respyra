@@ -86,13 +86,23 @@ def plot_within_block(trials: pd.DataFrame, output: str) -> None:
             ax = axes[row, col]
             if len(st) > 0:
                 ax.plot(
-                    st["block_trial"], st[metric], "o-",
-                    color="#2196F3", label="slow_steady", linewidth=2, markersize=8,
+                    st["block_trial"],
+                    st[metric],
+                    "o-",
+                    color="#2196F3",
+                    label="slow_steady",
+                    linewidth=2,
+                    markersize=8,
                 )
             if len(pt) > 0:
                 ax.plot(
-                    pt["block_trial"], pt[metric], "s-",
-                    color="#E91E63", label="perturbed (2x)", linewidth=2, markersize=8,
+                    pt["block_trial"],
+                    pt[metric],
+                    "s-",
+                    color="#E91E63",
+                    label="perturbed (2x)",
+                    linewidth=2,
+                    markersize=8,
                 )
             ax.set_title(f"Session {sess} — {title_suffix}", fontsize=12)
             ax.legend(fontsize=9)
@@ -130,10 +140,12 @@ def plot_cross_session(trials: pd.DataFrame, output: str) -> None:
     first = trials[trials["block_trial"] == 1]
     x = np.arange(n_sess)
     w = 0.35
-    for i, (cond, color, label) in enumerate([
-        ("slow_steady", "#2196F3", "slow_steady"),
-        ("perturbed_slow", "#E91E63", "perturbed"),
-    ]):
+    for i, (cond, color, label) in enumerate(
+        [
+            ("slow_steady", "#2196F3", "slow_steady"),
+            ("perturbed_slow", "#E91E63", "perturbed"),
+        ]
+    ):
         vals = [
             first[(first["session"] == s) & (first["condition"] == cond)]["comp_mae"].values
             for s in sessions
@@ -150,10 +162,12 @@ def plot_cross_session(trials: pd.DataFrame, output: str) -> None:
     # Panel B: Last trial of each block across sessions
     ax = axes[1]
     last = trials[trials["block_trial"] == max_block]
-    for i, (cond, color, label) in enumerate([
-        ("slow_steady", "#2196F3", "slow_steady"),
-        ("perturbed_slow", "#E91E63", "perturbed"),
-    ]):
+    for i, (cond, color, label) in enumerate(
+        [
+            ("slow_steady", "#2196F3", "slow_steady"),
+            ("perturbed_slow", "#E91E63", "perturbed"),
+        ]
+    ):
         vals = [
             last[(last["session"] == s) & (last["condition"] == cond)]["comp_mae"].values
             for s in sessions
@@ -178,8 +192,13 @@ def plot_cross_session(trials: pd.DataFrame, output: str) -> None:
     ]:
         sub = all_trials[all_trials["condition"] == cond]
         ax.plot(
-            sub["global_trial"], sub["comp_mae"], f"{marker}-",
-            color=color, label=label, linewidth=2, markersize=7,
+            sub["global_trial"],
+            sub["comp_mae"],
+            f"{marker}-",
+            color=color,
+            label=label,
+            linewidth=2,
+            markersize=7,
         )
 
     # Session break lines
@@ -213,6 +232,7 @@ def plot_split_half(trials: pd.DataFrame, output: str) -> None:
     point on the scatter. This gives 3 points per block, so with
     N sessions × 2 conditions = 6N total points.
     """
+
     def spearman_brown(r):
         return 2 * r / (1 + abs(r))
 
@@ -222,14 +242,16 @@ def plot_split_half(trials: pd.DataFrame, output: str) -> None:
         odd = block[block["block_trial"].isin([1, 3, 5])].reset_index(drop=True)
         even = block[block["block_trial"].isin([2, 4, 6])].reset_index(drop=True)
         for i in range(min(len(odd), len(even))):
-            pairs.append({
-                "session": sess,
-                "condition": cond,
-                "raw_odd": odd.iloc[i]["raw_mae"],
-                "raw_even": even.iloc[i]["raw_mae"],
-                "comp_odd": odd.iloc[i]["comp_mae"],
-                "comp_even": even.iloc[i]["comp_mae"],
-            })
+            pairs.append(
+                {
+                    "session": sess,
+                    "condition": cond,
+                    "raw_odd": odd.iloc[i]["raw_mae"],
+                    "raw_even": even.iloc[i]["raw_mae"],
+                    "comp_odd": odd.iloc[i]["comp_mae"],
+                    "comp_even": even.iloc[i]["comp_mae"],
+                }
+            )
 
     sh = pd.DataFrame(pairs)
 
@@ -245,8 +267,13 @@ def plot_split_half(trials: pd.DataFrame, output: str) -> None:
         ]:
             sub = sh[sh["condition"] == cond]
             ax.scatter(
-                sub[odd_col], sub[even_col],
-                c=color, marker=marker, s=80, label=label, zorder=3,
+                sub[odd_col],
+                sub[even_col],
+                c=color,
+                marker=marker,
+                s=80,
+                label=label,
+                zorder=3,
             )
 
         all_vals = pd.concat([sh[odd_col], sh[even_col]])
@@ -266,7 +293,8 @@ def plot_split_half(trials: pd.DataFrame, output: str) -> None:
 
     fig.suptitle(
         "Split-Half Reliability (Odd vs Even Trials)",
-        fontsize=14, fontweight="bold",
+        fontsize=14,
+        fontweight="bold",
     )
     fig.tight_layout()
     fig.savefig(output, dpi=150, bbox_inches="tight")
@@ -286,6 +314,7 @@ def plot_asymptotic_split_half(trials: pd.DataFrame, output: str) -> None:
     This removes the early-learning transient and tests reliability of the
     stable performance measure.
     """
+
     def spearman_brown(r):
         return 2 * r / (1 + abs(r))
 
@@ -298,14 +327,16 @@ def plot_asymptotic_split_half(trials: pd.DataFrame, output: str) -> None:
         odd = block[block["block_trial"].isin([3, 5])].reset_index(drop=True)
         even = block[block["block_trial"].isin([4, 6])].reset_index(drop=True)
         for i in range(min(len(odd), len(even))):
-            pairs.append({
-                "session": sess,
-                "condition": cond,
-                "raw_odd": odd.iloc[i]["raw_mae"],
-                "raw_even": even.iloc[i]["raw_mae"],
-                "comp_odd": odd.iloc[i]["comp_mae"],
-                "comp_even": even.iloc[i]["comp_mae"],
-            })
+            pairs.append(
+                {
+                    "session": sess,
+                    "condition": cond,
+                    "raw_odd": odd.iloc[i]["raw_mae"],
+                    "raw_even": even.iloc[i]["raw_mae"],
+                    "comp_odd": odd.iloc[i]["comp_mae"],
+                    "comp_even": even.iloc[i]["comp_mae"],
+                }
+            )
 
     sh = pd.DataFrame(pairs)
 
@@ -321,8 +352,13 @@ def plot_asymptotic_split_half(trials: pd.DataFrame, output: str) -> None:
         ]:
             sub = sh[sh["condition"] == cond]
             ax.scatter(
-                sub[odd_col], sub[even_col],
-                c=color, marker=marker, s=80, label=label, zorder=3,
+                sub[odd_col],
+                sub[even_col],
+                c=color,
+                marker=marker,
+                s=80,
+                label=label,
+                zorder=3,
             )
 
         all_vals = pd.concat([sh[odd_col], sh[even_col]])
@@ -342,7 +378,8 @@ def plot_asymptotic_split_half(trials: pd.DataFrame, output: str) -> None:
 
     fig.suptitle(
         "Asymptotic Split-Half Reliability (Trials 3-6 Only)",
-        fontsize=14, fontweight="bold",
+        fontsize=14,
+        fontweight="bold",
     )
     fig.tight_layout()
     fig.savefig(output, dpi=150, bbox_inches="tight")
@@ -370,17 +407,19 @@ def plot_adaptation_retest(trials: pd.DataFrame, output: str) -> None:
         block = block.sort_values("block_trial")
         first = block[block["block_trial"] == 1].iloc[0]
         last = block[block["block_trial"] == block["block_trial"].max()].iloc[0]
-        effects.append({
-            "session": sess,
-            "condition": cond,
-            "raw_first": first["raw_mae"],
-            "raw_last": last["raw_mae"],
-            "raw_adapt": first["raw_mae"] - last["raw_mae"],
-            "comp_first": first["comp_mae"],
-            "comp_last": last["comp_mae"],
-            "comp_adapt": first["comp_mae"] - last["comp_mae"],
-            "comp_block_mean": block["comp_mae"].mean(),
-        })
+        effects.append(
+            {
+                "session": sess,
+                "condition": cond,
+                "raw_first": first["raw_mae"],
+                "raw_last": last["raw_mae"],
+                "raw_adapt": first["raw_mae"] - last["raw_mae"],
+                "comp_first": first["comp_mae"],
+                "comp_last": last["comp_mae"],
+                "comp_adapt": first["comp_mae"] - last["comp_mae"],
+                "comp_block_mean": block["comp_mae"].mean(),
+            }
+        )
 
     eff = pd.DataFrame(effects)
 
@@ -394,8 +433,13 @@ def plot_adaptation_retest(trials: pd.DataFrame, output: str) -> None:
     ]:
         sub = eff[eff["condition"] == cond].sort_values("session")
         ax.plot(
-            sub["session"], sub["comp_block_mean"], f"{marker}-",
-            color=color, label=label, linewidth=2, markersize=8,
+            sub["session"],
+            sub["comp_block_mean"],
+            f"{marker}-",
+            color=color,
+            label=label,
+            linewidth=2,
+            markersize=8,
         )
     ax.set_xlabel("Session", fontsize=11)
     ax.set_ylabel("Block Mean Compensated MAE (N)", fontsize=11)
@@ -412,8 +456,13 @@ def plot_adaptation_retest(trials: pd.DataFrame, output: str) -> None:
     ]:
         sub = eff[eff["condition"] == cond].sort_values("session")
         ax.plot(
-            sub["session"], sub["comp_adapt"], f"{marker}-",
-            color=color, label=label, linewidth=2, markersize=8,
+            sub["session"],
+            sub["comp_adapt"],
+            f"{marker}-",
+            color=color,
+            label=label,
+            linewidth=2,
+            markersize=8,
         )
     ax.axhline(0, color="gray", linestyle=":", alpha=0.5)
     ax.set_xlabel("Session", fontsize=11)
@@ -431,8 +480,13 @@ def plot_adaptation_retest(trials: pd.DataFrame, output: str) -> None:
     ]:
         sub = eff[eff["condition"] == cond].sort_values("session")
         ax.plot(
-            sub["session"], sub["comp_first"], f"{marker}-",
-            color=color, label=label, linewidth=2, markersize=8,
+            sub["session"],
+            sub["comp_first"],
+            f"{marker}-",
+            color=color,
+            label=label,
+            linewidth=2,
+            markersize=8,
         )
     ax.set_xlabel("Session", fontsize=11)
     ax.set_ylabel("First-Trial Compensated MAE (N)", fontsize=11)

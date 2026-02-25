@@ -201,11 +201,9 @@ def plot_example_trials(df: pd.DataFrame, trials: pd.DataFrame) -> None:
     tracking = df[(df["phase"] == "tracking") & (df["session"] == rep_session)].copy()
     tracking["breath_phase"] = label_breath_phase(tracking["target_force"].values)
 
-    for row, (cond, row_title, cond_color) in enumerate(trial_configs):
+    for row, (cond, row_title, _cond_color) in enumerate(trial_configs):
         tnum = _pick_representative_trial(trials, rep_session, cond)
-        grp = tracking[
-            (tracking["trial_num"] == tnum) & (tracking["condition"] == cond)
-        ].copy()
+        grp = tracking[(tracking["trial_num"] == tnum) & (tracking["condition"] == cond)].copy()
 
         t_sec = grp["timestamp"].values
         force = grp["force_n"].values
@@ -227,25 +225,28 @@ def plot_example_trials(df: pd.DataFrame, trials: pd.DataFrame) -> None:
             color = COLOR_INSP if phase[i] == "inspiration" else COLOR_EXP
             ax.axvspan(t_sec[i], t_sec[i + 1], color=color, alpha=0.08)
 
-        ax.plot(t_sec, target, color=COLOR_TARGET, linewidth=1.2, alpha=0.7,
-                label="Target")
-        ax.plot(t_sec, force, color=COLOR_FORCE, linewidth=0.8, alpha=0.9,
-                label="Breathing")
-        ax.legend(fontsize=8, facecolor=PANEL_BG, edgecolor=SPINE_COLOR,
-                  labelcolor=TEXT_COLOR, loc="upper right")
+        ax.plot(t_sec, target, color=COLOR_TARGET, linewidth=1.2, alpha=0.7, label="Target")
+        ax.plot(t_sec, force, color=COLOR_FORCE, linewidth=0.8, alpha=0.9, label="Breathing")
+        ax.legend(
+            fontsize=8,
+            facecolor=PANEL_BG,
+            edgecolor=SPINE_COLOR,
+            labelcolor=TEXT_COLOR,
+            loc="upper right",
+        )
 
         # -- Col 2: Visual error trace --
         ax = axes[row, 1]
         style_ax(
             ax,
             f"Visual Error   MAE = {mae:.3f} N   RMSE/MAE = {ratio:.2f}",
-            xlabel="Time (s)", ylabel="Visual Error (N)",
+            xlabel="Time (s)",
+            ylabel="Visual Error (N)",
         )
 
         for i in range(len(t_sec) - 1):
             color = COLOR_INSP if phase[i] == "inspiration" else COLOR_EXP
-            ax.plot(t_sec[i:i + 2], comp_err[i:i + 2], color=color,
-                    linewidth=0.8, alpha=0.8)
+            ax.plot(t_sec[i : i + 2], comp_err[i : i + 2], color=color, linewidth=0.8, alpha=0.8)
 
         ax.axhline(0, color=TICK_COLOR, linewidth=0.5, alpha=0.5)
         ax.axhline(mae, color=TEXT_COLOR, linewidth=0.5, alpha=0.3, linestyle=":")
@@ -253,32 +254,53 @@ def plot_example_trials(df: pd.DataFrame, trials: pd.DataFrame) -> None:
 
         # -- Col 3: Error histogram --
         ax = axes[row, 2]
-        style_ax(ax, "Error Distribution", xlabel="Visual Error (N)",
-                 ylabel="Density")
+        style_ax(ax, "Error Distribution", xlabel="Visual Error (N)", ylabel="Density")
 
         insp_err = comp_err[phase == "inspiration"]
         exp_err = comp_err[phase == "expiration"]
-        all_err = np.concatenate([insp_err[~np.isnan(insp_err)],
-                                  exp_err[~np.isnan(exp_err)]])
+        all_err = np.concatenate([insp_err[~np.isnan(insp_err)], exp_err[~np.isnan(exp_err)]])
         bins = np.linspace(all_err.min() * 1.1, all_err.max() * 1.1, 50)
 
-        ax.hist(insp_err[~np.isnan(insp_err)], bins=bins, density=True,
-                color=COLOR_INSP, alpha=0.6, label="Inspiration", edgecolor="none")
-        ax.hist(exp_err[~np.isnan(exp_err)], bins=bins, density=True,
-                color=COLOR_EXP, alpha=0.6, label="Expiration", edgecolor="none")
+        ax.hist(
+            insp_err[~np.isnan(insp_err)],
+            bins=bins,
+            density=True,
+            color=COLOR_INSP,
+            alpha=0.6,
+            label="Inspiration",
+            edgecolor="none",
+        )
+        ax.hist(
+            exp_err[~np.isnan(exp_err)],
+            bins=bins,
+            density=True,
+            color=COLOR_EXP,
+            alpha=0.6,
+            label="Expiration",
+            edgecolor="none",
+        )
         ax.axvline(0, color=TICK_COLOR, linewidth=0.8, alpha=0.5)
 
         # Normal reference
         x_norm = np.linspace(bins[0], bins[-1], 200)
         sd = np.std(ce)
-        ax.plot(x_norm, stats.norm.pdf(x_norm, 0, sd), color=TEXT_COLOR,
-                linewidth=1, alpha=0.4, linestyle="--", label="Normal")
-        ax.legend(fontsize=8, facecolor=PANEL_BG, edgecolor=SPINE_COLOR,
-                  labelcolor=TEXT_COLOR)
+        ax.plot(
+            x_norm,
+            stats.norm.pdf(x_norm, 0, sd),
+            color=TEXT_COLOR,
+            linewidth=1,
+            alpha=0.4,
+            linestyle="--",
+            label="Normal",
+        )
+        ax.legend(fontsize=8, facecolor=PANEL_BG, edgecolor=SPINE_COLOR, labelcolor=TEXT_COLOR)
 
     fig.suptitle(
         "Figure 1: Representative Trial Traces (Session 2)",
-        color=TEXT_COLOR, fontsize=13, fontweight="bold", y=1.01,
+        color=TEXT_COLOR,
+        fontsize=13,
+        fontweight="bold",
+        y=1.01,
     )
     fig.tight_layout()
     save_fig(fig, "fig1_example_trials.png")
@@ -298,43 +320,55 @@ def plot_session_performance(df: pd.DataFrame, trials: pd.DataFrame) -> None:
 
     # -- Top-left: Visual MAE by session --
     ax = axes[0, 0]
-    style_ax(ax, "A  Visual MAE by Session", xlabel="Session",
-             ylabel="Visual MAE (N)")
+    style_ax(ax, "A  Visual MAE by Session", xlabel="Session", ylabel="Visual MAE (N)")
 
     for cond, color in COND_COLORS.items():
         means = []
         sems = []
         for s in sessions:
-            vals = trials[(trials["session"] == s) &
-                          (trials["condition"] == cond)]["comp_mae"]
+            vals = trials[(trials["session"] == s) & (trials["condition"] == cond)]["comp_mae"]
             means.append(vals.mean())
             sems.append(vals.sem())
-        ax.errorbar(sessions, means, yerr=sems, fmt="o-", color=color,
-                    linewidth=2, markersize=7, capsize=4, label=COND_LABELS[cond])
+        ax.errorbar(
+            sessions,
+            means,
+            yerr=sems,
+            fmt="o-",
+            color=color,
+            linewidth=2,
+            markersize=7,
+            capsize=4,
+            label=COND_LABELS[cond],
+        )
         # Individual trial dots
         for s in sessions:
-            vals = trials[(trials["session"] == s) &
-                          (trials["condition"] == cond)]["comp_mae"]
+            vals = trials[(trials["session"] == s) & (trials["condition"] == cond)]["comp_mae"]
             jitter = np.random.default_rng(42).uniform(-0.08, 0.08, len(vals))
-            ax.scatter([s] * len(vals) + jitter, vals, color=color, s=15,
-                       alpha=0.3, edgecolors="none")
+            ax.scatter(
+                [s] * len(vals) + jitter, vals, color=color, s=15, alpha=0.3, edgecolors="none"
+            )
 
     ax.set_xticks(sessions)
-    ax.legend(fontsize=9, facecolor=PANEL_BG, edgecolor=SPINE_COLOR,
-              labelcolor=TEXT_COLOR)
+    ax.legend(fontsize=9, facecolor=PANEL_BG, edgecolor=SPINE_COLOR, labelcolor=TEXT_COLOR)
 
     # -- Top-right: Perturbation ratio by session --
     ax = axes[0, 1]
-    style_ax(ax, "B  Perturbation Ratio by Session", xlabel="Session",
-             ylabel="Perturbed / Veridical MAE")
+    style_ax(
+        ax,
+        "B  Perturbation Ratio by Session",
+        xlabel="Session",
+        ylabel="Perturbed / Veridical MAE",
+    )
 
     ratio_means = []
     all_trial_ratios = []
     for s in sessions:
-        v_mean = trials[(trials["session"] == s) &
-                        (trials["condition"] == "slow_steady")]["comp_mae"].mean()
-        p_vals = trials[(trials["session"] == s) &
-                        (trials["condition"] == "perturbed_slow")]["comp_mae"]
+        v_mean = trials[(trials["session"] == s) & (trials["condition"] == "slow_steady")][
+            "comp_mae"
+        ].mean()
+        p_vals = trials[(trials["session"] == s) & (trials["condition"] == "perturbed_slow")][
+            "comp_mae"
+        ]
         session_ratio = p_vals.mean() / v_mean
         ratio_means.append(session_ratio)
         # Per-trial ratios
@@ -343,14 +377,20 @@ def plot_session_performance(df: pd.DataFrame, trials: pd.DataFrame) -> None:
 
     tr = pd.DataFrame(all_trial_ratios)
 
-    ax.plot(sessions, ratio_means, "o-", color=COLOR_RATIO, linewidth=2.5,
-            markersize=9, zorder=4)
+    ax.plot(sessions, ratio_means, "o-", color=COLOR_RATIO, linewidth=2.5, markersize=9, zorder=4)
 
     for s in sessions:
         vals = tr[tr["session"] == s]["ratio"]
         jitter = np.random.default_rng(42).uniform(-0.1, 0.1, len(vals))
-        ax.scatter([s] * len(vals) + jitter, vals, color=COLOR_RATIO, s=25,
-                   alpha=0.4, edgecolors="none", zorder=3)
+        ax.scatter(
+            [s] * len(vals) + jitter,
+            vals,
+            color=COLOR_RATIO,
+            s=25,
+            alpha=0.4,
+            edgecolors="none",
+            zorder=3,
+        )
 
     ax.axhline(1.0, color=TICK_COLOR, linewidth=1, alpha=0.5, linestyle=":")
     ax.text(sessions[0] - 0.1, 1.05, "no cost", color=TICK_COLOR, fontsize=8)
@@ -358,14 +398,25 @@ def plot_session_performance(df: pd.DataFrame, trials: pd.DataFrame) -> None:
 
     # Trend annotation
     rho, p_rho = stats.spearmanr(sessions, ratio_means)
-    ax.text(0.05, 0.95, f"rho={rho:+.3f}, p={p_rho:.3f}",
-            transform=ax.transAxes, color=COLOR_RATIO, fontsize=9, va="top",
-            fontfamily="monospace")
+    ax.text(
+        0.05,
+        0.95,
+        f"rho={rho:+.3f}, p={p_rho:.3f}",
+        transform=ax.transAxes,
+        color=COLOR_RATIO,
+        fontsize=9,
+        va="top",
+        fontfamily="monospace",
+    )
 
     # -- Bottom-left: Veridical within-block --
     ax = axes[1, 0]
-    style_ax(ax, "C  Veridical: Within-Block Tracking",
-             xlabel="Trial within block", ylabel="Raw MAE (N)")
+    style_ax(
+        ax,
+        "C  Veridical: Within-Block Tracking",
+        xlabel="Trial within block",
+        ylabel="Raw MAE (N)",
+    )
 
     verid = trials[trials["condition"] == "slow_steady"]
     grand_means = verid.groupby("block_trial")["raw_mae"].mean()
@@ -373,23 +424,46 @@ def plot_session_performance(df: pd.DataFrame, trials: pd.DataFrame) -> None:
 
     for i, s in enumerate(sessions):
         ss = verid[verid["session"] == s]
-        ax.plot(ss["block_trial"], ss["raw_mae"], "o-",
-                color=SESSION_COLORS[i], linewidth=1, markersize=5, alpha=0.5,
-                label=f"S{s}")
+        ax.plot(
+            ss["block_trial"],
+            ss["raw_mae"],
+            "o-",
+            color=SESSION_COLORS[i],
+            linewidth=1,
+            markersize=5,
+            alpha=0.5,
+            label=f"S{s}",
+        )
 
-    ax.fill_between(grand_means.index, grand_means - grand_sems,
-                    grand_means + grand_sems, color=COLOR_SLOW, alpha=0.2)
-    ax.plot(grand_means.index, grand_means, "o-", color=COLOR_SLOW,
-            linewidth=2.5, markersize=7, label="Mean", zorder=5)
+    ax.fill_between(
+        grand_means.index,
+        grand_means - grand_sems,
+        grand_means + grand_sems,
+        color=COLOR_SLOW,
+        alpha=0.2,
+    )
+    ax.plot(
+        grand_means.index,
+        grand_means,
+        "o-",
+        color=COLOR_SLOW,
+        linewidth=2.5,
+        markersize=7,
+        label="Mean",
+        zorder=5,
+    )
 
     ax.set_xticks(range(1, 7))
-    ax.legend(fontsize=8, facecolor=PANEL_BG, edgecolor=SPINE_COLOR,
-              labelcolor=TEXT_COLOR, ncol=3)
+    ax.legend(fontsize=8, facecolor=PANEL_BG, edgecolor=SPINE_COLOR, labelcolor=TEXT_COLOR, ncol=3)
 
     # -- Bottom-right: Perturbed within-block --
     ax = axes[1, 1]
-    style_ax(ax, "D  Perturbed: Within-Block Adaptation",
-             xlabel="Trial within block", ylabel="Visual MAE (N)")
+    style_ax(
+        ax,
+        "D  Perturbed: Within-Block Adaptation",
+        xlabel="Trial within block",
+        ylabel="Visual MAE (N)",
+    )
 
     pert = trials[trials["condition"] == "perturbed_slow"]
     grand_means = pert.groupby("block_trial")["comp_mae"].mean()
@@ -397,22 +471,44 @@ def plot_session_performance(df: pd.DataFrame, trials: pd.DataFrame) -> None:
 
     for i, s in enumerate(sessions):
         ss = pert[pert["session"] == s]
-        ax.plot(ss["block_trial"], ss["comp_mae"], "o-",
-                color=SESSION_COLORS[i], linewidth=1, markersize=5, alpha=0.5,
-                label=f"S{s}")
+        ax.plot(
+            ss["block_trial"],
+            ss["comp_mae"],
+            "o-",
+            color=SESSION_COLORS[i],
+            linewidth=1,
+            markersize=5,
+            alpha=0.5,
+            label=f"S{s}",
+        )
 
-    ax.fill_between(grand_means.index, grand_means - grand_sems,
-                    grand_means + grand_sems, color=COLOR_PERT, alpha=0.2)
-    ax.plot(grand_means.index, grand_means, "o-", color=COLOR_PERT,
-            linewidth=2.5, markersize=7, label="Mean", zorder=5)
+    ax.fill_between(
+        grand_means.index,
+        grand_means - grand_sems,
+        grand_means + grand_sems,
+        color=COLOR_PERT,
+        alpha=0.2,
+    )
+    ax.plot(
+        grand_means.index,
+        grand_means,
+        "o-",
+        color=COLOR_PERT,
+        linewidth=2.5,
+        markersize=7,
+        label="Mean",
+        zorder=5,
+    )
 
     ax.set_xticks(range(1, 7))
-    ax.legend(fontsize=8, facecolor=PANEL_BG, edgecolor=SPINE_COLOR,
-              labelcolor=TEXT_COLOR, ncol=3)
+    ax.legend(fontsize=8, facecolor=PANEL_BG, edgecolor=SPINE_COLOR, labelcolor=TEXT_COLOR, ncol=3)
 
     fig.suptitle(
         "Figure 2: Session Performance and Within-Block Adaptation",
-        color=TEXT_COLOR, fontsize=13, fontweight="bold", y=1.01,
+        color=TEXT_COLOR,
+        fontsize=13,
+        fontweight="bold",
+        y=1.01,
     )
     fig.tight_layout()
     save_fig(fig, "fig2_session_performance.png")
@@ -441,15 +537,22 @@ def plot_reliability(trials: pd.DataFrame) -> None:
         odd = block[block["block_trial"].isin([1, 3, 5])].reset_index(drop=True)
         even = block[block["block_trial"].isin([2, 4, 6])].reset_index(drop=True)
         for i in range(min(len(odd), len(even))):
-            pairs.append({
-                "session": sess, "condition": cond,
-                "odd": odd.iloc[i]["comp_mae"],
-                "even": even.iloc[i]["comp_mae"],
-            })
+            pairs.append(
+                {
+                    "session": sess,
+                    "condition": cond,
+                    "odd": odd.iloc[i]["comp_mae"],
+                    "even": even.iloc[i]["comp_mae"],
+                }
+            )
     sh = pd.DataFrame(pairs)
 
-    style_ax(ax, "Split-Half Reliability (Visual MAE)",
-             xlabel="Odd-trial MAE (N)", ylabel="Even-trial MAE (N)")
+    style_ax(
+        ax,
+        "Split-Half Reliability (Visual MAE)",
+        xlabel="Odd-trial MAE (N)",
+        ylabel="Even-trial MAE (N)",
+    )
 
     cond_markers = {"slow_steady": "o", "perturbed_slow": "s"}
 
@@ -459,45 +562,80 @@ def plot_reliability(trials: pd.DataFrame) -> None:
         for s_idx, s in enumerate(sessions):
             sub = sh[(sh["condition"] == cond) & (sh["session"] == s)]
             ax.scatter(
-                sub["odd"], sub["even"],
-                facecolors="none", edgecolors=SESSION_COLORS[s_idx],
-                s=60, linewidths=1.5, marker=marker, alpha=0.85, zorder=3,
+                sub["odd"],
+                sub["even"],
+                facecolors="none",
+                edgecolors=SESSION_COLORS[s_idx],
+                s=60,
+                linewidths=1.5,
+                marker=marker,
+                alpha=0.85,
+                zorder=3,
             )
 
     # Legend
     legend_handles = []
     for cond, marker in cond_markers.items():
         legend_handles.append(
-            ax.scatter([], [], facecolors="none", edgecolors=TICK_COLOR,
-                       s=60, linewidths=1.5, marker=marker,
-                       label=COND_LABELS[cond])
+            ax.scatter(
+                [],
+                [],
+                facecolors="none",
+                edgecolors=TICK_COLOR,
+                s=60,
+                linewidths=1.5,
+                marker=marker,
+                label=COND_LABELS[cond],
+            )
         )
     for s_idx, s in enumerate(sessions):
         legend_handles.append(
-            ax.scatter([], [], facecolors="none",
-                       edgecolors=SESSION_COLORS[s_idx],
-                       s=60, linewidths=1.5, marker="o", label=f"S{s}")
+            ax.scatter(
+                [],
+                [],
+                facecolors="none",
+                edgecolors=SESSION_COLORS[s_idx],
+                s=60,
+                linewidths=1.5,
+                marker="o",
+                label=f"S{s}",
+            )
         )
 
     all_vals = pd.concat([sh["odd"], sh["even"]])
     lim = (0, all_vals.max() * 1.15)
-    ax.plot(lim, lim, color=TICK_COLOR, linewidth=0.8, alpha=0.4,
-            linestyle="--")
+    ax.plot(lim, lim, color=TICK_COLOR, linewidth=0.8, alpha=0.4, linestyle="--")
     ax.set_xlim(lim)
     ax.set_ylim(lim)
     ax.set_aspect("equal")
 
     r = sh["odd"].corr(sh["even"])
     sb = _spearman_brown(r)
-    ax.text(0.05, 0.95, f"r = {r:.3f}\nSB reliability = {sb:.3f}",
-            transform=ax.transAxes, color=TEXT_COLOR, fontsize=9,
-            verticalalignment="top", fontfamily="monospace")
-    ax.legend(handles=legend_handles, fontsize=8, facecolor=PANEL_BG,
-              edgecolor=SPINE_COLOR, labelcolor=TEXT_COLOR, ncol=2)
+    ax.text(
+        0.05,
+        0.95,
+        f"r = {r:.3f}\nSB reliability = {sb:.3f}",
+        transform=ax.transAxes,
+        color=TEXT_COLOR,
+        fontsize=9,
+        verticalalignment="top",
+        fontfamily="monospace",
+    )
+    ax.legend(
+        handles=legend_handles,
+        fontsize=8,
+        facecolor=PANEL_BG,
+        edgecolor=SPINE_COLOR,
+        labelcolor=TEXT_COLOR,
+        ncol=2,
+    )
 
     fig.suptitle(
         "Figure 3: Split-Half Reliability",
-        color=TEXT_COLOR, fontsize=13, fontweight="bold", y=1.02,
+        color=TEXT_COLOR,
+        fontsize=13,
+        fontweight="bold",
+        y=1.02,
     )
     fig.tight_layout()
     save_fig(fig, "fig3_reliability.png")
@@ -513,9 +651,7 @@ def plot_qc_session(csv_path: str) -> None:
     # Import the QC plotting module
     import importlib.util
 
-    qc_module_path = (
-        Path(__file__).parent.parent / "respyra" / "utils" / "vis" / "plot_session.py"
-    )
+    qc_module_path = Path(__file__).parent.parent / "respyra" / "utils" / "vis" / "plot_session.py"
     spec = importlib.util.spec_from_file_location("plot_session_qc", qc_module_path)
     qc = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(qc)
@@ -524,7 +660,10 @@ def plot_qc_session(csv_path: str) -> None:
     fig = qc.plot_session(session_df, csv_path)
     fig.suptitle(
         "Figure 4: Example Session QC Summary (Session 1)",
-        color=TEXT_COLOR, fontsize=13, fontweight="bold", y=1.0,
+        color=TEXT_COLOR,
+        fontsize=13,
+        fontweight="bold",
+        y=1.0,
     )
     save_fig(fig, "fig4_qc_session.png")
 
@@ -551,8 +690,7 @@ def main():
     trials = compute_trial_stats(df)
     session_stats = compute_session_stats(df, trials)
 
-    print(f"\nTotal: {len(trials)} trials across "
-          f"{trials['session'].nunique()} sessions\n")
+    print(f"\nTotal: {len(trials)} trials across {trials['session'].nunique()} sessions\n")
 
     print("=== Table 1 ===")
     generate_table1(session_stats)
