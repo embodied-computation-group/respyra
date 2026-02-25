@@ -11,6 +11,7 @@
 [![PyPI](https://img.shields.io/pypi/v/respyra?color=blue)](https://pypi.org/project/respyra/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](https://github.com/embodied-computation-group/respyra/blob/main/LICENSE)
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue)](https://www.python.org/downloads/)
+[![GitHub](https://img.shields.io/badge/GitHub-source-black?logo=github)](https://github.com/embodied-computation-group/respyra)
 
 respyra is a Python toolbox that integrates a [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) with [PsychoPy](https://www.psychopy.org/) to enable real-time respiratory motor control tracking experiments. Participants follow a sinusoidal target with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation), in which the displayed breathing trace is amplified or attenuated relative to ground truth.
 

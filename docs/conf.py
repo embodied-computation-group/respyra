@@ -76,3 +76,16 @@ html_title = f"respyra {release}"
 # Path is relative to the docs/ directory (where conf.py lives).
 html_logo = "../media/respyra_icon.png"
 html_favicon = "../media/respyra_icon.png"
+
+# Theme options
+html_theme_options = {
+    "collapsiblesidebar": True,
+}
+
+# Context variables available in templates — used by the theme for
+# "Edit on GitHub" and source links.
+html_context = {
+    "github_url": "https://github.com/embodied-computation-group/respyra",
+    "github_version": "main",
+    "doc_path": "docs/",
+}
