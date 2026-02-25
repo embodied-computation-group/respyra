@@ -69,7 +69,8 @@ exclude_patterns = ["_build", "context"]
 # -- HTML output -------------------------------------------------------------
 
 html_theme = "python_docs_theme"
-html_static_path = []
+html_static_path = ["_static"]
+templates_path = ["_templates"]
 html_title = f"respyra {release}"
 
 # Project logo — displayed in the sidebar/header of the Sphinx site.
