@@ -16,12 +16,11 @@ from collections import deque
 
 import numpy as np
 
-from respyra.configs.breath_tracking import (
+from respyra.configs.validation_study import (
     BASELINE_DURATION_SEC,
     BELT_CHANNELS,
     BELT_PERIOD_MS,
     BG_COLOR,
-    CONDITIONS,
     CONNECTION,
     COUNTDOWN_DURATION_SEC,
     DATA_COLUMNS,
@@ -58,6 +57,10 @@ from respyra.configs.breath_tracking import (
     TRIAL_METHOD,
     UNITS,
 )
+try:
+    from respyra.configs.validation_study import build_conditions
+except ImportError:
+    build_conditions = None
 from respyra.core.breath_belt import BreathBelt, BreathBeltError
 from respyra.core.data_logger import DataLogger, create_session_file
 from respyra.core.target_generator import TargetGenerator, calibrate_from_baseline
@@ -266,8 +269,13 @@ def run_experiment():
     # ------------------------------------------------------------------
     # 8. Build trial order with TrialHandler
     # ------------------------------------------------------------------
-    condition_map = {c.name: c for c in CONDITIONS}
-    trial_list = [{"condition": c.name} for c in CONDITIONS]
+    if build_conditions is not None:
+        conditions = build_conditions(session)
+        print(f"[config] Session {session}: {[c.name for c in conditions[:1]]}... first")
+    else:
+        from respyra.configs.validation_study import CONDITIONS as conditions
+    condition_map = {c.name: c for c in conditions}
+    trial_list = [{"condition": c.name} for c in conditions]
     trials = data.TrialHandler(
         trialList=trial_list,
         nReps=N_REPS,
@@ -301,32 +309,35 @@ def run_experiment():
     )
 
     # ==================================================================
-    # 10. Range calibration phase (once per session)
+    # 10. Range calibration phase (with retry option)
     # ==================================================================
     try:
-        # Show range-cal instruction screen
-        key = show_text_and_wait(
-            win,
-            text=(
-                "Breathing Range Calibration\n\n"
-                "Take several comfortable deep breaths.\n"
-                "Breathe more deeply than normal,\n"
-                "but not as hard as you can.\n\n"
-                "This helps us set the right difficulty level.\n\n"
-                "Press SPACE when ready."
-            ),
-            key_list=["space", ESCAPE_KEY],
-        )
-
         escaped = False
-        if key == ESCAPE_KEY:
-            print("Escape pressed -- ending experiment.")
-            escaped = True
+        cal_accepted = False
 
-        # Range calibration frame loop
-        range_cal_forces = []
+        while not cal_accepted and not escaped:
+            # Show range-cal instruction screen
+            key = show_text_and_wait(
+                win,
+                text=(
+                    "Breathing Range Calibration\n\n"
+                    "Breathe normally and comfortably.\n"
+                    "Try to cover your full natural breathing range\n"
+                    "without straining.\n\n"
+                    "This helps us set the right difficulty level.\n\n"
+                    "Press SPACE when ready."
+                ),
+                key_list=["space", ESCAPE_KEY],
+            )
 
-        if not escaped:
+            if key == ESCAPE_KEY:
+                print("Escape pressed -- ending experiment.")
+                escaped = True
+                break
+
+            # Range calibration frame loop
+            range_cal_forces = []
+            buffer.clear()
             phase_title.text = "RANGE CALIBRATION"
             exp_clock.reset()
             frame_count = 0
@@ -352,7 +363,7 @@ def run_experiment():
 
                 # Draw
                 remaining = max(0, RANGE_CAL_DURATION_SEC - elapsed)
-                status_text.text = f"Comfortable deep breaths -- {remaining:.0f}s remaining"
+                status_text.text = f"Breathe normally -- {remaining:.0f}s remaining"
 
                 trace_border.draw()
                 trace.draw(list(buffer))
@@ -367,44 +378,35 @@ def run_experiment():
                     escaped = True
                     break
 
-        # Compute range calibration results
-        if range_cal_forces and not escaped:
-            sorted_forces = sorted(range_cal_forces)
-            raw_min = sorted_forces[0]
-            raw_max = sorted_forces[-1]
+            if escaped:
+                break
 
-            # Saturation detection (Rec 2): warn if sensor limits hit
-            saturated = any(
-                f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI for f in range_cal_forces
-            )
-            if saturated:
-                n_sat = sum(
-                    1
+            # Compute range calibration results
+            if range_cal_forces:
+                sorted_forces = sorted(range_cal_forces)
+                raw_min = sorted_forces[0]
+                raw_max = sorted_forces[-1]
+
+                # Saturation detection
+                saturated = any(
+                    f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI
                     for f in range_cal_forces
-                    if f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI
                 )
-                print(
-                    f"[cal] WARNING: {n_sat} samples near sensor limits "
-                    f"(≤{FORCE_SATURATION_LO} or ≥{FORCE_SATURATION_HI} N). "
-                    f"Belt may be too tight."
-                )
-                key = show_text_and_wait(
-                    win,
-                    text=(
-                        "Sensor Saturation Detected\n\n"
-                        "Some readings hit the sensor limits.\n"
-                        "The belt may be too tight.\n\n"
-                        "Consider loosening the belt slightly.\n"
-                        "Results may still be usable.\n\n"
-                        "Press SPACE to continue."
-                    ),
-                    key_list=["space", ESCAPE_KEY],
-                )
-                if key == ESCAPE_KEY:
-                    escaped = True
+                sat_warning = ""
+                if saturated:
+                    n_sat = sum(
+                        1
+                        for f in range_cal_forces
+                        if f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI
+                    )
+                    print(
+                        f"[cal] WARNING: {n_sat} samples near sensor limits "
+                        f"(≤{FORCE_SATURATION_LO} or ≥{FORCE_SATURATION_HI} N). "
+                        f"Belt may be too tight."
+                    )
+                    sat_warning = "\n\nWARNING: Sensor saturation detected.\nConsider loosening the belt."
 
-            if not escaped:
-                # Percentile clipping (Rec 1): reject outliers
+                # Percentile clipping
                 n = len(sorted_forces)
                 lo_idx = int(n * RANGE_CAL_PERCENTILE_LO / 100)
                 hi_idx = int(n * RANGE_CAL_PERCENTILE_HI / 100) - 1
@@ -434,11 +436,32 @@ def run_experiment():
                     f"amplitude={global_amplitude:.2f} N, "
                     f"y_range=[{y_min:.2f}, {y_max:.2f}]"
                 )
-        else:
-            # Fallback if no data was collected
-            global_amplitude = 2.0
-            range_center = 5.0
-            print("Range calibration: no data collected, using defaults")
+
+                # Show results — SPACE to accept, R to redo
+                key = show_text_and_wait(
+                    win,
+                    text=(
+                        "Calibration Complete\n\n"
+                        f"Range: {global_min:.1f} - {global_max:.1f} N\n"
+                        f"Amplitude: {global_amplitude:.1f} N\n"
+                        f"{sat_warning}\n\n"
+                        "Press SPACE to accept, R to recalibrate."
+                    ),
+                    key_list=["space", "r", ESCAPE_KEY],
+                )
+
+                if key == ESCAPE_KEY:
+                    escaped = True
+                elif key == "r":
+                    print("[cal] Recalibrating...")
+                else:
+                    cal_accepted = True
+            else:
+                # Fallback if no data was collected
+                global_amplitude = 2.0
+                range_center = 5.0
+                print("Range calibration: no data collected, using defaults")
+                cal_accepted = True
 
         if escaped:
             return  # finally block handles cleanup
@@ -641,13 +664,19 @@ def run_experiment():
                     buffer.append(force)
                     latest_force = force
                     error = target_force - force
-                    trial_errors.append(abs(error))
+                    # Compensated error: how well the gain-adjusted trace
+                    # matches the target — the signal participants are
+                    # actually optimizing.  When gain=1.0 this equals error.
+                    visual_force = range_center + feedback_gain * (force - range_center)
+                    compensated_error = target_force - visual_force
+                    trial_errors.append(abs(compensated_error))
                     logger.log_row(
                         timestamp=round(tracking_t, 4),
                         frame=frame_count,
                         force_n=round(force, 4),
                         target_force=round(target_force, 4),
                         error=round(error, 4),
+                        compensated_error=round(compensated_error, 4),
                         phase="tracking",
                         condition=condition_name,
                         trial_num=trial_num,
@@ -666,9 +695,12 @@ def run_experiment():
 
                 target_dot.pos = (trace_right + DOT_X_OFFSET, dot_y)
 
-                # Dot color feedback
+                # Dot color feedback based on compensated error (how
+                # well the visual trace matches the target).  This is
+                # what the participant is actually optimizing.
                 if latest_force is not None:
-                    current_error = abs(target_force - latest_force)
+                    visual_f = range_center + feedback_gain * (latest_force - range_center)
+                    current_error = abs(target_force - visual_f)
                     if DOT_FEEDBACK_MODE == "graded":
                         color = _graded_dot_color(current_error, DOT_GRADED_MAX_ERROR_N)
                     elif DOT_FEEDBACK_MODE == "trinary":

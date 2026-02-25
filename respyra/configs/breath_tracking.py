@@ -101,6 +101,7 @@ DATA_COLUMNS = [
     "force_n",
     "target_force",
     "error",
+    "compensated_error",
     "phase",
     "condition",
     "trial_num",
