@@ -6,7 +6,7 @@
 
 # respyra
 
-**Open-source toolbox for respiratory motor control tracking with visuomotor perturbation**
+**A general-purpose respiratory motor control tracking toolbox for interoception research**
 
 [![PyPI](https://img.shields.io/pypi/v/respyra?color=blue)](https://pypi.org/project/respyra/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](https://github.com/embodied-computation-group/respyra/blob/main/LICENSE)

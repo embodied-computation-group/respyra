@@ -5,7 +5,7 @@
 <h1 align="center">respyra</h1>
 
 <p align="center">
-  <strong>Open-source toolbox for respiratory motor control tracking with visuomotor perturbation</strong>
+  <strong>A general-purpose respiratory motor control tracking toolbox for interoception research</strong>
 </p>
 
 <p align="center">
