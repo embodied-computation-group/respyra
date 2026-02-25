@@ -1,17 +1,8 @@
-"""Configuration for the validation study (4 sessions, 12 trials each).
+"""Demo configuration: 5 slow-and-steady breathing trials.
 
-Extends the base breath_tracking config with:
-- 4 breath cycles per trial (40 s at 0.1 Hz)
-- 12 trials per session (6 slow_steady + 6 perturbed_slow)
-- Counterbalanced starting condition across sessions (ABAB/BABA)
-
-To use: change the import in breath_tracking_task.py from
-    from respyra.configs.breath_tracking import ...
-to
-    from respyra.configs.validation_study import ...
-
-The session number entered in the participant dialog determines
-counterbalancing: odd sessions start slow_steady, even start perturbed.
+A lightweight config for quick demonstrations and testing.
+All trials use the slow_steady condition (0.1 Hz, 4 cycles = 40 s).
+No counterbalancing, no perturbed condition.
 """
 
 # ------------------------------------------------------------------ #
@@ -55,27 +46,15 @@ from respyra.configs.breath_tracking import (  # noqa: F401, E402
 from respyra.core.target_generator import ConditionDef, SegmentDef
 
 # ------------------------------------------------------------------ #
-#  Display override                                                    #
+#  Display                                                             #
 # ------------------------------------------------------------------ #
-FULLSCR = True
-MONITOR_SIZE_PIX = (3440, 1440)
+FULLSCR = False
+MONITOR_SIZE_PIX = (1920, 1080)
 
 # ------------------------------------------------------------------ #
-#  Conditions — 4 cycles per trial (40 s at 0.1 Hz)                  #
+#  Condition — slow and steady (4 cycles at 0.1 Hz = 40 s)           #
 # ------------------------------------------------------------------ #
 SLOW_STEADY = ConditionDef("slow_steady", [SegmentDef(0.1, 4)])
-PERTURBED_SLOW = ConditionDef("perturbed_slow", [SegmentDef(0.1, 4)], feedback_gain=2.0)
-
-# ------------------------------------------------------------------ #
-#  Block size                                                          #
-# ------------------------------------------------------------------ #
-BLOCK_SIZE = 6
-
-# ------------------------------------------------------------------ #
-#  Trials                                                              #
-# ------------------------------------------------------------------ #
-N_REPS = 1  # trial list is fully expanded by build_conditions()
-TRIAL_METHOD = "sequential"
 
 # ------------------------------------------------------------------ #
 #  Tracking duration — matches 4 cycles at 0.1 Hz                    #
@@ -83,25 +62,22 @@ TRIAL_METHOD = "sequential"
 TRACKING_DURATION_SEC = 40.0
 
 # ------------------------------------------------------------------ #
+#  Trials — 5 identical slow_steady trials                            #
+# ------------------------------------------------------------------ #
+N_REPS = 1
+TRIAL_METHOD = "sequential"
+
+# ------------------------------------------------------------------ #
 #  Data output                                                         #
 # ------------------------------------------------------------------ #
 OUTPUT_DIR = "data/"
 
 
-def build_conditions(session_num: int) -> list[ConditionDef]:
-    """Build the blocked trial list based on session number.
-
-    Odd sessions (1, 3): slow_steady block first.
-    Even sessions (2, 4): perturbed block first.
-    """
-    if int(session_num) % 2 == 1:
-        return [SLOW_STEADY] * BLOCK_SIZE + [PERTURBED_SLOW] * BLOCK_SIZE
-    else:
-        return [PERTURBED_SLOW] * BLOCK_SIZE + [SLOW_STEADY] * BLOCK_SIZE
+def build_conditions(session_num: int | str) -> list[ConditionDef]:
+    """Return 5 slow_steady trials (session number is ignored)."""
+    return [SLOW_STEADY] * 5
 
 
-# Default CONDITIONS for backward compatibility — overridden by the
-# runner after the participant dialog.
 CONDITIONS = build_conditions(1)
 
 # ------------------------------------------------------------------ #
@@ -114,8 +90,7 @@ from respyra.configs.experiment_config import TrialConfig as _TrialConfig  # noq
 
 CONFIG = _replace(
     _BASE,
-    name="Validation Study",
-    display=_replace(_BASE.display, fullscr=FULLSCR, monitor_size_pix=MONITOR_SIZE_PIX),
+    name="Breath Tracking Demo (5 trials)",
     timing=_replace(_BASE.timing, tracking_duration_sec=TRACKING_DURATION_SEC),
     trial=_TrialConfig(
         conditions=CONDITIONS,
