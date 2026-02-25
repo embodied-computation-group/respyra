@@ -126,7 +126,7 @@ detailed API reference and user guides.
 
 ## Submitting changes
 
-1. **Fork** the repository and create a feature branch from `main`.
+1. **Fork** the repository and create a feature branch from `dev`.
 2. Make your changes, adding tests for new functionality.
 3. Ensure **lint** and **tests** pass locally:
    ```bash
@@ -135,8 +135,11 @@ detailed API reference and user guides.
    pytest tests/ -v
    ```
 4. Commit with a clear, descriptive message.
-5. Open a **pull request** against `main`. CI will run lint and test checks
-   automatically — both must pass before merging.
+5. Open a **pull request** against `dev` (not `main`). CI will run lint and
+   test checks automatically — both must pass before merging.
+
+`main` is the stable release branch and is protected. All development
+happens on `dev`, which is periodically merged into `main` for releases.
 
 ## The `gdx/` directory
 
