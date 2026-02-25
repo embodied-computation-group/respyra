@@ -103,7 +103,7 @@ class TrialConfig:
     conditions: list[ConditionDef] = field(default_factory=list)
     n_reps: int = 1
     method: str = "sequential"
-    build_conditions: Callable[[int | str], list[ConditionDef]] | None = None
+    build_conditions: Callable[[str], list[ConditionDef]] | None = None
 
 
 # ------------------------------------------------------------------ #

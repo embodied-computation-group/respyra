@@ -20,7 +20,6 @@ from respyra.configs.experiment_config import (
 )
 from respyra.core.target_generator import ConditionDef, SegmentDef
 
-
 # ------------------------------------------------------------------ #
 #  ExperimentConfig construction                                       #
 # ------------------------------------------------------------------ #
@@ -197,3 +196,34 @@ class TestLoadConfig:
         )
         cfg = load_config(str(child))
         assert cfg.name == "Child"
+
+    def test_load_from_file_restores_sys_path(self, tmp_path):
+        """sys.path is restored after loading a config file."""
+        import sys
+
+        config_file = tmp_path / "my_config.py"
+        config_file.write_text(
+            textwrap.dedent("""\
+            from respyra.configs.experiment_config import ExperimentConfig
+            CONFIG = ExperimentConfig(name="PathTest")
+            """)
+        )
+        path_before = list(sys.path)
+        load_config(str(config_file))
+        assert sys.path == path_before
+
+    def test_load_short_name_demo(self):
+        """Short name 'demo' resolves to respyra.configs.demo."""
+        cfg = load_config("demo")
+        assert isinstance(cfg, ExperimentConfig)
+        assert "Demo" in cfg.name or "demo" in cfg.name.lower()
+
+    def test_load_dotted_module_path(self):
+        """Dotted module path resolves correctly."""
+        cfg = load_config("respyra.configs.demo")
+        assert isinstance(cfg, ExperimentConfig)
+
+    def test_load_short_name_nonexistent_raises(self):
+        """Short name that doesn't map to a real module raises ImportError."""
+        with pytest.raises((ImportError, ModuleNotFoundError)):
+            load_config("nonexistent_config_xyz")

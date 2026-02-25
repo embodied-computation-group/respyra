@@ -25,6 +25,10 @@ The `--config` flag accepts three forms:
 
 Every config module must export a module-level variable named `CONFIG` — an {class}`~respyra.configs.experiment_config.ExperimentConfig` instance.
 
+```{note}
+Config files are standard Python modules and are executed when loaded. Only use config files from trusted sources.
+```
+
 ## Creating a custom config
 
 The recommended workflow: start from the base defaults and override what you need using {func}`dataclasses.replace`.
@@ -107,7 +111,7 @@ from respyra.configs.presets import slow_steady, perturbed_slow, mixed_rhythm
 # Factory functions — customize parameters
 easy = slow_steady(freq_hz=0.1, n_cycles=3)          # 30 s trial
 hard = slow_steady(freq_hz=0.15, n_cycles=4)         # 26.7 s trial
-perturbed = perturbed_slow(feedback_gain=2.0)         # 2x visual gain
+perturbed = perturbed_slow(feedback_gain=2.0)         # 2x visual gain (default is 1.5x)
 mixed = mixed_rhythm(freq_slow=0.1, freq_fast=0.25)   # multi-segment
 
 # Pre-built constants — standard defaults
@@ -249,6 +253,7 @@ Each phase function takes an `ExperimentState` and `ExperimentConfig`, mutates t
 | `trial` | `TrialConfig` | See below | Trial structure and conditions |
 | `output_dir` | `str` | `"data/"` | Output directory for CSV files |
 | `escape_key` | `str` | `"escape"` | Key to abort the experiment |
+| `data_columns` | `list[str]` | 10 standard columns | Column names for the output CSV |
 
 ### BeltConfig
 

@@ -88,7 +88,7 @@ TRACKING_DURATION_SEC = 40.0
 OUTPUT_DIR = "data/"
 
 
-def build_conditions(session_num: int) -> list[ConditionDef]:
+def build_conditions(session_num: str) -> list[ConditionDef]:
     """Build the blocked trial list based on session number.
 
     Odd sessions (1, 3): slow_steady block first.

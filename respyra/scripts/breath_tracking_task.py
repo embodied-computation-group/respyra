@@ -20,9 +20,6 @@ Examples::
 import argparse
 
 from respyra.configs.experiment_config import load_config
-
-# Backward-compat re-export used by generate_screenshots.py
-from respyra.core.runner import graded_dot_color as _graded_dot_color  # noqa: F401
 from respyra.core.runner import run_experiment
 
 

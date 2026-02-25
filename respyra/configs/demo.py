@@ -73,7 +73,7 @@ TRIAL_METHOD = "sequential"
 OUTPUT_DIR = "data/"
 
 
-def build_conditions(session_num: int | str) -> list[ConditionDef]:
+def build_conditions(session_num: str) -> list[ConditionDef]:
     """Return 5 slow_steady trials (session number is ignored)."""
     return [SLOW_STEADY] * 5
 

@@ -72,7 +72,7 @@ win, stimuli = setup_display(cfg)
 
 ### Gain perturbation
 
-The displayed waveform is perturbed while the target and error remain veridical:
+The displayed waveform is perturbed; the dot color reflects the visual (compensated) error:
 
 ```python
 from respyra.core.runner import apply_gain
@@ -80,9 +80,11 @@ from respyra.core.runner import apply_gain
 # Display: apply gain to the visual trace
 stimuli["trace"].draw(apply_gain(buffer, feedback_gain, range_center))
 
-# Target and error: always use true (unperturbed) force
+# Target position uses true force; dot color uses visual error
 target_force = target_gen.get_target(tracking_t)
-error = target_force - force  # true error
+error = target_force - force  # true (physical) error
+visual_force = center + feedback_gain * (force - center)
+compensated_error = target_force - visual_force  # visual error (drives dot color)
 ```
 
 ### Incremental logging with DataLogger

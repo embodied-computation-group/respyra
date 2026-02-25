@@ -742,7 +742,9 @@ def run_experiment(cfg: ExperimentConfig | None = None) -> None:
         :class:`ExperimentConfig`.
     """
     if cfg is None:
-        cfg = ExperimentConfig()
+        from respyra.configs.breath_tracking import CONFIG as _default_cfg
+
+        cfg = _default_cfg
 
     # 1. Connect belt BEFORE PsychoPy (Windows BLE/COM constraint)
     belt = connect_belt(cfg)
@@ -833,7 +835,17 @@ def run_experiment(cfg: ExperimentConfig | None = None) -> None:
             print("[error] No conditions defined -- nothing to run.")
             return
 
-        condition_map = {c.name: c for c in conditions}
+        # Map condition names to defs; warn on duplicates with differing params
+        condition_map: dict[str, Any] = {}
+        for c in conditions:
+            if c.name in condition_map and c is not condition_map[c.name]:
+                existing = condition_map[c.name]
+                if c.feedback_gain != existing.feedback_gain or c.segments != existing.segments:
+                    raise ValueError(
+                        f"Duplicate condition name '{c.name}' with different parameters. "
+                        f"Give each condition a unique name."
+                    )
+            condition_map[c.name] = c
         trial_list = [{"condition": c.name} for c in conditions]
         trials = data.TrialHandler(
             trialList=trial_list,
@@ -873,7 +885,8 @@ def run_experiment(cfg: ExperimentConfig | None = None) -> None:
             if escaped:
                 break
 
-            # b) Calibrate from baseline
+            # b) Calibrate from baseline (center logged for diagnostics only;
+            #    target generation uses the global range calibration values)
             baseline_center, _baseline_amp = calibrate_from_baseline(baseline_forces)
             target_gen = TargetGenerator(condition_def, state.range_center, state.global_amplitude)
             print(

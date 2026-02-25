@@ -123,13 +123,13 @@ Using integer cycle counts per segment ensures phase continuity at boundaries �
 
 ## Visual feedback modes
 
-The target dot's color provides real-time tracking error feedback. Three modes are available (set via `DOT_FEEDBACK_MODE`):
+The target dot's color provides real-time tracking error feedback. Three modes are available (set via `DotConfig.feedback_mode`):
 
-**Graded** (default) — Continuous green → yellow → red color mapping using HSV interpolation. Error 0 = pure green; error ≥ `DOT_GRADED_MAX_ERROR_N` (3.0 N) = pure red.
+**Graded** (default) — Continuous green → yellow → red color mapping using HSV interpolation. Error 0 = pure green; error ≥ `graded_max_error_n` (3.0 N) = pure red.
 
-**Binary** — Two-color threshold: yellow (good, error ≤ `ERROR_THRESHOLD_N`) or red (poor).
+**Binary** — Two-color threshold: yellow (good, error ≤ `error_threshold_n`) or red (poor).
 
-**Trinary** — Three-color: yellow (good, ≤ 1.0 N), orange (moderate, ≤ 2.0 N), red (poor, > 2.0 N).
+**Trinary** — Three-color: yellow (good, ≤ `error_threshold_n`), orange (moderate, ≤ `error_threshold_mid_n`), red (poor).
 
 ## Visuomotor perturbation
 
@@ -143,7 +143,7 @@ f_display = center + gain × (f_actual − center)
 - `gain > 1.0` — amplified: small breathing excursions look larger on screen
 - `gain < 1.0` — attenuated: large breathing excursions look smaller
 
-The **target dot**, **tracking error computation**, and **color feedback** are always based on the true (unperturbed) signal — only the waveform trace is distorted. This creates a sensorimotor mismatch analogous to cursor rotation in visuomotor reaching studies.
+The **target dot** position follows the true target waveform, but the **dot color feedback** reflects the *visual* (compensated) error — the discrepancy between the target and the gain-perturbed trace. Only the waveform trace is visually distorted. This creates a sensorimotor mismatch analogous to cursor rotation in visuomotor reaching studies.
 
 ## Data output format
 
@@ -156,6 +156,7 @@ The session CSV contains one row per sample with these columns:
 | `force_n` | float | Force reading in Newtons from the respiration belt |
 | `target_force` | float | Target force value (tracking phase only) |
 | `error` | float | Signed error: target − actual (tracking phase only) |
+| `compensated_error` | float | Signed error: target − displayed force, i.e. after gain (tracking only) |
 | `phase` | str | `range_cal`, `baseline`, `countdown`, or `tracking` |
 | `condition` | str | Condition name (e.g., `slow_steady`) |
 | `trial_num` | int | Trial number (1-indexed) |
