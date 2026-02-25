@@ -1,8 +1,25 @@
-# respyra
+<p align="center">
+  <img src="media/respyra_icon_transparent.png" alt="respyra logo" width="200">
+</p>
 
-Python framework for respiratory motor control experiments integrating the [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) (GDX-RB) with [PsychoPy](https://www.psychopy.org/). All experiments are written in pure Python (no PsychoPy Builder/GUI).
+<h1 align="center">respyra</h1>
 
-Participants follow a sinusoidal target dot with their breathing while their live respiratory waveform is displayed. The framework supports multiple experimental conditions including frequency changes and visuomotor perturbations (visual gain manipulation).
+<p align="center">
+  <strong>Open-source toolbox for respiratory motor control tracking with visuomotor perturbation</strong>
+</p>
+
+<p align="center">
+  <a href="https://pypi.org/project/respyra/"><img alt="PyPI" src="https://img.shields.io/pypi/v/respyra?color=blue"></a>
+  <a href="https://embodied-computation-group.github.io/respyra/"><img alt="Docs" src="https://img.shields.io/badge/docs-online-brightgreen"></a>
+  <a href="https://github.com/embodied-computation-group/respyra/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow"></a>
+  <a href="https://www.python.org/downloads/"><img alt="Python 3.10" src="https://img.shields.io/badge/python-3.10-blue"></a>
+</p>
+
+---
+
+respyra is a Python toolbox that integrates a [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) (GDX-RB) with [PsychoPy](https://www.psychopy.org/) to enable real-time respiratory motor control tracking experiments. Participants follow a sinusoidal target dot with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation).
+
+**[Full documentation](https://embodied-computation-group.github.io/respyra/)** | **[PyPI](https://pypi.org/project/respyra/)** | **[Paper](https://github.com/embodied-computation-group/respyra/tree/main/paper)**
 
 ## Task Schematic
 
@@ -18,39 +35,65 @@ Participants follow a sinusoidal target dot with their breathing while their liv
 |:-:|:-:|:-:|
 | ![Countdown](media/screenshots/03_countdown.png) | ![Tracking veridical](media/screenshots/04_tracking_veridical.png) | ![Tracking bad](media/screenshots/05_tracking_bad.png) |
 
-## Requirements
-
-- **Python 3.10** (PsychoPy does not support 3.11+)
-- **Vernier Go Direct Respiration Belt** (GDX-RB) connected via BLE or USB
-
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/embodied-computation-group/respyra.git
-   cd respyra
-   ```
+### From PyPI (recommended)
 
-2. Create a virtual environment with Python 3.10:
-   ```bash
-   # Windows (with Python Launcher)
-   py -3.10 -m venv .venv
-   .venv\Scripts\activate
+```bash
+pip install respyra
+```
 
-   # macOS / Linux
-   python3.10 -m venv .venv
-   source .venv/bin/activate
-   ```
+For post-session visualization (adds pandas and matplotlib):
 
-3. Install in development mode:
-   ```bash
-   pip install -e .
-   ```
+```bash
+pip install "respyra[vis]"
+```
 
-   For post-session visualization (optional):
-   ```bash
-   pip install -e ".[vis]"
-   ```
+### Development install
+
+```bash
+git clone https://github.com/embodied-computation-group/respyra.git
+cd respyra
+```
+
+Create a virtual environment with Python 3.10:
+
+```bash
+# Windows (with Python Launcher)
+py -3.10 -m venv .venv
+.venv\Scripts\activate
+
+# macOS / Linux
+python3.10 -m venv .venv
+source .venv/bin/activate
+```
+
+Install in editable mode:
+
+```bash
+pip install -e ".[vis]"
+```
+
+### Requirements
+
+- **Python 3.10** -- PsychoPy does not yet support 3.11+
+- **Vernier Go Direct Respiration Belt** (GDX-RB) -- required for hardware experiments; display demos run without a belt
+
+## Quick start
+
+Run a no-hardware display demo to verify PsychoPy is working:
+
+```bash
+python -m respyra.demos.demo_display
+```
+
+With a belt connected, run the full experiment:
+
+```bash
+respyra-task
+```
+
+See the [full documentation](https://embodied-computation-group.github.io/respyra/) for detailed installation, quickstart, and user guide.
 
 ## Running the experiment
 
@@ -124,8 +167,8 @@ respyra/
   scripts/          Runnable experiment sessions
   demos/            Standalone single-feature test scripts
   utils/vis/        Post-session visualization
-docs/context/       Reference docs (PsychoPy API, Vernier belt interface)
-media/              Stimulus assets
+docs/               Sphinx documentation source
+media/              Stimulus assets and icons
 data/               Session output (gitignored)
 ```
 
@@ -137,10 +180,24 @@ python -m respyra.demos.demo_display           # PsychoPy display with synthetic
 python -m respyra.demos.demo_threaded_belt     # Threaded belt queue-draining pattern
 ```
 
+## Documentation
+
+Full documentation is available at **[embodied-computation-group.github.io/respyra](https://embodied-computation-group.github.io/respyra/)**, including:
+
+- [Installation guide](https://embodied-computation-group.github.io/respyra/installation.html) with platform-specific notes
+- [Quick start](https://embodied-computation-group.github.io/respyra/quickstart.html) tutorial
+- [User guide](https://embodied-computation-group.github.io/respyra/userguide.html) with detailed experiment configuration
+- [API reference](https://embodied-computation-group.github.io/respyra/api/index.html) generated from source docstrings
+- [Troubleshooting](https://embodied-computation-group.github.io/respyra/troubleshooting.html) for common issues
+
 ## Platform notes
 
 **Windows BLE**: The Vernier belt's BLE scanner (Bleak) requires COM in MTA mode on the main thread. PsychoPy sets COM to STA on import. The framework handles this by connecting the belt *before* importing PsychoPy.
 
-**Linux**: Requires udev rules for USB access. See `docs/context/vernier/vernier.md`.
+**Linux**: Requires udev rules for USB access. See the [installation guide](https://embodied-computation-group.github.io/respyra/installation.html#linux).
 
 **macOS**: Works with both BLE and USB out of the box.
+
+## License
+
+[MIT](LICENSE)
