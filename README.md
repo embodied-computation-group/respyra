@@ -5,7 +5,7 @@
 <h1 align="center">respyra</h1>
 
 <p align="center">
-  <strong>A general-purpose respiratory motor control tracking toolbox for interoception research</strong>
+  <strong>A general-purpose respiratory tracking toolbox for interoception research</strong>
 </p>
 
 <p align="center">
@@ -18,7 +18,7 @@
 
 ---
 
-respyra is a Python toolbox that integrates a [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) (GDX-RB) with [PsychoPy](https://www.psychopy.org/) to enable real-time respiratory motor control tracking experiments. Participants follow a sinusoidal target dot with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation).
+respyra is a Python toolbox that integrates a [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) (GDX-RB) with [PsychoPy](https://www.psychopy.org/) to enable real-time respiratory tracking experiments. Participants follow a sinusoidal target dot with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation).
 
 **[Full documentation](https://embodied-computation-group.github.io/respyra/)** | **[PyPI](https://pypi.org/project/respyra/)** | **[Paper](https://github.com/embodied-computation-group/respyra/tree/main/paper)**
 
@@ -200,6 +200,10 @@ Full documentation is available at **[embodied-computation-group.github.io/respy
 - [User guide](https://embodied-computation-group.github.io/respyra/userguide.html) with detailed experiment configuration
 - [API reference](https://embodied-computation-group.github.io/respyra/api/index.html) generated from source docstrings
 - [Troubleshooting](https://embodied-computation-group.github.io/respyra/troubleshooting.html) for common issues
+
+## Why the Vernier belt?
+
+The [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) (GDX-RB) was chosen because it is inexpensive, well-documented, and available worldwide through educational science suppliers. It provides wireless (BLE) respiratory force measurement out of the box, making it accessible to researchers and teaching labs without specialized biomedical equipment budgets. While not a research-grade instrument, it offers a reliable and practical solution for respiratory tracking and interoception research at low cost. For applications requiring more sophisticated monitoring (e.g., dual-band respiratory inductance plethysmography or spirometry), respyra's [modular sensor interface](https://embodied-computation-group.github.io/respyra/adapting_belt.html) is designed to accommodate alternative hardware.
 
 ## Platform notes
 

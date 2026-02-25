@@ -1,6 +1,8 @@
 # Adapting to a Different Respiratory Sensor
 
-respyra's architecture separates the belt I/O from the experiment logic, making it possible to substitute a different respiratory sensor. This guide explains the interface contract and shows how to implement a custom sensor class.
+respyra ships with support for the [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) (GDX-RB). This belt was chosen because it is inexpensive, well-documented, and available worldwide through educational science suppliers. It provides wireless (BLE) respiratory force measurement out of the box, making it accessible to researchers and teaching labs without specialized biomedical equipment budgets.
+
+However, some applications may require more sophisticated respiratory monitoring — for example, dual-band respiratory inductance plethysmography (RIP) or spirometry. respyra's architecture separates the belt I/O from the experiment logic, making it straightforward to substitute a different sensor. This guide explains the interface contract and shows how to implement a custom sensor class.
 
 ## The BreathBelt interface contract
 

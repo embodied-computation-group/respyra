@@ -32,7 +32,7 @@ Runs for 10 seconds, draining queued samples and reporting the effective sample 
 
 ## Full experiment
 
-Run the respiratory motor control tracking task:
+Run the respiratory tracking task:
 
 ```bash
 respyra-task

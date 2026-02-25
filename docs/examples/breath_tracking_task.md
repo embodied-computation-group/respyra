@@ -2,7 +2,7 @@
 
 **Script:** `respyra/scripts/breath_tracking_task.py`
 
-**What it demonstrates:** The complete respiratory motor control tracking experiment with calibration, multi-condition trials, and data logging.
+**What it demonstrates:** The complete respiratory tracking experiment with calibration, multi-condition trials, and data logging.
 
 ## How to run
 

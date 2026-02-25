@@ -1,4 +1,4 @@
-"""Target waveform generator for respiratory motor control tracking.
+"""Target waveform generator for respiratory tracking.
 
 Generates sinusoidal breathing-target waveforms from a sequence of
 frequency/cycle segments.  After a baseline calibration phase the generator

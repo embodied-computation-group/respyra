@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "respyra"
 dynamic = ["version"]
-description = "A general-purpose respiratory motor control tracking toolbox for interoception research"
+description = "A general-purpose respiratory tracking toolbox for interoception research"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10,<3.11"

@@ -1,4 +1,4 @@
-"""Configuration for the respiratory motor control tracking task.
+"""Configuration for the respiratory tracking task.
 
 All experiment parameters live here so the script in
 ``respyra/scripts/breath_tracking_task.py`` contains no magic numbers.
