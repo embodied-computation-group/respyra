@@ -17,9 +17,9 @@
 \authorsnames{Micah Allen}
 \authorsaffiliations{Aarhus University}
 
-\abstract{Respiratory interoception is increasingly recognized as a key modality linking bodily sensation to emotional experience and self-regulation. However, few tools exist for studying the sensorimotor dynamics of voluntary breathing control. Here we present \textit{respyra}, an open-source Python toolbox that integrates a Vernier Go Direct Respiration Belt with PsychoPy to enable real-time respiratory tracking experiments. Participants follow a sinusoidal target with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation), in which the displayed breathing trace is amplified or attenuated relative to ground truth. We report proof-of-concept data from a single participant completing six trials alternating between veridical feedback and a 1.5$\times$ gain perturbation condition. Results demonstrate that the participant achieved accurate respiratory tracking (overall MAE = \SI{0.174}{\newton}) and that the gain perturbation reliably increased tracking error (perturbed MAE = \SI{0.240}{\newton}) relative to veridical feedback (MAE = \SI{0.107}{\newton}), while remaining learnable within the session. The toolbox is freely available and designed to facilitate future research on respiratory sensorimotor control, interoceptive learning, and breathing-based interventions.}
+\abstract{Respiratory interoception is increasingly recognized as a key modality linking bodily sensation to emotional experience and self-regulation. However, few tools exist for studying the sensorimotor dynamics of voluntary breathing control. Here we present \textit{respyra}, an open-source Python toolbox that integrates a Vernier Go Direct Respiration Belt with PsychoPy to enable real-time respiratory tracking experiments. Participants follow a sinusoidal target with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation), in which the displayed breathing trace is amplified or attenuated relative to ground truth. The visuomotor perturbation is designed to dissociate two components of respiratory control: veridical feedback conditions measure baseline respiratory tracking ability, while perturbed conditions probe the capacity to remap sensorimotor relationships when visual feedback is altered. We report a single-participant validation study comprising 48 trials across four sessions under veridical and $2\times$ gain perturbation conditions in a blocked, counterbalanced design. The participant achieved accurate respiratory tracking under veridical feedback (visual MAE = \SI{0.243}{\newton}) with substantially increased error under perturbation (visual MAE = \SI{0.538}{\newton}; perturbation ratio = $2.2\times$). Perturbed trials showed within-block adaptation that degraded across sessions, while veridical performance remained stable---suggesting that fatigue selectively impairs sensorimotor remapping rather than basic respiratory control. Split-half reliability was good (Spearman--Brown = .86). The toolbox is freely available and designed to facilitate research on respiratory sensorimotor control, interoceptive learning, and breathing-based interventions.}
 
-\keywords{respiratory interoception, motor control, breathing, visuomotor perturbation, psychophysics, open-source toolbox}
+\keywords{respiratory interoception, sensorimotor adaptation, breathing, visuomotor perturbation, psychophysics, open-source toolbox}
 
 \begin{document}
 \maketitle
@@ -32,9 +32,9 @@ While the cardiac axis has dominated interoception research, respiratory interoc
 
 Measuring respiroception has relied primarily on detection paradigms, such as the Filter Detection Task \parencite{harrison2021interoception} and the Respiratory Resistance Sensitivity Task \parencite{nikolova2022respiratory}, which quantify perceptual sensitivity to inspiratory loads. However, these approaches focus on interoceptive detection rather than on the sensorimotor dynamics of voluntary breathing control---that is, the ability to precisely modulate one's own respiratory output to match a prescribed target. This motor control dimension of breathing is central to breathing-based interventions and meditation practices, yet it has received comparatively little experimental attention.
 
-The study of sensorimotor control offers well-established paradigms for investigating how the motor system adapts to perturbations in visual feedback. In visuomotor reaching studies, participants learn to compensate for rotated or scaled cursor feedback, revealing the dynamics of sensorimotor adaptation, error correction, and internal model updating \parencite[e.g.,][]{krakauer2019motor}. Applying analogous perturbation paradigms to respiratory control could illuminate how individuals monitor and correct their breathing output, with implications for understanding both healthy respiratory regulation and clinical conditions involving dysfunctional breathing patterns.
+The study of sensorimotor control offers well-established paradigms for investigating how the motor system adapts to perturbations in visual feedback. In visuomotor reaching studies, participants learn to compensate for rotated or scaled cursor feedback, revealing the dynamics of sensorimotor adaptation, error correction, and internal model updating \parencite[e.g.,][]{krakauer2019motor}. Importantly, veridical and perturbed feedback conditions probe dissociable constructs: veridical tracking reflects baseline motor control ability, while perturbed tracking additionally engages the capacity to remap sensorimotor relationships when feedback is altered. The ratio of perturbed to veridical error isolates this remapping cost independent of baseline ability, offering a promising individual-differences metric for future group studies. Applying analogous perturbation paradigms to respiratory control could illuminate how individuals monitor and correct their breathing output, with implications for understanding both healthy respiratory regulation and clinical conditions involving dysfunctional breathing patterns.
 
-Here we present \textit{respyra}, an open-source Python toolbox for conducting respiratory tracking experiments with real-time biofeedback and visuomotor perturbation capabilities (Figure~\ref{fig:schematic}). The toolbox integrates a commercially available respiration belt with PsychoPy for stimulus-precise experiment control. We describe the system architecture, experimental protocol, and report proof-of-concept data demonstrating that (a) participants can accurately track sinusoidal breathing targets and (b) visual gain perturbations reliably increase tracking error while remaining learnable within a session.
+Here we present \textit{respyra}, an open-source Python toolbox for conducting respiratory tracking experiments with real-time biofeedback and visuomotor perturbation capabilities (Figure~\ref{fig:schematic}). The toolbox integrates a commercially available respiration belt with PsychoPy for stimulus-precise experiment control. We describe the system architecture and experimental protocol, and report a single-participant validation study (48 trials across four sessions) demonstrating that (a) participants can accurately track sinusoidal breathing targets under veridical feedback, (b) visual gain perturbations reliably increase tracking error, (c) perturbed trials show within-block adaptation that degrades with fatigue while veridical performance remains stable, and (d) the task produces reliable trial-level measurements.
 
 \section{Method}
 
@@ -73,12 +73,12 @@ Experimental conditions are defined using a \texttt{ConditionDef} dataclass spec
 
 The task display consists of two visual elements: a scrolling waveform trace showing the participant's real-time breathing signal, and a target dot that traverses a sinusoidal path at the prescribed target frequency. The dot's vertical position indicates the target force, and its color provides continuous error feedback using an HSV color mapping from green (low error) through yellow to red (high error), with a square-root transfer function for perceptual salience.
 
-The visuomotor perturbation is implemented as a multiplicative gain applied exclusively to the visual trace display:
+The visuomotor perturbation is implemented as a multiplicative gain applied to the visual trace display:
 \begin{equation}
 f_{\text{display}} = c + g \cdot (f_{\text{actual}} - c)
 \label{eq:gain}
 \end{equation}
-where $f_{\text{actual}}$ is the raw belt force, $c$ is the participant's breathing center (from calibration), and $g$ is the feedback gain. When $g = 1.0$, the display is veridical. When $g > 1.0$, displayed deviations from center are amplified, requiring the participant to breathe with \textit{smaller} amplitude to match the visual target. Critically, the target dot position, tracking error computation, and dot color feedback all remain based on the unperturbed signal, isolating the perturbation to the sensory feedback channel.
+where $f_{\text{actual}}$ is the raw belt force, $c$ is the participant's breathing center (from calibration), and $g$ is the feedback gain. When $g = 1.0$, the display is veridical. When $g > 1.0$, displayed deviations from center are amplified, requiring the participant to breathe with \textit{smaller} amplitude to match the visual target. The target dot position remains anchored to the physical target waveform, while the dot's color feedback reflects the \textit{visual error}---the discrepancy between the target and the displayed trace (see Equation~\ref{eq:visual_error})---ensuring that color feedback is consistent with the participant's visual experience of their tracking performance.
 
 \subsection{Calibration}
 
@@ -91,72 +91,115 @@ Each session consists of a range calibration phase followed by a series of track
 \begin{enumerate}
 \item \textbf{Baseline} (10~s): The participant breathes naturally. Force data from this phase are used to compute a trial-specific breathing center via the midpoint of the observed range.
 \item \textbf{Countdown} (3~s): A ``3\ldots2\ldots1'' countdown during which the target dot smoothly blends from the participant's current respiratory position into the target waveform trajectory, providing a gradual transition into tracking.
-\item \textbf{Tracking} (30~s): The participant follows the sinusoidal target dot with their breathing. Force, target, and signed error are logged at every sample (\textasciitilde10~Hz). At the conclusion of each trial, mean absolute tracking error is displayed as performance feedback.
+\item \textbf{Tracking}: The participant follows the sinusoidal target dot with their breathing for a duration determined by the trial's frequency--cycle segment definitions. Force, target, and signed error are logged at every sample (\textasciitilde10~Hz). At the conclusion of each trial, mean absolute tracking error is displayed as performance feedback.
 \end{enumerate}
 
-Trial conditions are managed using PsychoPy's \texttt{TrialHandler}, supporting both sequential (alternating) and randomized presentation orders across configurable numbers of repetitions.
+Trial conditions are managed using PsychoPy's \texttt{TrialHandler}, supporting both blocked and randomized presentation orders across configurable numbers of repetitions.
 
-\subsection{Proof-of-Concept Data Collection}
+\subsection{Validation Data Collection}
 
-To validate the toolbox, a single experienced participant (male, first author) completed one session consisting of six tracking trials alternating between two conditions: \textit{slow\_steady} (3 sinusoidal cycles at 0.1~Hz, veridical feedback; $g = 1.0$) and \textit{perturbed\_slow} (identical target waveform with visual gain perturbation; $g = 1.5$). Trial order was sequential (alternating), with three repetitions of each condition. The belt was worn around the lower ribcage and connected via BLE at 10~Hz sampling. The display was presented on a 1920$\times$1080 monitor at 57~cm viewing distance.
+To validate the toolbox, a single experienced participant (male, first author) completed four sessions in a single sitting. Each session consisted of 12 tracking trials: six veridical feedback trials ($g = 1.0$) and six perturbed feedback trials ($g = 2.0$), presented in a blocked design. Each trial comprised four sinusoidal cycles at 0.1~Hz (40~s tracking duration). The starting condition was counterbalanced across sessions: sessions 1 and 3 began with the veridical block, while sessions 2 and 4 began with the perturbed block. Between sessions, the participant had the option to recalibrate the belt. The belt was worn around the lower ribcage and connected via BLE at 10~Hz sampling. The display was presented on a 1920$\times$1080 monitor at 57~cm viewing distance.
 
 \subsection{Data Analysis}
 
-Tracking performance was quantified using mean absolute error (MAE) and root mean square error (RMSE) between the target and actual force signals during the 30-second tracking phases. Statistics were computed both per-trial and per-condition. All analyses used the raw CSV output from the toolbox, processed with pandas and NumPy in Python.
+Tracking performance was quantified using visual mean absolute error (visual MAE)---defined as the mean absolute deviation between the target waveform and the displayed feedback trace during each trial's tracking phase:
+\begin{equation}
+\text{Visual MAE} = \frac{1}{n} \sum_{i=1}^{n} \left| f_{\text{target},i} - f_{\text{display},i} \right|
+\label{eq:visual_error}
+\end{equation}
+where $f_{\text{display}}$ is defined by Equation~\ref{eq:gain}. For veridical trials ($g = 1$), visual MAE equals the physical tracking error. For perturbed trials ($g > 1$), visual MAE captures the error as experienced by the participant in the displayed feedback---the quantity the participant actively optimizes in the closed-loop control task.
+
+The \textit{perturbation ratio} was computed as the ratio of perturbed visual MAE to veridical visual MAE within each session, providing a normalized index of the cost of sensorimotor remapping independent of baseline tracking ability.
+
+The ratio of root mean square error to MAE (RMSE/MAE ratio) was computed as a secondary metric of error distribution shape. For normally distributed errors, this ratio equals $\sqrt{\pi/2} \approx 1.253$; values exceeding this reference indicate heavy-tailed error distributions with intermittent large deviations, suggestive of attentional lapses or control instability.
+
+Respiratory metrics---breaths per minute (BPM) and peak-to-trough breathing depth---were computed for each trial using SciPy peak detection on the force signal. Breath phase was labeled continuously based on the gradient of the target sinusoid (rising phase = inspiration, falling phase = expiration).
+
+Split-half reliability was assessed by correlating visual MAE between odd-numbered and even-numbered trials within each condition, with the Spearman--Brown prophecy formula applied to estimate full-test reliability.
+
+All analyses were conducted at the trial level (each trial = one observation, $N = 48$). Statistics were computed using Python with pandas, NumPy, and SciPy.
 
 \section{Results}
 
 \subsection{Calibration}
 
-The range calibration phase yielded a raw force range of 0.01--3.96~N. After percentile clipping (P5/P95), the effective range was 0.10--2.79~N, with a center of 1.45~N and scaled amplitude of 1.07~N. Baseline breathing centers were stable across trials ($M$ = \SI{1.15}{\newton}, range: 1.08--1.21~N), indicating consistent resting breathing position throughout the session.
+Prior to each session, the participant completed the range calibration procedure. Calibration amplitude varied across sessions, with Session~1 producing a notably large target amplitude due to an excessively deep calibration breath, which increased the difficulty of tracking---particularly under perturbed feedback where the required breathing amplitude was halved by the $2\times$ gain. Baseline breathing centers were stable within sessions, indicating consistent resting breathing position.
 
 \subsection{Tracking Performance}
 
-The participant achieved accurate respiratory tracking across all six trials, with an overall MAE of \SI{0.174}{\newton} (RMSE = \SI{0.219}{\newton}). Table~\ref{tab:results} presents per-trial performance metrics.
+\input{table1_session_stats}
 
-\begin{table}[ht]
-\caption{Per-Trial Tracking Performance}
-\label{tab:results}
-\begin{tabular}{ccS[table-format=1.0]S[table-format=1.3]S[table-format=1.3]c}
-\toprule
-Trial & Condition & {Gain} & {MAE (N)} & {RMSE (N)} & {$n$ samples} \\
-\midrule
-1 & slow\_steady    & 1.0 & 0.114 & 0.141 & 300 \\
-2 & perturbed\_slow & 1.5 & 0.253 & 0.289 & 300 \\
-3 & slow\_steady    & 1.0 & 0.108 & 0.143 & 301 \\
-4 & perturbed\_slow & 1.5 & 0.249 & 0.288 & 300 \\
-5 & slow\_steady    & 1.0 & 0.100 & 0.127 & 300 \\
-6 & perturbed\_slow & 1.5 & 0.217 & 0.253 & 300 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Effect of Visuomotor Perturbation}
-
-The gain perturbation condition produced consistently higher tracking errors than veridical feedback. Across the three veridical trials, the mean MAE was \SI{0.107}{\newton} ($SD$ = \SI{0.007}{\newton}). Across the three perturbed trials ($g = 1.5$), the mean MAE was \SI{0.240}{\newton} ($SD$ = \SI{0.020}{\newton}), representing a 2.2-fold increase in tracking error. The perturbation effect was present from the first perturbed trial and remained stable across repetitions, though a modest improvement was observed from the first (MAE = \SI{0.253}{\newton}) to the third perturbed trial (MAE = \SI{0.217}{\newton}), suggesting partial adaptation within the session. Veridical trials also showed a slight improvement across the session (Trial~1: 0.114, Trial~5: 0.100~N), consistent with general task familiarization. Figure~\ref{fig:summary} presents the full session summary.
+Table~\ref{tab:session_stats} presents session-level descriptive statistics. The participant maintained a breathing rate close to the 0.1~Hz (6~BPM) target across all sessions ($M = 6.1$~BPM). Under veridical feedback, visual MAE was \SI{0.243}{\newton} ($SD = \SI{0.070}{\newton}$ across sessions), indicating accurate respiratory tracking. Under perturbation ($g = 2.0$), visual MAE increased to \SI{0.538}{\newton} ($SD = \SI{0.255}{\newton}$), yielding a mean perturbation ratio of $2.2\times$ (range: 1.68--2.61 across sessions). Figure~\ref{fig:examples} shows representative veridical and perturbed trial traces, and Figure~\ref{fig:qc} presents a complete session quality-control summary.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{fig_session_summary.png}
-\caption{Six-panel session summary for the proof-of-concept participant. \textit{Top left}: Full session force trace (green) with target overlay (orange dashes) across all phases. \textit{Top right}: Signed tracking error over time for each trial. \textit{Middle left}: Per-trial mean absolute error; blue bars = slow\_steady (veridical), magenta bars = perturbed\_slow ($g = 1.5$). \textit{Middle right}: Error distribution by condition (box plots). \textit{Bottom left}: Baseline calibration stability (center $\pm$ amplitude) across trials. \textit{Bottom right}: Summary statistics.}
-\label{fig:summary}
+\includegraphics[width=\textwidth]{fig1_example_trials.png}
+\caption{Representative single-trial traces from Session~2. \textbf{Top row}: Veridical trial ($g = 1.0$). \textbf{Bottom row}: Perturbed trial ($g = 2.0$). Left panels show the target waveform (dashed) and displayed breathing trace (solid). Center panels show the visual error time series. Right panels show the error distribution with kernel density estimate. The perturbed trial shows larger and more variable errors, with characteristic overcorrection oscillations due to the amplified visual feedback.}
+\label{fig:examples}
+\end{figure}
+
+\subsection{Within-Block Adaptation}
+
+Within each session's block of perturbed trials, visual MAE decreased from the first to the last trial in early sessions, indicating within-block sensorimotor adaptation. In Session~1, the within-block linear slope was $-0.094$ (decreasing MAE, i.e., improving), reflecting rapid remapping of the altered visual feedback. This within-block adaptation degraded across sessions: by Session~4, the slope reversed to $+0.058$ (increasing MAE, i.e., worsening). The linear trend in within-block slopes across sessions was significant ($r = +.957$, $p = .043$), indicating progressive loss of adaptive capacity. Veridical trials showed no comparable trend ($r = -.198$, $p = .80$; Figure~\ref{fig:session_perf}, bottom panels).
+
+\subsection{Session Effects and Fatigue}
+
+Session~2 showed the best overall perturbed performance (visual MAE = \SI{0.259}{\newton}), representing substantial cross-session savings from Session~1 (\SI{0.837}{\newton}). However, perturbed performance degraded in Sessions~3 and 4 (\SI{0.411}{\newton} and \SI{0.647}{\newton}, respectively), while veridical MAE remained relatively stable (range: 0.154--0.321~N; Figure~\ref{fig:session_perf}, top panels). The perturbation ratio followed a U-shaped trajectory across sessions: 2.61 $\rightarrow$ 1.68 $\rightarrow$ 1.79 $\rightarrow$ 2.42, consistent with initial learning followed by fatigue-driven degradation of remapping capacity.
+
+The RMSE/MAE ratio for veridical trials remained close to the normal-distribution reference value of 1.253 ($M = 1.25$), indicating consistent, well-regulated tracking errors. For perturbed trials, the ratio was elevated ($M = 1.50$), and reached 1.72 in Session~4, indicating increasingly heavy-tailed error distributions. Session~4 perturbed trials showed extreme excess kurtosis ($M = 10.6$) with individual errors reaching up to \SI{10}{\newton}, consistent with intermittent large deviations characteristic of attentional lapses or fatigue-driven control breakdown.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{fig2_session_performance.png}
+\caption{Session-level performance and within-block adaptation. \textbf{(A)}~Mean visual MAE by session and condition. Error bars indicate $\pm 1\,SD$. \textbf{(B)}~Perturbation ratio (perturbed visual MAE / veridical MAE) across sessions, showing a U-shaped trajectory consistent with initial learning followed by fatigue. \textbf{(C,~D)}~Within-block visual MAE across the six trials within each condition's block, plotted separately for veridical~(C) and perturbed~(D) trials. Each line represents one session. Perturbed trials show within-block adaptation in early sessions that reverses by Session~4.}
+\label{fig:session_perf}
+\end{figure}
+
+\subsection{Breath Phase Effects}
+
+Inspiration was consistently associated with larger tracking errors than expiration. For veridical trials, mean inspiratory visual MAE was \SI{0.260}{\newton} versus \SI{0.227}{\newton} for expiration, a marginal difference ($t(23) = 1.72$, $p = .099$). The RMSE/MAE ratio showed a significant phase difference under perturbation ($t(23) = 3.62$, $p = .002$), indicating that inspiratory errors were more intermittent and heavy-tailed during perturbed tracking.
+
+\subsection{Reliability}
+
+Split-half reliability (odd vs.\ even trials) for visual MAE yielded $r = .759$. After Spearman--Brown correction, estimated full-test reliability was .857, indicating good measurement reliability at the trial level (Figure~\ref{fig:reliability}).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{fig3_reliability.png}
+\caption{Split-half reliability of visual MAE. Scatter plot of odd-trial versus even-trial mean visual MAE for each trial pair. Marker shape indicates condition (circles = veridical, squares = perturbed). Marker color indicates session. Spearman--Brown corrected reliability = .857.}
+\label{fig:reliability}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{fig4_qc_session.png}
+\caption{Example quality-control session summary (Session~1) generated by the toolbox's built-in visualization module. Panels show the full-session force trace with target overlay, signed error time series, per-trial MAE, error distributions, and calibration stability. This automated diagnostic output facilitates rapid data quality assessment after each session.}
+\label{fig:qc}
 \end{figure}
 
 \section{Discussion}
 
-We presented \textit{respyra}, an open-source toolbox for studying respiratory motor control through real-time tracking with visuomotor perturbation. The proof-of-concept data demonstrate that the system produces stable, high-quality respiratory tracking data at 10~Hz and that participants can achieve precise control of their breathing to follow prescribed sinusoidal targets.
+We presented \textit{respyra}, an open-source toolbox for studying respiratory sensorimotor control through real-time tracking with visuomotor perturbation. A single-participant validation study across 48 trials and four sessions demonstrated that the system produces stable, high-quality respiratory tracking data and that the perturbation paradigm engages measurable sensorimotor adaptation processes.
 
-The visuomotor perturbation condition---in which the visual trace of breathing was amplified by a factor of 1.5 around the participant's center---reliably increased tracking error while remaining learnable. This finding parallels results from the visuomotor reaching literature, where cursor gain perturbations produce immediate performance costs followed by gradual adaptation \parencite{krakauer2019motor}. The observed improvement from the first to the third perturbed trial suggests that respiratory sensorimotor adaptation follows a similar trajectory, though systematic studies with larger samples are needed to characterize the time course and completeness of adaptation.
+The validation data support the interpretation that veridical and perturbed feedback conditions tap dissociable aspects of respiratory control. Under veridical feedback, the participant maintained stable tracking performance across all four sessions, indicating reliable baseline respiratory control. Under perturbation, performance showed a characteristic adaptation profile: initial learning across sessions (substantial cross-session savings from Session~1 to Session~2), followed by fatigue-related degradation in Sessions~3--4. Critically, the fatigue effect was selective---it impaired perturbed performance while sparing veridical tracking---suggesting that the two conditions place different demands on the respiratory control system. Veridical tracking reflects the ability to learn and maintain a visual-respiratory mapping, while perturbed tracking additionally requires remapping this relationship when sensory feedback is altered.
 
-The design choice to apply the perturbation exclusively to the visual trace---while preserving veridical target positioning, error computation, and color feedback---creates a clean dissociation between the sensory feedback channel and the motor control reference signal. This mirrors the logic of cursor rotation paradigms in reaching studies, where the visual feedback is altered but the task goal (reach to the target) remains unchanged. Future work could explore whether respiratory adaptation to visual gain perturbation shows hallmarks of implicit sensorimotor recalibration (e.g., aftereffects when returning to veridical feedback) versus explicit strategic compensation.
+The perturbation ratio---defined as perturbed visual MAE divided by veridical MAE---provides a normalized index of the cost of sensorimotor remapping, independent of baseline tracking ability. For group studies, this ratio offers a promising individual-differences metric: a participant with low veridical MAE and a low perturbation ratio demonstrates both good respiratory control and good sensorimotor flexibility, while high veridical MAE with a low ratio suggests poor control but intact adaptability. The U-shaped trajectory of the perturbation ratio across sessions (2.61 $\rightarrow$ 1.68 $\rightarrow$ 1.79 $\rightarrow$ 2.42) illustrates how fatigue can differentially affect remapping capacity, an effect that would be masked by examining raw performance alone.
+
+The visual gain perturbation increases tracking error through a control-theoretic mechanism. Under $2\times$ gain, every motor correction produces twice the expected visual displacement, effectively doubling the loop gain of the visuomotor control system. This amplifies motor noise in the visual domain, causes corrective movements to overshoot, and reduces the stability margin of the control loop---resulting in more oscillatory and less precise convergence on the target. The elevated RMSE/MAE ratio under perturbation ($M = 1.50$ versus 1.25 for veridical) supports this interpretation: perturbation produces intermittent large deviations rather than a uniform increase in error, consistent with overshooting correction dynamics rather than a simple scaling of tracking difficulty.
+
+The RMSE/MAE ratio proved informative as a secondary metric of control quality. While MAE captures the average magnitude of tracking error, the RMSE/MAE ratio distinguishes between steady, consistent errors (ratio near 1.253, the expected value for normally distributed errors) and intermittent large deviations (elevated ratio). This metric was particularly sensitive to the fatigue effects in Session~4, where the RMSE/MAE ratio for perturbed trials reached 1.72 with extreme kurtosis, even as mean MAE remained within a less dramatic range. The ratio also revealed breath-phase asymmetries that were not significant in MAE alone: under perturbation, inspiration produced significantly more heavy-tailed errors than expiration ($p = .002$), suggesting that the active inspiratory phase is more vulnerable to control instability under amplified feedback.
+
+The finding that inspiration was consistently harder to control than expiration aligns with known biomechanical asymmetries in respiratory control. Inspiration is an active muscular process (primarily diaphragmatic), while expiration at rest is largely passive (elastic recoil). Under visual gain perturbation, the active inspiratory phase may be more susceptible to overcorrection and motor noise amplification, producing the observed heavier-tailed error distribution.
 
 The toolbox addresses several practical challenges in respiratory psychophysics. The percentile-based calibration with saturation detection provides robust target scaling even when individual data contain outlier breaths or sensor artifacts. The non-blocking belt interface ensures that respiratory sampling does not disrupt PsychoPy's frame-locked timing. The modular architecture---separating belt I/O, display rendering, target generation, and data logging into independent components---facilitates extension to new experimental designs.
 
-Several limitations should be noted. First, the proof-of-concept data come from a single experienced participant (the developer), and performance may differ substantially in naive participants. Second, the current implementation uses a simple sinusoidal target; more complex waveforms (e.g., asymmetric inspiration/expiration ratios or naturalistic breathing patterns) may better capture the demands of real-world breathing regulation. Third, the 10~Hz sampling rate, while sufficient for tracking slow breathing patterns (\textasciitilde0.1~Hz), may limit the resolution of fine-grained error dynamics. Fourth, while the Vernier GDX-RB provides a reliable and affordable single-band force measurement, some applications may require more sophisticated respiratory monitoring such as dual-band respiratory inductance plethysmography (RIP) or spirometry; the toolbox's modular sensor interface is designed to accommodate such extensions in future versions.
+Several practical challenges also emerged during the validation study that highlight areas for future improvement. Session~1 produced an unusually large calibration amplitude because the participant breathed too deeply during range calibration, resulting in a target waveform that was difficult to sustain---particularly under the $2\times$ gain perturbation where the required breathing amplitude was halved. In Session~3, a tightened belt compressed the usable force range and produced sensations of air hunger (inability to exhale fully), degrading performance. These observations suggest that calibrating from comfortable normal breathing---rather than maximal range---and accounting for the gain factor when setting target amplitude may produce more ecologically valid operating ranges in future iterations.
 
-The respiratory tracking paradigm opens several directions for future research. Within the interoceptive framework, the task could be combined with measures of respiratory interoceptive sensitivity \parencite{nikolova2022respiratory} to investigate whether perceptual sensitivity predicts motor control precision. The perturbation conditions could be extended to study sensorimotor adaptation dynamics---including savings, interference, and transfer---using the well-developed theoretical toolkit from the motor learning literature. Finally, the framework could support investigations of breathing-based interventions by quantifying how accurately individuals can implement prescribed breathing patterns (e.g., paced slow breathing at 0.1~Hz) and how this accuracy relates to downstream physiological and psychological outcomes \parencite{gholamrezaei2021psychophysiological, luo2025effect}.
+Several limitations should be noted. First, the validation data come from a single experienced participant (the developer), and performance may differ substantially in naive participants. However, the 48-trial, four-session design provides substantially more evidence than a single proof-of-concept session, and the good split-half reliability (Spearman--Brown = .857) indicates that the task produces stable individual measurements. Second, the within-session fatigue effects (degraded perturbed performance in Sessions~3--4) complicate interpretation of the session effects, and future studies should include rest periods between sessions or spread sessions across multiple days. Third, the 10~Hz sampling rate, while sufficient for tracking slow breathing patterns ($\sim$0.1~Hz), may limit the resolution of fine-grained error dynamics. Fourth, while the Vernier GDX-RB provides a reliable and affordable single-band force measurement, some applications may require more sophisticated respiratory monitoring such as dual-band respiratory inductance plethysmography (RIP); the toolbox's modular sensor interface is designed to accommodate such extensions.
 
-\textit{respyra} is freely available at \url{https://github.com/embodied-computation-group/respyra} under an open-source license.
+The respiratory tracking paradigm opens several directions for future research. The dissociation between respiratory control ability (veridical MAE) and sensorimotor flexibility (perturbation ratio) provides a framework for individual-differences research. In group studies, the perturbation ratio could be correlated with measures of respiratory interoceptive sensitivity \parencite{nikolova2022respiratory} to investigate whether perceptual sensitivity to breathing predicts the capacity for sensorimotor remapping. Clinical populations with dysfunctional breathing patterns---including panic disorder, chronic hyperventilation, and chronic obstructive pulmonary disease---may show selective deficits in either baseline control or perturbation adaptation. The adaptation dynamics observed here (within-block learning, cross-session savings, fatigue effects) can be further characterized using the well-developed theoretical toolkit from the motor learning literature, including studies of savings, interference, and transfer \parencite{krakauer2019motor}. Finally, the framework could support investigations of breathing-based interventions by quantifying how accurately individuals can implement prescribed breathing patterns (e.g., paced slow breathing at 0.1~Hz) and how this accuracy relates to downstream physiological and psychological outcomes \parencite{gholamrezaei2021psychophysiological, luo2025effect}.
+
+\textit{respyra} is freely available at \url{https://github.com/embodied-computation-group/respyra} under an MIT license.
 
 \printbibliography
 

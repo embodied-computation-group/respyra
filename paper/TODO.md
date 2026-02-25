@@ -1,4 +1,4 @@
-# Paper 2: Validation Study TODO
+# Validation Study TODO (Toolkit Paper)
 
 ## Experiment Design
 

@@ -1,0 +1,25 @@
+Breath Phase Statistics — Validation Study (N=1, 48 trials)
+======================================================================
+
+Descriptive Statistics (Compensated MAE, Newtons)
+----------------------------------------------------------------------
+                         Inspiration      Expiration      Diff (E-I)
+Veridical            0.260 +/- 0.110   0.227 +/- 0.068   -0.033 +/- 0.093
+Perturbed (2x)       0.577 +/- 0.307   0.499 +/- 0.336   -0.078 +/- 0.314
+
+Paired t-tests: Expiration vs Inspiration (within condition)
+----------------------------------------------------------------------
+                            t   df        p        d
+Veridical              -1.718   23   0.0992   -0.358
+Perturbed (2x)         -1.215   23   0.2368   -0.253
+
+Factorial Effects (Condition x Phase)
+----------------------------------------------------------------------
+Condition (Pert vs Verid):  t=-4.954, p=0.000010
+Phase (Exp vs Insp):       t(47)=1.662, p=0.1031
+Condition x Phase:         t=-0.677, p=0.5020
+
+Phase Asymmetry x Session (Spearman rho)
+----------------------------------------------------------------------
+Veridical            rho=+0.280, p=0.1852
+Perturbed (2x)       rho=-0.081, p=0.7076
