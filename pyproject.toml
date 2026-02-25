@@ -49,7 +49,7 @@ respyra-plot = "respyra.utils.vis.plot_session:main"
 respyra-screenshots = "respyra.scripts.generate_screenshots:main"
 
 [project.urls]
-Homepage = "https://github.com/embodied-computation-group/respyra"
+Homepage = "https://embodied-computation-group.github.io/respyra/"
 Documentation = "https://embodied-computation-group.github.io/respyra/"
 Repository = "https://github.com/embodied-computation-group/respyra"
 

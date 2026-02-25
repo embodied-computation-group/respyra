@@ -8,7 +8,7 @@
 
 **A general-purpose respiratory tracking toolbox for interoception research**
 
-[![PyPI](https://img.shields.io/pypi/v/respyra?color=blue)](https://pypi.org/project/respyra/)
+[![PyPI](https://img.shields.io/pypi/v/respyra)](https://pypi.org/project/respyra/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](https://github.com/embodied-computation-group/respyra/blob/main/LICENSE)
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue)](https://www.python.org/downloads/)
 [![GitHub](https://img.shields.io/badge/GitHub-source-black?logo=github)](https://github.com/embodied-computation-group/respyra)

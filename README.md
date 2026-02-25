@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/embodied-computation-group/respyra/actions/workflows/test.yml"><img alt="Tests" src="https://github.com/embodied-computation-group/respyra/actions/workflows/test.yml/badge.svg"></a>
-  <a href="https://pypi.org/project/respyra/"><img alt="PyPI" src="https://img.shields.io/pypi/v/respyra?color=blue"></a>
+  <a href="https://pypi.org/project/respyra/"><img alt="PyPI" src="https://img.shields.io/pypi/v/respyra"></a>
   <a href="https://embodied-computation-group.github.io/respyra/"><img alt="Docs" src="https://img.shields.io/badge/docs-online-brightgreen"></a>
   <a href="https://github.com/embodied-computation-group/respyra/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow"></a>
   <a href="https://www.python.org/downloads/"><img alt="Python 3.10" src="https://img.shields.io/badge/python-3.10-blue"></a>
