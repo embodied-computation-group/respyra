@@ -44,7 +44,6 @@ import logging
 import queue
 import threading
 import time
-from typing import Optional
 
 from respyra.core.gdx import gdx as _gdx_module
 
@@ -97,14 +96,14 @@ class BreathBelt:
         self._sensors = list(sensors)
 
         # Internals -- populated by start()
-        self._gdx: Optional[_gdx_module.gdx] = None
+        self._gdx: _gdx_module.gdx | None = None
         self._queue: queue.Queue[tuple[float, float]] = queue.Queue()
         self._stop_event = threading.Event()
-        self._thread: Optional[threading.Thread] = None
+        self._thread: threading.Thread | None = None
         self._started = False
 
         # Error reporting from the reader thread
-        self._error: Optional[BaseException] = None
+        self._error: BaseException | None = None
         self._error_lock = threading.Lock()
 
     # ------------------------------------------------------------------
@@ -141,9 +140,7 @@ class BreathBelt:
             raise
         except Exception as exc:
             self._cleanup_gdx()
-            raise BreathBeltError(
-                f"Failed to initialise belt: {exc}"
-            ) from exc
+            raise BreathBeltError(f"Failed to initialise belt: {exc}") from exc
 
         self._stop_event.clear()
         self._error = None
@@ -157,7 +154,7 @@ class BreathBelt:
         self._thread.start()
         logger.info("Reader thread started.")
 
-    def get_latest(self) -> Optional[tuple[float, float]]:
+    def get_latest(self) -> tuple[float, float] | None:
         """Return the most recent sample, discarding older ones.
 
         Returns
@@ -251,7 +248,7 @@ class BreathBelt:
             return self._error is not None
 
     @property
-    def error(self) -> Optional[BaseException]:
+    def error(self) -> BaseException | None:
         """The exception recorded by the reader thread, or None."""
         with self._error_lock:
             return self._error
@@ -260,7 +257,7 @@ class BreathBelt:
     # Context manager
     # ------------------------------------------------------------------
 
-    def __enter__(self) -> "BreathBelt":
+    def __enter__(self) -> BreathBelt:
         self.start()
         return self
 
@@ -309,9 +306,7 @@ class BreathBelt:
                 measurements = self._gdx.read()
                 if measurements is None:
                     # Device disconnected or buffer empty -- treat as fatal.
-                    raise BreathBeltError(
-                        "gdx.read() returned None (device disconnected?)."
-                    )
+                    raise BreathBeltError("gdx.read() returned None (device disconnected?).")
 
                 timestamp = time.time()
                 force_value = measurements[0]
@@ -348,6 +343,4 @@ class BreathBelt:
         """Raise if the reader thread has encountered an error."""
         with self._error_lock:
             if self._error is not None:
-                raise BreathBeltError(
-                    f"Reader thread failed: {self._error}"
-                ) from self._error
+                raise BreathBeltError(f"Reader thread failed: {self._error}") from self._error

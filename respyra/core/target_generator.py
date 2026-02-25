@@ -21,13 +21,13 @@ Usage
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Sequence
-
 
 # ------------------------------------------------------------------ #
 #  Data definitions                                                    #
 # ------------------------------------------------------------------ #
+
 
 @dataclass
 class SegmentDef:
@@ -81,6 +81,7 @@ class ConditionDef:
 #  Baseline calibration                                                #
 # ------------------------------------------------------------------ #
 
+
 def calibrate_from_baseline(
     force_samples: Sequence[float],
     min_amplitude: float = 0.5,
@@ -118,6 +119,7 @@ def calibrate_from_baseline(
 # ------------------------------------------------------------------ #
 #  Target generator                                                    #
 # ------------------------------------------------------------------ #
+
 
 class TargetGenerator:
     """Real-time sinusoidal breathing-target generator.

@@ -1,3 +1,7 @@
+# Copyright (c) 2018 Vernier Software and Technology
+# Licensed under the BSD 3-Clause License — see LICENSE in this directory.
+# Original source: https://github.com/VernierST/godirect-examples
+#
 # To use Go Direct sensors with Python 3 you must install the godirect module
 # with the command: pip3 install godirect
 

@@ -35,6 +35,6 @@ All of the examples in the godirect-examples repository use the `gdx` module, ex
 
 ## License
 
-All of the content in this repository is available under the terms of the [BSD 3-Clause License](../../LICENSE).
+The gdx module is copyright (c) 2018 Vernier Software and Technology, available under the [BSD 3-Clause License](LICENSE). Original source: [VernierST/godirect-examples](https://github.com/VernierST/godirect-examples).
 
 Vernier products are designed for educational use. Our products are not designed nor are they recommended for any industrial, medical, or commercial process such as life support, patient diagnosis, control of a manufacturing process, or industrial testing of any kind.

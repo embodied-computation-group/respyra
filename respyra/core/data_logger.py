@@ -19,8 +19,8 @@ from __future__ import annotations
 
 import csv
 import os
+from collections.abc import Sequence
 from datetime import datetime
-from typing import Optional, Sequence
 
 # ------------------------------------------------------------------ #
 #  Default column schema                                              #
@@ -91,7 +91,7 @@ class DataLogger:
     def __init__(
         self,
         filepath: str,
-        columns: Optional[Sequence[str]] = None,
+        columns: Sequence[str] | None = None,
     ) -> None:
         self.filepath: str = filepath
         self.columns: list[str] = list(columns) if columns else list(DEFAULT_COLUMNS)
@@ -119,7 +119,7 @@ class DataLogger:
             init (or :data:`DEFAULT_COLUMNS`).  Unrecognised keys are
             silently ignored; missing columns are written as empty strings.
         """
-        row = [kwargs.get(col, '') for col in self.columns]
+        row = [kwargs.get(col, "") for col in self.columns]
         self._writer.writerow(row)
         self._file.flush()
 
@@ -127,10 +127,10 @@ class DataLogger:
         self,
         timestamp: float,
         frame: int,
-        force_n: Optional[float] = None,
-        event_type: Optional[str] = None,
-        key: Optional[str] = None,
-        rt: Optional[float] = None,
+        force_n: float | None = None,
+        event_type: str | None = None,
+        key: str | None = None,
+        rt: float | None = None,
     ) -> None:
         """Append a single row and flush to disk.
 
@@ -163,7 +163,7 @@ class DataLogger:
 
     # ---- context manager ------------------------------------------ #
 
-    def __enter__(self) -> "DataLogger":
+    def __enter__(self) -> DataLogger:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:

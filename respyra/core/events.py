@@ -29,7 +29,7 @@ def check_keys(key_list=None, clock=None):
     return [(k, t) for k, t in keys]
 
 
-def wait_for_key(key_list=None, clock=None, max_wait=float('inf')):
+def wait_for_key(key_list=None, clock=None, max_wait=float("inf")):
     """Block until a key is pressed (or *max_wait* seconds elapse).
 
     Parameters
@@ -71,8 +71,10 @@ def record_event(event_log, event_type, timestamp, **data):
     **data
         Arbitrary extra fields merged into the record.
     """
-    event_log.append({
-        'event_type': event_type,
-        'timestamp': timestamp,
-        **data,
-    })
+    event_log.append(
+        {
+            "event_type": event_type,
+            "timestamp": timestamp,
+            **data,
+        }
+    )

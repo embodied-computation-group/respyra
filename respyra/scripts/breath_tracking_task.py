@@ -22,8 +22,10 @@ from respyra.configs.breath_tracking import (
     BELT_PERIOD_MS,
     BG_COLOR,
     CONDITIONS,
+    CONNECTION,
     COUNTDOWN_DURATION_SEC,
     DATA_COLUMNS,
+    DEVICE_TO_OPEN,
     DOT_COLOR_BAD,
     DOT_COLOR_GOOD,
     DOT_COLOR_MID,
@@ -34,18 +36,15 @@ from respyra.configs.breath_tracking import (
     ERROR_THRESHOLD_MID_N,
     ERROR_THRESHOLD_N,
     ESCAPE_KEY,
+    FORCE_SATURATION_HI,
+    FORCE_SATURATION_LO,
     FULLSCR,
     MONITOR_DISTANCE_CM,
     MONITOR_NAME,
     MONITOR_SIZE_PIX,
     MONITOR_WIDTH_CM,
     N_REPS,
-    TRIAL_METHOD,
     OUTPUT_DIR,
-    CONNECTION,
-    DEVICE_TO_OPEN,
-    FORCE_SATURATION_HI,
-    FORCE_SATURATION_LO,
     RANGE_CAL_DURATION_SEC,
     RANGE_CAL_PERCENTILE_HI,
     RANGE_CAL_PERCENTILE_LO,
@@ -56,16 +55,17 @@ from respyra.configs.breath_tracking import (
     TRACE_RECT,
     TRACE_Y_RANGE,
     TRACKING_DURATION_SEC,
+    TRIAL_METHOD,
     UNITS,
 )
 from respyra.core.breath_belt import BreathBelt, BreathBeltError
 from respyra.core.data_logger import DataLogger, create_session_file
 from respyra.core.target_generator import TargetGenerator, calibrate_from_baseline
 
-
 # ======================================================================
 # Helpers
 # ======================================================================
+
 
 def _apply_gain(buffer, gain: float, center: float) -> list[float]:
     """Return a perturbed copy of the buffer for display.
@@ -89,8 +89,8 @@ def _graded_dot_color(error: float, max_error: float) -> tuple[float, float, flo
     falloff so small errors already shift noticeably toward yellow.
     """
     t = min(abs(error) / max_error, 1.0)  # 0 = perfect, 1 = worst
-    t = t ** 0.5                           # sharpen: small errors shift faster
-    hue = (1.0 - t) / 3.0                 # 0.33 (green) → 0.0 (red)
+    t = t**0.5  # sharpen: small errors shift faster
+    hue = (1.0 - t) / 3.0  # 0.33 (green) → 0.0 (red)
     r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
     # Convert [0,1] RGB to PsychoPy [-1,1]
     return (r * 2 - 1, g * 2 - 1, b * 2 - 1)
@@ -99,6 +99,7 @@ def _graded_dot_color(error: float, max_error: float) -> tuple[float, float, flo
 # ======================================================================
 # Main experiment
 # ======================================================================
+
 
 def _connect_belt():
     """Connect to the breath belt before PsychoPy is imported.
@@ -122,12 +123,12 @@ def _connect_belt():
         print(f"[belt] Found device via {CONNECTION.upper()}. Connected and streaming.")
     except BreathBeltError as exc:
         print(f"[belt] {CONNECTION.upper()} failed: {exc}")
-        if CONNECTION == 'ble':
+        if CONNECTION == "ble":
             print("[belt] Falling back to USB...")
             print("[belt] Searching for device via USB...")
             try:
                 belt = BreathBelt(
-                    connection='usb',
+                    connection="usb",
                     device_to_open=None,
                     period_ms=BELT_PERIOD_MS,
                     sensors=BELT_CHANNELS,
@@ -137,7 +138,7 @@ def _connect_belt():
             except BreathBeltError as usb_exc:
                 print(f"[belt] USB also failed: {usb_exc}")
                 print("[belt] No device found. Exiting.")
-                raise SystemExit(1)
+                raise SystemExit(1) from usb_exc
     return belt
 
 
@@ -152,25 +153,26 @@ def run_experiment():
     # 2. Import PsychoPy (safe now that BLE scanning is done)
     # ------------------------------------------------------------------
     from psychopy import core, data, gui, visual
+
     from respyra.core.display import SignalTrace, create_monitor, create_window, show_text_and_wait
     from respyra.core.events import check_keys
 
     # ------------------------------------------------------------------
     # 3. Participant info dialog
     # ------------------------------------------------------------------
-    exp_info = {'participant': '', 'session': '001'}
+    exp_info = {"participant": "", "session": "001"}
     dlg = gui.DlgFromDict(
         exp_info,
-        title='Breath Tracking Task',
-        order=['participant', 'session'],
+        title="Breath Tracking Task",
+        order=["participant", "session"],
     )
     if not dlg.OK:
         belt.stop()
         core.quit()
         return
 
-    participant = exp_info['participant']
-    session = exp_info['session']
+    participant = exp_info["participant"]
+    session = exp_info["session"]
 
     # ------------------------------------------------------------------
     # 4. Create session file
@@ -223,8 +225,8 @@ def run_experiment():
 
     phase_title = visual.TextStim(
         win,
-        text='',
-        color='#aaaaaa',
+        text="",
+        color="#aaaaaa",
         height=0.05,
         pos=(0.0, 0.45),
         bold=True,
@@ -232,8 +234,8 @@ def run_experiment():
 
     status_text = visual.TextStim(
         win,
-        text='',
-        color='white',
+        text="",
+        color="white",
         height=0.03,
         pos=(0.0, trace_bottom - 0.06),
         wrapWidth=1.5,
@@ -241,8 +243,8 @@ def run_experiment():
 
     countdown_text = visual.TextStim(
         win,
-        text='',
-        color='white',
+        text="",
+        color="white",
         height=0.15,
         pos=(0.0, trace_center_y),
     )
@@ -265,7 +267,7 @@ def run_experiment():
     # 8. Build trial order with TrialHandler
     # ------------------------------------------------------------------
     condition_map = {c.name: c for c in CONDITIONS}
-    trial_list = [{'condition': c.name} for c in CONDITIONS]
+    trial_list = [{"condition": c.name} for c in CONDITIONS]
     trials = data.TrialHandler(
         trialList=trial_list,
         nReps=N_REPS,
@@ -295,7 +297,7 @@ def run_experiment():
             "  3. Tracking -- follow the dot (30 s)\n\n"
             "Press SPACE to begin."
         ),
-        key_list=['space', ESCAPE_KEY],
+        key_list=["space", ESCAPE_KEY],
     )
 
     # ==================================================================
@@ -313,7 +315,7 @@ def run_experiment():
                 "This helps us set the right difficulty level.\n\n"
                 "Press SPACE when ready."
             ),
-            key_list=['space', ESCAPE_KEY],
+            key_list=["space", ESCAPE_KEY],
         )
 
         escaped = False
@@ -342,17 +344,15 @@ def run_experiment():
                         timestamp=round(elapsed, 4),
                         frame=frame_count,
                         force_n=round(force, 4),
-                        phase='range_cal',
-                        condition='',
+                        phase="range_cal",
+                        condition="",
                         trial_num=0,
                         feedback_gain=1.0,
                     )
 
                 # Draw
                 remaining = max(0, RANGE_CAL_DURATION_SEC - elapsed)
-                status_text.text = (
-                    f"Comfortable deep breaths -- {remaining:.0f}s remaining"
-                )
+                status_text.text = f"Comfortable deep breaths -- {remaining:.0f}s remaining"
 
                 trace_border.draw()
                 trace.draw(list(buffer))
@@ -375,12 +375,12 @@ def run_experiment():
 
             # Saturation detection (Rec 2): warn if sensor limits hit
             saturated = any(
-                f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI
-                for f in range_cal_forces
+                f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI for f in range_cal_forces
             )
             if saturated:
                 n_sat = sum(
-                    1 for f in range_cal_forces
+                    1
+                    for f in range_cal_forces
                     if f <= FORCE_SATURATION_LO or f >= FORCE_SATURATION_HI
                 )
                 print(
@@ -398,7 +398,7 @@ def run_experiment():
                         "Results may still be usable.\n\n"
                         "Press SPACE to continue."
                     ),
-                    key_list=['space', ESCAPE_KEY],
+                    key_list=["space", ESCAPE_KEY],
                 )
                 if key == ESCAPE_KEY:
                     escaped = True
@@ -447,7 +447,7 @@ def run_experiment():
         # 11. Trial loop
         # ==============================================================
         for trial in trials:
-            condition_name = trial['condition']
+            condition_name = trial["condition"]
             condition_def = condition_map[condition_name]
             feedback_gain = condition_def.feedback_gain
             trial_num = trials.thisN + 1
@@ -463,7 +463,7 @@ def run_experiment():
                     f"Condition: {condition_name}\n\n"
                     "Press SPACE when ready."
                 ),
-                key_list=['space', ESCAPE_KEY],
+                key_list=["space", ESCAPE_KEY],
             )
             if key == ESCAPE_KEY:
                 print("Escape pressed -- ending experiment.")
@@ -495,7 +495,7 @@ def run_experiment():
                         timestamp=round(elapsed, 4),
                         frame=frame_count,
                         force_n=round(force, 4),
-                        phase='baseline',
+                        phase="baseline",
                         condition=condition_name,
                         trial_num=trial_num,
                         feedback_gain=1.0,
@@ -503,9 +503,7 @@ def run_experiment():
 
                 # Draw
                 remaining = max(0, BASELINE_DURATION_SEC - elapsed)
-                status_text.text = (
-                    f"Breathe naturally -- {remaining:.0f}s remaining"
-                )
+                status_text.text = f"Breathe naturally -- {remaining:.0f}s remaining"
 
                 trace_border.draw()
                 trace.draw(list(buffer))
@@ -550,8 +548,8 @@ def run_experiment():
             # the first segment's frequency to extend the waveform backwards
             # (avoids cross-segment wrapping artifacts).  Neutral color
             # signals that error is not yet being recorded.
-            target_dot.fillColor = '#aaaaaa'
-            target_dot.lineColor = '#aaaaaa'
+            target_dot.fillColor = "#aaaaaa"
+            target_dot.lineColor = "#aaaaaa"
             y_span = y_max - y_min
             current_force = buffer[-1] if buffer else range_center
             first_freq = condition_def.segments[0].freq_hz
@@ -568,7 +566,7 @@ def run_experiment():
                         timestamp=round(elapsed, 4),
                         frame=frame_count,
                         force_n=round(force, 4),
-                        phase='countdown',
+                        phase="countdown",
                         condition=condition_name,
                         trial_num=trial_num,
                         feedback_gain=feedback_gain,
@@ -587,9 +585,13 @@ def run_experiment():
                 if y_span == 0:
                     normed = 0.5
                 else:
-                    normed = float(np.clip(
-                        (dot_force - y_min) / y_span, 0.0, 1.0,
-                    ))
+                    normed = float(
+                        np.clip(
+                            (dot_force - y_min) / y_span,
+                            0.0,
+                            1.0,
+                        )
+                    )
                 dot_y = trace_bottom + normed * (trace_top - trace_bottom)
                 target_dot.pos = (trace_right + DOT_X_OFFSET, dot_y)
 
@@ -646,7 +648,7 @@ def run_experiment():
                         force_n=round(force, 4),
                         target_force=round(target_force, 4),
                         error=round(error, 4),
-                        phase='tracking',
+                        phase="tracking",
                         condition=condition_name,
                         trial_num=trial_num,
                         feedback_gain=feedback_gain,
@@ -667,9 +669,9 @@ def run_experiment():
                 # Dot color feedback
                 if latest_force is not None:
                     current_error = abs(target_force - latest_force)
-                    if DOT_FEEDBACK_MODE == 'graded':
+                    if DOT_FEEDBACK_MODE == "graded":
                         color = _graded_dot_color(current_error, DOT_GRADED_MAX_ERROR_N)
-                    elif DOT_FEEDBACK_MODE == 'trinary':
+                    elif DOT_FEEDBACK_MODE == "trinary":
                         if current_error <= ERROR_THRESHOLD_N:
                             color = DOT_COLOR_GOOD
                         elif current_error <= ERROR_THRESHOLD_MID_N:
@@ -677,14 +679,14 @@ def run_experiment():
                         else:
                             color = DOT_COLOR_BAD
                     else:  # binary (default)
-                        color = DOT_COLOR_GOOD if current_error <= ERROR_THRESHOLD_N else DOT_COLOR_BAD
+                        color = (
+                            DOT_COLOR_GOOD if current_error <= ERROR_THRESHOLD_N else DOT_COLOR_BAD
+                        )
                     target_dot.fillColor = color
                     target_dot.lineColor = color
 
                 remaining = max(0, TRACKING_DURATION_SEC - tracking_t)
-                status_text.text = (
-                    f"Follow the dot -- {remaining:.0f}s remaining"
-                )
+                status_text.text = f"Follow the dot -- {remaining:.0f}s remaining"
 
                 trace_border.draw()
                 trace.draw(_apply_gain(buffer, feedback_gain, range_center))
@@ -709,7 +711,7 @@ def run_experiment():
             if trial_errors:
                 mean_abs_error = sum(trial_errors) / len(trial_errors)
             else:
-                mean_abs_error = float('nan')
+                mean_abs_error = float("nan")
 
             all_trial_errors.append(mean_abs_error)
 
@@ -720,7 +722,7 @@ def run_experiment():
                     f"Mean tracking error: {mean_abs_error:.2f} N\n\n"
                     "Press SPACE to continue."
                 ),
-                key_list=['space', ESCAPE_KEY],
+                key_list=["space", ESCAPE_KEY],
             )
             if key == ESCAPE_KEY:
                 print("Escape pressed at feedback.")
@@ -733,7 +735,7 @@ def run_experiment():
             if all_trial_errors:
                 overall_mean = sum(all_trial_errors) / len(all_trial_errors)
             else:
-                overall_mean = float('nan')
+                overall_mean = float("nan")
 
             show_text_and_wait(
                 win,
@@ -743,7 +745,7 @@ def run_experiment():
                     f"Data saved to:\n{filepath}\n\n"
                     "Press SPACE to exit."
                 ),
-                key_list=['space', ESCAPE_KEY],
+                key_list=["space", ESCAPE_KEY],
             )
 
     # ==================================================================
@@ -764,5 +766,5 @@ def run_experiment():
         core.quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_experiment()

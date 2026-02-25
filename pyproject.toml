@@ -34,6 +34,7 @@ dependencies = [
 
 [project.optional-dependencies]
 vis = ["pandas", "matplotlib"]
+dev = ["ruff>=0.9"]
 docs = [
     "sphinx>=7.3",
     "python-docs-theme>=2025.1",
@@ -54,3 +55,14 @@ Repository = "https://github.com/embodied-computation-group/respyra"
 
 [tool.hatch.version]
 path = "respyra/__init__.py"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 99
+exclude = ["respyra/core/gdx/"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+"respyra/configs/*.py" = ["E501"]

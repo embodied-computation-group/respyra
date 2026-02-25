@@ -201,3 +201,5 @@ Full documentation is available at **[embodied-computation-group.github.io/respy
 ## License
 
 [MIT](LICENSE)
+
+The `respyra/core/gdx/` module is derived from [VernierST/godirect-examples](https://github.com/VernierST/godirect-examples) and is licensed under the [BSD 3-Clause License](respyra/core/gdx/LICENSE).

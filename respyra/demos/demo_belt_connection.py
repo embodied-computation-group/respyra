@@ -21,14 +21,14 @@ def main():
     belt = None
     try:
         print("Attempting BLE connection (proximity pairing)...")
-        belt = BreathBelt(connection='ble', device_to_open='proximity_pairing')
+        belt = BreathBelt(connection="ble", device_to_open="proximity_pairing")
         belt.start()
         print("BLE connection succeeded.")
     except BreathBeltError as exc:
         print(f"BLE failed: {exc}")
         print("Falling back to USB...")
         try:
-            belt = BreathBelt(connection='usb', device_to_open=None)
+            belt = BreathBelt(connection="usb", device_to_open=None)
             belt.start()
             print("USB connection succeeded.")
         except BreathBeltError as usb_exc:
@@ -66,5 +66,5 @@ def main():
         print("Belt stopped. Done.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

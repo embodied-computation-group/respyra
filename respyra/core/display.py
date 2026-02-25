@@ -7,16 +7,17 @@ pre-created stimuli).  Also contains :class:`SignalTrace`, a pre-allocated
 and :func:`draw_signal_trace`, a convenience wrapper with automatic caching.
 """
 
-from psychopy import monitors, visual, event
 import numpy as np
-
+from psychopy import event, monitors, visual
 
 # ---------------------------------------------------------------------------
 # Monitor profile
 # ---------------------------------------------------------------------------
 
-def create_monitor(name: str, width_cm: float, distance_cm: float,
-                   size_pix: tuple[int, int]) -> monitors.Monitor:
+
+def create_monitor(
+    name: str, width_cm: float, distance_cm: float, size_pix: tuple[int, int]
+) -> monitors.Monitor:
     """Create, configure, and save a PsychoPy monitor profile.
 
     Parameters
@@ -46,8 +47,14 @@ def create_monitor(name: str, width_cm: float, distance_cm: float,
 # Window
 # ---------------------------------------------------------------------------
 
-def create_window(fullscr: bool = False, monitor=None, units: str = 'height',
-                  color: tuple = (-1, -1, -1), **kwargs) -> visual.Window:
+
+def create_window(
+    fullscr: bool = False,
+    monitor=None,
+    units: str = "height",
+    color: tuple = (-1, -1, -1),
+    **kwargs,
+) -> visual.Window:
     """Create a PsychoPy window with sensible project defaults.
 
     Parameters
@@ -80,7 +87,7 @@ def create_window(fullscr: bool = False, monitor=None, units: str = 'height',
         monitor=monitor,
         units=units,
         color=color,
-        colorSpace='rgb',
+        colorSpace="rgb",
         **kwargs,
     )
     return win
@@ -90,8 +97,10 @@ def create_window(fullscr: bool = False, monitor=None, units: str = 'height',
 # Text display
 # ---------------------------------------------------------------------------
 
-def show_text_and_wait(win: visual.Window, text: str, key_list: list[str] | None = None,
-                      color: str | tuple = 'white') -> str:
+
+def show_text_and_wait(
+    win: visual.Window, text: str, key_list: list[str] | None = None, color: str | tuple = "white"
+) -> str:
     """Draw a text screen and block until the participant presses a key.
 
     Parameters
@@ -110,7 +119,7 @@ def show_text_and_wait(win: visual.Window, text: str, key_list: list[str] | None
         The key that was pressed.
     """
     if key_list is None:
-        key_list = ['space']
+        key_list = ["space"]
 
     msg = visual.TextStim(
         win,
@@ -118,7 +127,7 @@ def show_text_and_wait(win: visual.Window, text: str, key_list: list[str] | None
         color=color,
         height=0.04,
         wrapWidth=1.5,
-        alignText='center',
+        alignText="center",
     )
 
     event.clearEvents()
@@ -132,6 +141,7 @@ def show_text_and_wait(win: visual.Window, text: str, key_list: list[str] | None
 # ---------------------------------------------------------------------------
 # Real-time signal trace
 # ---------------------------------------------------------------------------
+
 
 class SignalTrace:
     """Pre-created ShapeStim that renders a scrolling waveform.
@@ -154,8 +164,14 @@ class SignalTrace:
         Line width in pixels.
     """
 
-    def __init__(self, win, trace_rect=(-0.8, -0.3, 0.8, 0.3),
-                 y_range=(0, 50), color='green', line_width=2.0):
+    def __init__(
+        self,
+        win,
+        trace_rect=(-0.8, -0.3, 0.8, 0.3),
+        y_range=(0, 50),
+        color="green",
+        line_width=2.0,
+    ):
         self.win = win
         self.left, self.bottom, self.right, self.top = trace_rect
         self.y_min, self.y_max = y_range
@@ -204,9 +220,12 @@ class SignalTrace:
         self._shape.draw()
 
 
-def draw_signal_trace(win, data_points, y_range=(0, 50),
-                      trace_rect=(-0.8, -0.3, 0.8, 0.3), color='green',
-                      _cache={}):
+_signal_trace_cache: dict = {}
+
+
+def draw_signal_trace(
+    win, data_points, y_range=(0, 50), trace_rect=(-0.8, -0.3, 0.8, 0.3), color="green"
+):
     """Convenience function: draw a signal trace on *win* this frame.
 
     Internally caches a :class:`SignalTrace` per window so the ShapeStim
@@ -225,15 +244,13 @@ def draw_signal_trace(win, data_points, y_range=(0, 50),
         Line color.
     """
     cache_key = id(win)
-    cached = _cache.get(cache_key)
+    cached = _signal_trace_cache.get(cache_key)
 
     # Recreate if the visual parameters changed
-    if (cached is None
-            or cached._y_cfg != (y_range, trace_rect, color)):
-        trace = SignalTrace(win, trace_rect=trace_rect,
-                            y_range=y_range, color=color)
+    if cached is None or cached._y_cfg != (y_range, trace_rect, color):
+        trace = SignalTrace(win, trace_rect=trace_rect, y_range=y_range, color=color)
         trace._y_cfg = (y_range, trace_rect, color)
-        _cache[cache_key] = trace
+        _signal_trace_cache[cache_key] = trace
         cached = trace
 
     cached.draw(data_points)

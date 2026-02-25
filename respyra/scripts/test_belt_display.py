@@ -9,12 +9,13 @@ Run from the project root:
     python -m respyra.scripts.test_belt_display
 """
 
+import contextlib
 from collections import deque
 
 from respyra.configs.test_experiment import (
-    BG_COLOR,
     BELT_CHANNELS,
     BELT_PERIOD_MS,
+    BG_COLOR,
     CONNECTION,
     DEVICE_TO_OPEN,
     ESCAPE_KEY,
@@ -35,10 +36,10 @@ from respyra.configs.test_experiment import (
 from respyra.core.breath_belt import BreathBelt, BreathBeltError
 from respyra.core.data_logger import DataLogger, create_session_file
 
-
 # ======================================================================
 # Setup
 # ======================================================================
+
 
 def _connect_belt():
     """Connect to the breath belt before PsychoPy is imported.
@@ -62,12 +63,12 @@ def _connect_belt():
         print(f"[belt] Found device via {CONNECTION.upper()}. Connected and streaming.")
     except BreathBeltError as exc:
         print(f"[belt] {CONNECTION.upper()} failed: {exc}")
-        if CONNECTION == 'ble':
+        if CONNECTION == "ble":
             print("[belt] Falling back to USB...")
             print("[belt] Searching for device via USB...")
             try:
                 belt = BreathBelt(
-                    connection='usb',
+                    connection="usb",
                     device_to_open=None,
                     period_ms=BELT_PERIOD_MS,
                     sensors=BELT_CHANNELS,
@@ -77,7 +78,7 @@ def _connect_belt():
             except BreathBeltError as usb_exc:
                 print(f"[belt] USB also failed: {usb_exc}")
                 print("[belt] No device found. Exiting.")
-                raise SystemExit(1)
+                raise SystemExit(1) from usb_exc
     return belt
 
 
@@ -92,25 +93,26 @@ def run_experiment():
     # 2. Import PsychoPy (safe now that BLE scanning is done)
     # ------------------------------------------------------------------
     from psychopy import core, gui, visual
+
     from respyra.core.display import SignalTrace, create_monitor, create_window
     from respyra.core.events import check_keys
 
     # ------------------------------------------------------------------
     # 3. Participant info dialog
     # ------------------------------------------------------------------
-    exp_info = {'participant': '', 'session': '001'}
+    exp_info = {"participant": "", "session": "001"}
     dlg = gui.DlgFromDict(
         exp_info,
-        title='Test Belt Display',
-        order=['participant', 'session'],
+        title="Test Belt Display",
+        order=["participant", "session"],
     )
     if not dlg.OK:
         belt.stop()
         core.quit()
         return
 
-    participant = exp_info['participant']
-    session = exp_info['session']
+    participant = exp_info["participant"]
+    session = exp_info["session"]
 
     # ------------------------------------------------------------------
     # 4. Create session file
@@ -150,8 +152,8 @@ def run_experiment():
 
     status_text = visual.TextStim(
         win,
-        text='',
-        color='white',
+        text="",
+        color="white",
         height=0.03,
         pos=(0.0, -0.42),
         wrapWidth=1.5,
@@ -161,7 +163,7 @@ def run_experiment():
     marker_indicator = visual.Circle(
         win,
         radius=0.02,
-        fillColor='red',
+        fillColor="red",
         pos=(0.85, 0.42),
     )
 
@@ -176,6 +178,7 @@ def run_experiment():
     # Instruction phase
     # ------------------------------------------------------------------
     from respyra.core.display import show_text_and_wait
+
     show_text_and_wait(
         win,
         text=(
@@ -184,7 +187,7 @@ def run_experiment():
             "Press ESCAPE to end.\n\n"
             "Press SPACE to begin."
         ),
-        key_list=['space'],
+        key_list=["space"],
     )
 
     # Reset clock after instructions so elapsed time starts at 0
@@ -201,7 +204,7 @@ def run_experiment():
 
             # -- Drain new samples from the belt --
             new_samples = belt.get_all()
-            for timestamp, force in new_samples:
+            for _timestamp, force in new_samples:
                 buffer.append(force)
                 data_logger.log_sample(
                     timestamp=elapsed,
@@ -228,7 +231,7 @@ def run_experiment():
                     data_logger.log_sample(
                         timestamp=elapsed,
                         frame=frame_count,
-                        event_type='keypress',
+                        event_type="keypress",
                         key=key,
                         rt=rt,
                     )
@@ -240,9 +243,7 @@ def run_experiment():
                 marker_flash_frames -= 1
 
             # -- Update and draw status text --
-            status_text.text = (
-                f"Time: {elapsed:.0f}s  |  Presses: {press_count}"
-            )
+            status_text.text = f"Time: {elapsed:.0f}s  |  Presses: {press_count}"
             status_text.draw()
 
             # -- Flip --
@@ -262,7 +263,8 @@ def run_experiment():
         data_logger.close()
 
         # End screen
-        try:
+        with contextlib.suppress(Exception):
+            # If the window is already broken, just print to console
             show_text_and_wait(
                 win,
                 text=(
@@ -271,11 +273,8 @@ def run_experiment():
                     f"Total presses: {press_count}\n\n"
                     f"Press SPACE to exit."
                 ),
-                key_list=['space'],
+                key_list=["space"],
             )
-        except Exception:
-            # If the window is already broken, just print to console
-            pass
 
         print(f"Data saved to: {filepath}")
         print(f"Total button presses: {press_count}")
@@ -285,5 +284,5 @@ def run_experiment():
         core.quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_experiment()
