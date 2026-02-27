@@ -11,6 +11,7 @@ docs/_build/
 .coverage
 .claude/
 CLAUDE.md
+local/
 
 # LaTeX build artifacts
 paper/*.aux

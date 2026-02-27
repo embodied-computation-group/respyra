@@ -28,7 +28,7 @@ respyra is a Python toolbox that integrates a [Vernier Go Direct Respiration Bel
 - **Post-session visualization** — 6-panel summary figure for quick data quality checks
 - **Non-blocking belt I/O** — background thread + queue architecture keeps PsychoPy's frame loop smooth
 
-For the full scientific background and validation data, see the [accompanying paper](https://github.com/embodied-computation-group/respyra/tree/main/paper).
+For the full scientific background and validation data, see the [accompanying preprint](https://osf.io/preprints/psyarxiv/wjuce_v1).
 
 ## Getting started
 
@@ -126,6 +126,12 @@ Development setup, testing, linting, and pull requests
 :::
 
 ::::
+
+## Citation
+
+If you use respyra in your research, please cite the preprint:
+
+> Allen, M. (2026). respyra: A General-Purpose Respiratory Tracking Toolbox for Interoception Research. *PsyArXiv*. [https://osf.io/preprints/psyarxiv/wjuce_v1](https://osf.io/preprints/psyarxiv/wjuce_v1)
 
 ```{toctree}
 :maxdepth: 2

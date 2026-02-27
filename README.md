@@ -20,7 +20,7 @@
 
 respyra is a Python toolbox that integrates a [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-direct-respiration-belt/) (GDX-RB) with [PsychoPy](https://www.psychopy.org/) to enable real-time respiratory tracking experiments. Participants follow a sinusoidal target dot with their breathing while receiving continuous visual biofeedback. The toolbox supports configurable experimental conditions including multi-frequency target waveforms and visuomotor perturbations (visual gain manipulation).
 
-**[Full documentation](https://embodied-computation-group.github.io/respyra/)** | **[PyPI](https://pypi.org/project/respyra/)** | **[Paper](https://github.com/embodied-computation-group/respyra/tree/main/paper)**
+**[Full documentation](https://embodied-computation-group.github.io/respyra/)** | **[PyPI](https://pypi.org/project/respyra/)** | **[Preprint](https://osf.io/preprints/psyarxiv/wjuce_v1)**
 
 ## Task Schematic
 
@@ -217,6 +217,12 @@ The [Vernier Go Direct Respiration Belt](https://www.vernier.com/product/go-dire
 
 Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for development
 setup, testing, linting, and pull request guidelines.
+
+## Citation
+
+If you use respyra in your research, please cite the preprint:
+
+> Allen, M. (2026). respyra: A General-Purpose Respiratory Tracking Toolbox for Interoception Research. *PsyArXiv*. https://osf.io/preprints/psyarxiv/wjuce_v1
 
 ## License
 

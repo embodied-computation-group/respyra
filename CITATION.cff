@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the preprint below."
+title: "respyra: A General-Purpose Respiratory Tracking Toolbox for Interoception Research"
+type: software
+authors:
+  - family-names: Allen
+    given-names: Micah
+    orcid: "https://orcid.org/0000-0001-9399-4179"
+license: MIT
+repository-code: "https://github.com/embodied-computation-group/respyra"
+url: "https://embodied-computation-group.github.io/respyra/"
+preferred-citation:
+  type: article
+  title: "respyra: A General-Purpose Respiratory Tracking Toolbox for Interoception Research"
+  authors:
+    - family-names: Allen
+      given-names: Micah
+      orcid: "https://orcid.org/0000-0001-9399-4179"
+  year: 2026
+  doi: "10.31234/osf.io/wjuce_v1"
+  url: "https://osf.io/preprints/psyarxiv/wjuce_v1"
