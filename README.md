@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="media/respyra_icon_transparent.png" alt="respyra logo" width="200">
+  <img src="media/respyra_icon.png" alt="respyra logo" width="200">
 </p>
 
 <h1 align="center">respyra</h1>
