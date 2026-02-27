@@ -8,9 +8,9 @@ data/
 dist/
 build/
 docs/_build/
+.coverage
 .claude/
 CLAUDE.md
-.coverage
 
 # LaTeX build artifacts
 paper/*.aux
